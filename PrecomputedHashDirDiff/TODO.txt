@@ -1,0 +1,6 @@
+﻿
+27.7.16:
+[ ] Better size interpetation (size format at the end of step 1 is wrong, unformatted is ok )
+[ ] Add First\Random\Sampled 100KB Hash for faster operation for bigger files
+		For Step 2 (Comparing)
+[ ] Basic: Add normal diff identifing
