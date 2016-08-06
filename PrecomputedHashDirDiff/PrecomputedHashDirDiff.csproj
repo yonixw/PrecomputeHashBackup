@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiffDB.cs" />
+    <Compile Include="GenericIOobject.cs" />
     <Compile Include="PrecomputeHash.cs" />
     <Compile Include="SQLliteDataSet.Designer.cs">
       <AutoGen>True</AutoGen>

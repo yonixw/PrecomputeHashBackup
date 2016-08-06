@@ -7,4 +7,4 @@
 
 
 05.08.16:
-[ ] Folder size column for more exact statics
+[X] Folder size column for more exact statics --> Decided not, total will come from copy stats.

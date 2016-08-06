@@ -54,7 +54,7 @@ namespace PrecomputedHashDirDiff
         private void bwCalcHash_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pbHashStatus.Value = 100;
-            Console.WriteLine("Background worker: All done!");
+            Console.WriteLine("Compute Background worker: All done!");
             TimeSpan duration = DateTime.Now - startHash;
             Console.WriteLine("Duration: " + 
                 String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.",
@@ -91,7 +91,10 @@ namespace PrecomputedHashDirDiff
 
         private void bwDBdiff_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+            secondStep = new DiffDB();
+            secondStep.Init(
+                txtBackup.Text, 
+                txtTartget.Text);
         }
 
         private void bwDBdiff_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -101,8 +104,8 @@ namespace PrecomputedHashDirDiff
 
         private void bwDBdiff_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            pbHashStatus.Value = 100;
-            Console.WriteLine("Background worker: All done!");
+            pbDiffStatus.Value = 100;
+            Console.WriteLine("Diff Background worker: All done!");
             TimeSpan duration = DateTime.Now - startDiffDB;
 
             Console.WriteLine("Duration: " +
@@ -111,10 +114,16 @@ namespace PrecomputedHashDirDiff
                 )
             );
 
-            // TODO: New stat from econd step.
-            //Console.WriteLine("Files: " + firstStep.FileIdCounter + ", Folders: " + firstStep.FolderIdCounter);
-            //Console.WriteLine("Total files size:" + Utils.byte2hum(firstStep.totalFilesSize));
-            //Console.WriteLine("\t(" + firstStep.totalFilesSize.ToString() + " Bytes)");
+            Console.WriteLine(" * Files:");
+            Console.WriteLine("           [COUNT]        [SIZE]");
+            Console.WriteLine("  + Added:    "+ secondStep.AddedFilesCount + "       " + Utils.byte2hum(secondStep.AddedFileSize));
+            Console.WriteLine("  + Changed:  " + secondStep.ChangedFilesCount + "       XXXX" );
+            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFilesCount + "       " + Utils.byte2hum(secondStep.DeletedFileSize));
+
+            Console.WriteLine("* Folders:");
+            Console.WriteLine("           [COUNT]");
+            Console.WriteLine("  + Added:    " + secondStep.AddedFoldersCount);
+            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFoldersCount);
         }
     }
 }

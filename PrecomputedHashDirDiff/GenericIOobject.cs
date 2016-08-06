@@ -45,6 +45,20 @@ namespace PrecomputedHashDirDiff
             //      we need to know the database this file came from.
             return new SQLite3Folder(fr, ConnectionString);
         }
+
+        public static GenericFolder FolderObject(int FolderID, string ConnectionString) {
+            FoldersTableAdapter adapt = new FoldersTableAdapter();
+            adapt.Connection.ConnectionString = ConnectionString;
+
+            DataSet1.FoldersDataTable dt = adapt.GetFolderById(FolderID);
+            if (dt.Count > 0 ) {
+                return GenericTools.FolderObject(dt[0], ConnectionString);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
 
