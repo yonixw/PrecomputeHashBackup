@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -88,9 +89,21 @@ namespace PrecomputedHashDirDiff
             return name;
         }
 
-        void compareDirs(long backupID, long targetID) {
+        void compareDirs(int backupID, int targetID) {
+            // Note: bahind the scene, the sql is ordering by name, this is important and we can 
+            //      compare them in a linear time as explained here: "Merging two lists" https://en.wikipedia.org/wiki/Merge_algorithm
 
-            // 
+            // Print to screen what folders are being compared:
+
+            // Get backup dir and files:
+            DataSet1.FoldersDataTable backupFolders = backup_adptFolders.GetFoldersByParentFolderId(backupID);
+            DataSet1.FilesDataTable backupFiles = backup_adptFiles.GetFilesByFolderID(backupID);
+
+            // Get target dir and files:
+            DataSet1.FoldersDataTable targetFolders = target_adptFolders.GetFoldersByParentFolderId(targetID);
+            DataSet1.FilesDataTable targetFiles = target_adptFiles.GetFilesByFolderID(targetID);
+
+            
         }
 
     }

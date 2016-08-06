@@ -1267,8 +1267,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[1].Parameters.Add(param);
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT FileHash, FileId, FileName, FileSize, FolderParentID FROM Files WHERE (Fol" +
-                "derParentID = @ParentId)";
+            this._commandCollection[2].CommandText = "SELECT        FileHash, FileId, FileName, FileSize, FolderParentID\r\nFROM         " +
+                "   Files\r\nWHERE        (FolderParentID = @ParentId)\r\nORDER BY FileName";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@ParentId";
@@ -1651,7 +1651,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
             this._commandCollection[2].CommandText = "SELECT        FolderId, FolderName, FolderParentID\r\nFROM            Folders\r\nWHER" +
-                "E        (FolderParentID = @Param1)";
+                "E        (FolderParentID = @Param1)\r\nORDER BY FolderName";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Param1";
