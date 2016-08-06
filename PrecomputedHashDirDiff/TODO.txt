@@ -4,3 +4,7 @@
 [ ] Add First\Random\Sampled 100KB Hash for faster operation for bigger files
 		For Step 2 (Comparing)
 [ ] Basic: Add normal diff identifing
+
+
+05.08.16:
+[ ] Folder size column for more exact statics

@@ -1247,7 +1247,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[3];
+            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[4];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT        FileId, FileName, FileHash, FolderParentID, FileSize\r\nFROM         " +
@@ -1255,55 +1255,67 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT FileHash, FileId, FileName, FileSize, FolderParentID FROM Files WHERE (Fol" +
-                "derParentID = @ParentId)";
+            this._commandCollection[1].CommandText = "SELECT        FileId, FileName, FileHash, FolderParentID, FileSize\r\nFROM         " +
+                "   Files\r\nWHERE        (FileId = @Param1)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Param1";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.Size = 4;
+            param.SourceColumn = "FileId";
+            this._commandCollection[1].Parameters.Add(param);
+            this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT FileHash, FileId, FileName, FileSize, FolderParentID FROM Files WHERE (Fol" +
+                "derParentID = @ParentId)";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@ParentId";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FolderParentID";
-            this._commandCollection[1].Parameters.Add(param);
-            this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
-            this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "INSERT INTO Files\r\n                         (FileName, FileHash, FolderParentID, " +
+            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "INSERT INTO Files\r\n                         (FileName, FileHash, FolderParentID, " +
                 "FileId, FileSize)\r\nVALUES        (@FileName, @FileHash, @FolderParentID, @FileID" +
                 ", @Bytes)";
-            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FileName";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 2147483647;
             param.SourceColumn = "FileName";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FileHash";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 2147483647;
             param.SourceColumn = "FileHash";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderParentID";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FolderParentID";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FileID";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FileId";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Bytes";
             param.DbType = global::System.Data.DbType.Int64;
             param.DbType = global::System.Data.DbType.Int64;
             param.Size = 8;
             param.SourceColumn = "FileSize";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1334,8 +1346,20 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FilesDataTable GetFilesByFolderID(int ParentId) {
+        public virtual DataSet1.FilesDataTable GetFileByID(int Param1) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
+            DataSet1.FilesDataTable dataTable = new DataSet1.FilesDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSet1.FilesDataTable GetFilesByFolderID(int ParentId) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(ParentId));
             DataSet1.FilesDataTable dataTable = new DataSet1.FilesDataTable();
             this.Adapter.Fill(dataTable);
@@ -1347,7 +1371,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
         public virtual int NewFile(string FileName, string FileHash, int FolderParentID, int FileID, long Bytes) {
-            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[2];
+            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[3];
             if ((FileName == null)) {
                 throw new global::System.ArgumentNullException("FileName");
             }
@@ -1607,7 +1631,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[3];
+            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[4];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT [FolderId], [FolderName], [FolderParentID] FROM [Folders]";
@@ -1615,40 +1639,52 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[1] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[1].Connection = this.Connection;
             this._commandCollection[1].CommandText = "SELECT        FolderId, FolderName, FolderParentID\r\nFROM            Folders\r\nWHER" +
-                "E        (FolderParentID = @Param1)";
+                "E        (FolderId = @Param1)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Param1";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
-            param.SourceColumn = "FolderParentID";
+            param.SourceColumn = "FolderId";
             this._commandCollection[1].Parameters.Add(param);
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "INSERT INTO Folders\r\n                         (FolderName, FolderParentID, Folder" +
-                "Id)\r\nVALUES        (@FolderName, @FolderParentID, @FolderId)";
+            this._commandCollection[2].CommandText = "SELECT        FolderId, FolderName, FolderParentID\r\nFROM            Folders\r\nWHER" +
+                "E        (FolderParentID = @Param1)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Param1";
+            param.DbType = global::System.Data.DbType.Int32;
+            param.DbType = global::System.Data.DbType.Int32;
+            param.Size = 4;
+            param.SourceColumn = "FolderParentID";
+            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "INSERT INTO Folders\r\n                         (FolderName, FolderParentID, Folder" +
+                "Id)\r\nVALUES        (@FolderName, @FolderParentID, @FolderId)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderName";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 2147483647;
             param.SourceColumn = "FolderName";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderParentID";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FolderParentID";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderId";
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FolderId";
-            this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3].Parameters.Add(param);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1679,8 +1715,20 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FoldersDataTable GetFoldersByParentFolderId(int Param1) {
+        public virtual DataSet1.FoldersDataTable GetFolderById(int Param1) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
+            DataSet1.FoldersDataTable dataTable = new DataSet1.FoldersDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual DataSet1.FoldersDataTable GetFoldersByParentFolderId(int Param1) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
             DataSet1.FoldersDataTable dataTable = new DataSet1.FoldersDataTable();
             this.Adapter.Fill(dataTable);
@@ -1824,7 +1872,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
         public virtual int NewFolder(string FolderName, int FolderParentID, int FolderId) {
-            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[2];
+            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[3];
             if ((FolderName == null)) {
                 throw new global::System.ArgumentNullException("FolderName");
             }

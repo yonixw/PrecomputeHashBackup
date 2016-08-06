@@ -15,13 +15,13 @@ namespace PrecomputedHashDirDiff
 {
     
 
-    public partial class Form1 : Form
+    public partial class frmToolsGui : Form
     {
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        public Form1()
+        public frmToolsGui()
         {
             InitializeComponent();
         }
@@ -62,7 +62,7 @@ namespace PrecomputedHashDirDiff
                 )
             );
             Console.WriteLine("Files: " + firstStep.FileIdCounter + ", Folders: " + firstStep.FolderIdCounter);
-            Console.WriteLine("Total files size:" + PrecomputeHash.byte2hum(firstStep.totalFilesSize));
+            Console.WriteLine("Total files size:" + Utils.byte2hum(firstStep.totalFilesSize));
             Console.WriteLine("\t(" + firstStep.totalFilesSize.ToString() + " Bytes)");
         }
 
@@ -70,7 +70,51 @@ namespace PrecomputedHashDirDiff
         {
             pbHashStatus.Value = e.ProgressPercentage;
         }
-    
-        
+
+
+
+
+
+        /*
+        **************** Optional STEP 2 : Comapre two precomputed hash
+        */
+
+        DateTime startDiffDB;
+        DiffDB secondStep;
+
+        private void btnDiffDB_Click(object sender, EventArgs e)
+        {
+            pbDiffStatus.Value = 0;
+            startDiffDB = DateTime.Now;
+            bwDBdiff.RunWorkerAsync();
+        }
+
+        private void bwDBdiff_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+        }
+
+        private void bwDBdiff_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            pbDiffStatus.Value  = e.ProgressPercentage;
+        }
+
+        private void bwDBdiff_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pbHashStatus.Value = 100;
+            Console.WriteLine("Background worker: All done!");
+            TimeSpan duration = DateTime.Now - startDiffDB;
+
+            Console.WriteLine("Duration: " +
+                String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.",
+                duration.Days, duration.Hours, duration.Minutes, duration.Seconds
+                )
+            );
+
+            // TODO: New stat from econd step.
+            //Console.WriteLine("Files: " + firstStep.FileIdCounter + ", Folders: " + firstStep.FolderIdCounter);
+            //Console.WriteLine("Total files size:" + Utils.byte2hum(firstStep.totalFilesSize));
+            //Console.WriteLine("\t(" + firstStep.totalFilesSize.ToString() + " Bytes)");
+        }
     }
 }
