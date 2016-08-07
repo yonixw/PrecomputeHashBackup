@@ -8,3 +8,7 @@
 
 05.08.16:
 [X] Folder size column for more exact statics --> Decided not, total will come from copy stats.
+[ ] Add stat saving for precompute, diff with date or somthing...
+[ ] GUI inside Console....
+[ ] ERROR! C:\Users\YoniWas\Documents\Visual Studio 2015\Projects\PrecomputedHashDirDiff\PrecomputedHashDirDiff\bin\Debug\SEM8.db3
+		not worling with SEM8

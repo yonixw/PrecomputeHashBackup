@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -120,12 +121,12 @@ namespace PrecomputedHashDirDiff
                     if (bytesRead > percent * currentPercent && currentPercent < 100)
                     {
                         currentPercent++;
-                        Console.WriteLine("#");
+                        Console.Write("#");
                     }
                 }
 
                 hash256.TransformFinalBlock(buffer, 0, 0);
-                Console.WriteLine("]."); // End Progress
+                Console.Write("]."); // End Progress
 
                 finalHash = BitConverter.ToString(hash256.Hash).Replace("-", "");
                 Console.WriteLine(finalHash.Substring(0, 10));
@@ -146,6 +147,7 @@ namespace PrecomputedHashDirDiff
         }
     }
 
+    [DebuggerDisplay("{_file.FileName}")]
     public class SQLite3File : GenericFile
     {
         DataSet1.FilesRow _file;
@@ -246,6 +248,7 @@ namespace PrecomputedHashDirDiff
        
     }
 
+    [DebuggerDisplay("{_folder.FolderName}")]
     public class SQLite3Folder : GenericFolder
     {
         DataSet1.FoldersRow _folder;
@@ -284,7 +287,9 @@ namespace PrecomputedHashDirDiff
             FilesTableAdapter adap = new FilesTableAdapter();
             adap.Connection.ConnectionString = _conn;
 
-            foreach (DataSet1.FilesRow fr in adap.GetFilesByFolderID(_folder.FolderId)) 
+            var Rows = adap.GetFilesByFolderID(_folder.FolderId).AsEnumerable().OrderBy(f => f.FileName);
+
+            foreach (DataSet1.FilesRow fr in Rows) 
             {
                 result.Add(GenericTools.FileObject(fr, _conn));
             }
@@ -298,7 +303,9 @@ namespace PrecomputedHashDirDiff
             FoldersTableAdapter adap = new FoldersTableAdapter();
             adap.Connection.ConnectionString = _conn;
 
-            foreach (DataSet1.FoldersRow fr in adap.GetFoldersByParentFolderId(_folder.FolderId))
+            var Rows = adap.GetFoldersByParentFolderId(_folder.FolderId).AsEnumerable().OrderBy(f => f.FolderName);
+
+            foreach (DataSet1.FoldersRow fr in Rows)
             {
                 result.Add(GenericTools.FolderObject(fr, _conn));
             }

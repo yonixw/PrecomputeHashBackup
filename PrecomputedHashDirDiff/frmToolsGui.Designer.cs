@@ -86,25 +86,25 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 155);
+            this.label2.Location = new System.Drawing.Point(12, 127);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.Size = new System.Drawing.Size(146, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Compare premaid databases:";
+            this.label2.Text = "Compare (IO\\DB) vs (IO\\DB):";
             // 
             // txtBackup
             // 
-            this.txtBackup.Location = new System.Drawing.Point(15, 192);
+            this.txtBackup.Location = new System.Drawing.Point(15, 164);
             this.txtBackup.Name = "txtBackup";
             this.txtBackup.Size = new System.Drawing.Size(567, 20);
             this.txtBackup.TabIndex = 5;
-            this.txtBackup.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Tes" +
-    "t Cases\\backup.db3";
+            this.txtBackup.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Pre" +
+    "computedHashDirDiff\\bin\\Debug\\SEM8.db3";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 176);
+            this.label3.Location = new System.Drawing.Point(22, 148);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(105, 13);
             this.label3.TabIndex = 6;
@@ -113,7 +113,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(20, 219);
+            this.label4.Location = new System.Drawing.Point(20, 191);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(117, 13);
             this.label4.TabIndex = 8;
@@ -121,16 +121,15 @@
             // 
             // txtTartget
             // 
-            this.txtTartget.Location = new System.Drawing.Point(13, 235);
+            this.txtTartget.Location = new System.Drawing.Point(13, 207);
             this.txtTartget.Name = "txtTartget";
             this.txtTartget.Size = new System.Drawing.Size(567, 20);
             this.txtTartget.TabIndex = 7;
-            this.txtTartget.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Tes" +
-    "t Cases\\added.db3";
+            this.txtTartget.Text = "C:\\Users\\YoniWas\\Desktop\\SEM8";
             // 
             // btnDiffDB
             // 
-            this.btnDiffDB.Location = new System.Drawing.Point(478, 261);
+            this.btnDiffDB.Location = new System.Drawing.Point(478, 233);
             this.btnDiffDB.Name = "btnDiffDB";
             this.btnDiffDB.Size = new System.Drawing.Size(101, 23);
             this.btnDiffDB.TabIndex = 9;
@@ -147,7 +146,7 @@
             // 
             // pbDiffStatus
             // 
-            this.pbDiffStatus.Location = new System.Drawing.Point(12, 261);
+            this.pbDiffStatus.Location = new System.Drawing.Point(12, 233);
             this.pbDiffStatus.Name = "pbDiffStatus";
             this.pbDiffStatus.Size = new System.Drawing.Size(459, 23);
             this.pbDiffStatus.TabIndex = 10;
@@ -156,7 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(601, 436);
+            this.ClientSize = new System.Drawing.Size(601, 292);
             this.Controls.Add(this.pbDiffStatus);
             this.Controls.Add(this.btnDiffDB);
             this.Controls.Add(this.label4);

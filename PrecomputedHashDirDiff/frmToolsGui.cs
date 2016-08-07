@@ -76,7 +76,7 @@ namespace PrecomputedHashDirDiff
 
 
         /*
-        **************** Optional STEP 2 : Comapre two precomputed hash
+        **************** STEP 2 : Comapre db or io with db or io
         */
 
         DateTime startDiffDB;

@@ -25,25 +25,44 @@ namespace PrecomputedHashDirDiff
         public long DeletedFoldersCount = 0;
 
         public void Init(string backupDB, string targetDB) {
-            // Make adapters for both dbs
+            // Make generic objects based on path
 
-            if (!File.Exists(backupDB))
+            GenericFolder backupRootDir = null;
+            GenericFolder targetRootDir = null;
+
+            if (backupDB.EndsWith(".db3") && File.Exists(backupDB))
             {
-                Console.WriteLine("Backup db not found.");
-                return;
+                backupRootDir = GenericTools.FolderObject(0, "data source=\"" + backupDB + "\"");
             }
 
-            if (!File.Exists(targetDB))
+            if (targetDB.EndsWith(".db3") && File.Exists(targetDB))
             {
-                Console.WriteLine("Target db not found.");
-                return;
+                targetRootDir = GenericTools.FolderObject(0, "data source=\"" + targetDB + "\"");
+            }
+            
+            if (backupRootDir == null && Directory.Exists(backupDB)) {
+                backupRootDir = GenericTools.FolderObject(new DirectoryInfo(backupDB));
             }
 
-            GenericFolder backupRootDir = GenericTools.FolderObject(0, "data source=\"" + backupDB + "\"");
-            GenericFolder targetRootDir = GenericTools.FolderObject(0, "data source=\"" + targetDB + "\"");
+            if (targetRootDir == null && Directory.Exists(targetDB))
+            {
+                targetRootDir = GenericTools.FolderObject(new DirectoryInfo(targetDB));
+            }
 
-            // Start recursion:
-            compareDirs(backupRootDir, targetRootDir);
+            if (backupRootDir == null) {
+                Console.WriteLine("Cant find db3 or folder for backup:\n\t" + backupDB);
+            }
+
+            if (targetRootDir == null)
+            {
+                Console.WriteLine("Cant find db3 or folder for target:\n\t" + targetDB);
+            }
+
+            if (backupRootDir != null && targetRootDir != null)
+            {
+                // Start recursion:
+                compareDirs(backupRootDir, targetRootDir);
+            }
         }
 
 
@@ -53,7 +72,7 @@ namespace PrecomputedHashDirDiff
         }
 
         void compareDirs(GenericFolder backupDir, GenericFolder targetDir) {
-            // Note: bahind the scene, the sql is ordering by name, this is important and we can 
+            // Note: bahind the scene, list is ordered by name, this is important and we can 
             //      compare them in a linear time as explained here: "Merging two lists" https://en.wikipedia.org/wiki/Merge_algorithm
 
             // Print to screen what folders are being compared:
