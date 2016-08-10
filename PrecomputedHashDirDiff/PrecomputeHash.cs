@@ -57,6 +57,7 @@ namespace PrecomputedHashDirDiff
             {
                 Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... ");
 
+                
                 // Compute Hash
                 SHA256 hash256 = SHA256.Create();
                 byte[] buffer = new byte[1024];
@@ -90,7 +91,18 @@ namespace PrecomputedHashDirDiff
                     totalFilesSize += size;
                     aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
                 }
+                
 
+                /*
+                MultithreadHash mh = new MultithreadHash(
+                   fi,
+                   10 * 1024,
+                   4,
+                   typeof(SHA256)
+               );
+                string finalHash = mh.StartSync();
+                aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, fi.Length);
+                */
             }
 
             foreach (DirectoryInfo childdi in di.GetDirectories())

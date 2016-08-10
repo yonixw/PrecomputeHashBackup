@@ -30,6 +30,10 @@ namespace PrecomputedHashDirDiff
         {
             // Create console for easy cross-thread printing.
             AllocConsole();
+
+            // Test functions:
+            //
+           
         }
 
         /*
