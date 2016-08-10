@@ -14,9 +14,13 @@ namespace PrecomputedHashDirDiff
     class PrecomputeHash
     {
 
+        Object folderLock = new Object();
         public int FolderIdCounter = 0;
+        Object fileLock = new Object();
         public int FileIdCounter = 0;
         public long totalFilesSize = 0;
+
+        MultiInsertSQLite multisql;
         
         public void Init(string DirectoryPath, BackgroundWorker bwCalcHash) {
             // To make sure each db ids start from 0.
@@ -41,23 +45,34 @@ namespace PrecomputedHashDirDiff
 
             DirectoryInfo sourceDi = new DirectoryInfo(DirectoryPath);
 
+            multisql = new MultiInsertSQLite(_adptFiles, _adptFolders, 499);
+
             // Start Recurtion:
             HashFiles(sourceDi, -1, _adptFiles, _adptFolders, bwCalcHash);
+
+            // Flush any rows in cache:
+            multisql.FlushAll();
         }
 
 
         public  void HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
-            int myFolderId = FolderIdCounter++;
+            int myFolderId;
+            lock (folderLock)
+            {
+                myFolderId = FolderIdCounter++;
+            }
 
             Console.WriteLine("[Directory] (" + myFolderId.ToString() + ") " + di.FullName);
-            aFolders.NewFolder(di.Name, ParentFolderId, myFolderId);
 
-            foreach (FileInfo fi in di.GetFiles())
+            //aFolders.NewFolder(di.Name, ParentFolderId, myFolderId);
+            multisql.AddFolderRow(di.Name, ParentFolderId, myFolderId);
+
+            Parallel.ForEach(di.GetFiles(), (fi) =>
             {
                 Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... ");
 
-                
+
                 // Compute Hash
                 SHA256 hash256 = SHA256.Create();
                 byte[] buffer = new byte[1024];
@@ -89,21 +104,18 @@ namespace PrecomputedHashDirDiff
                     Console.WriteLine(finalHash.Substring(0, 10));
 
                     totalFilesSize += size;
-                    aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
-                }
-                
 
-                /*
-                MultithreadHash mh = new MultithreadHash(
-                   fi,
-                   10 * 1024,
-                   4,
-                   typeof(SHA256)
-               );
-                string finalHash = mh.StartSync();
-                aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, fi.Length);
-                */
-            }
+                    //aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
+                    lock(fileLock)
+                    {
+                        multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
+                    }
+                }
+
+
+            });
+
+           
 
             foreach (DirectoryInfo childdi in di.GetDirectories())
             {
