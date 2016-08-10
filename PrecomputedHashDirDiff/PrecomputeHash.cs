@@ -62,7 +62,7 @@ namespace PrecomputedHashDirDiff
             //aFolders.NewFolder(di.Name, ParentFolderId, myFolderId);
             multisql.AddFolderRow(di.Name, ParentFolderId, myFolderId);
 
-            Parallel.ForEach(di.GetFiles(), (fi) =>
+            foreach (FileInfo fi in di.GetFiles())
             {
                 Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... ");
 
@@ -104,7 +104,7 @@ namespace PrecomputedHashDirDiff
                 }
 
 
-            });
+            }
 
            
 
