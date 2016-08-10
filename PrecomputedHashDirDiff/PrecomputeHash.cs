@@ -14,9 +14,7 @@ namespace PrecomputedHashDirDiff
     class PrecomputeHash
     {
 
-        Object folderLock = new Object();
         public int FolderIdCounter = 0;
-        Object fileLock = new Object();
         public int FileIdCounter = 0;
         public long totalFilesSize = 0;
 
@@ -57,11 +55,7 @@ namespace PrecomputedHashDirDiff
 
         public  void HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
-            int myFolderId;
-            lock (folderLock)
-            {
-                myFolderId = FolderIdCounter++;
-            }
+            int myFolderId = FolderIdCounter++;
 
             Console.WriteLine("[Directory] (" + myFolderId.ToString() + ") " + di.FullName);
 
@@ -106,10 +100,7 @@ namespace PrecomputedHashDirDiff
                     totalFilesSize += size;
 
                     //aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
-                    lock(fileLock)
-                    {
-                        multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
-                    }
+                    multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
                 }
 
 
