@@ -52,6 +52,7 @@ namespace PrecomputedHashDirDiff
             multisql.FlushAll();
         }
 
+        const int progresscols = 30;
 
         public  void HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
@@ -64,7 +65,7 @@ namespace PrecomputedHashDirDiff
 
             foreach (FileInfo fi in di.GetFiles())
             {
-                Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... ");
+                Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... [");
 
 
                 // Compute Hash
@@ -75,7 +76,7 @@ namespace PrecomputedHashDirDiff
                 {
                     long size = filestream.Length;
                     long bytesRead = 0;
-                    long percent = size / 100;
+                    long percent = size / progresscols;
                     if (percent == 0) percent = 1; // for files under 100B
 
                     int currentPercent = 0;
@@ -86,16 +87,17 @@ namespace PrecomputedHashDirDiff
                         hash256.TransformBlock(buffer, 0, lastBytesRead, buffer, 0);
                         bytesRead += lastBytesRead;
 
-                        if (bytesRead > percent * currentPercent && currentPercent < 100)
+                        if (bytesRead > percent * currentPercent && currentPercent < progresscols)
                         {
+                            Console.Write('#');
                             currentPercent++;
-                            bwCalcHash.ReportProgress(currentPercent);
+                            bwCalcHash.ReportProgress((100 * currentPercent) / progresscols);
                         }
                     }
 
                     hash256.TransformFinalBlock(buffer, 0, 0);
                     string finalHash = BitConverter.ToString(hash256.Hash).Replace("-", "");
-                    Console.WriteLine(finalHash.Substring(0, 10));
+                    Console.WriteLine("] =>" + finalHash.Substring(0, 10));
 
                     totalFilesSize += size;
 
