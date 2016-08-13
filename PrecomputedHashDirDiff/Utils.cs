@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PrecomputedHashDirDiff
 {
-    class Utils
+    public class Utils
     {
         public static string byte2hum(long bytes)
         {
