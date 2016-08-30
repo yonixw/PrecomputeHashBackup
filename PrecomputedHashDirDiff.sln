@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrecomputedHashDirDiff", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrecomputedHashDirDiffTests", "PrecomputedHashDirDiffTests\PrecomputedHashDirDiffTests.csproj", "{04BF292F-9AB8-4781-8F5A-08B2B0194596}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrecomputeDBFileViewer", "PrecomputeDBFileViewer\PrecomputeDBFileViewer.csproj", "{149BBBAA-585E-461F-AE52-3CDD71BDFFA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{04BF292F-9AB8-4781-8F5A-08B2B0194596}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04BF292F-9AB8-4781-8F5A-08B2B0194596}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04BF292F-9AB8-4781-8F5A-08B2B0194596}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149BBBAA-585E-461F-AE52-3CDD71BDFFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149BBBAA-585E-461F-AE52-3CDD71BDFFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149BBBAA-585E-461F-AE52-3CDD71BDFFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149BBBAA-585E-461F-AE52-3CDD71BDFFA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
