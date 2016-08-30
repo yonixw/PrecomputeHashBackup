@@ -104,9 +104,9 @@ namespace PrecomputedHashDirDiff
                 FlushFolderData();
         }
 
-        public void AddFolderRow(string name, int folderparent, int folderid)
+        public void AddFolderRow(string name, int folderparent, int folderid, long foldersize)
         {
-            localFolders.AddFoldersRow(folderid, name, folderparent);
+            localFolders.AddFoldersRow(folderid, name, folderparent,foldersize);
 
             if (localFolders.Rows.Count > this._cutoff)
                 FlushFolderData();
@@ -115,8 +115,8 @@ namespace PrecomputedHashDirDiff
         string FolderRowToString(DataSet1.FoldersRow folderRow)
         {
             return
-               string.Format("\n('{0}', {1}, {2})",
-               folderRow.FolderName, folderRow.FolderParentID, folderRow.FolderId
+               string.Format("\n('{0}', {1}, {2}, {3})",
+               folderRow.FolderName, folderRow.FolderParentID, folderRow.FolderId, folderRow.FolderSize
                )
             ;
         }
@@ -126,7 +126,7 @@ namespace PrecomputedHashDirDiff
             Console.WriteLine("\t\tSave [Folders] to DB...");
 
             string InsertCommand = @"INSERT INTO Folders
-                         (FolderName, FolderParentID, FolderId) VALUES";
+                         (FolderName, FolderParentID, FolderId, FolderSize) VALUES";
 
             if (localFolders.Rows.Count == 0)
             {

@@ -54,14 +54,12 @@ namespace PrecomputedHashDirDiff
 
         const int progresscols = 30;
 
-        public  void HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
+        public long HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
+            long myFolderSize = 0;
             int myFolderId = FolderIdCounter++;
 
             Console.WriteLine("[Directory] (" + myFolderId.ToString() + ") " + di.FullName);
-
-            //aFolders.NewFolder(di.Name, ParentFolderId, myFolderId);
-            multisql.AddFolderRow(di.Name, ParentFolderId, myFolderId);
 
             foreach (FileInfo fi in di.GetFiles())
             {
@@ -100,6 +98,7 @@ namespace PrecomputedHashDirDiff
                     Console.WriteLine("] =>" + finalHash.Substring(0, 10));
 
                     totalFilesSize += size;
+                    myFolderSize += size;
 
                     //aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
                     multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
@@ -108,12 +107,16 @@ namespace PrecomputedHashDirDiff
 
             }
 
-           
-
             foreach (DirectoryInfo childdi in di.GetDirectories())
             {
-                HashFiles(childdi, myFolderId, aFiles, aFolders,bwCalcHash);
+               myFolderSize += HashFiles(childdi, myFolderId, aFiles, aFolders,bwCalcHash);
             }
+
+            // After finding my size add it:
+            //      Note: this method will make deeper folders have lower ids (the root having the highest id)
+            multisql.AddFolderRow(di.Name, ParentFolderId, myFolderId,myFolderSize);
+
+            return myFolderSize;
         }
 
        

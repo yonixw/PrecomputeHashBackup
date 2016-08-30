@@ -640,6 +640,8 @@ namespace PrecomputedHashDirDiff {
             
             private global::System.Data.DataColumn columnFolderParentID;
             
+            private global::System.Data.DataColumn columnFolderSize;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public FoldersDataTable() {
@@ -699,6 +701,14 @@ namespace PrecomputedHashDirDiff {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FolderSizeColumn {
+                get {
+                    return this.columnFolderSize;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -734,12 +744,13 @@ namespace PrecomputedHashDirDiff {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public FoldersRow AddFoldersRow(int FolderId, string FolderName, int FolderParentID) {
+            public FoldersRow AddFoldersRow(int FolderId, string FolderName, int FolderParentID, long FolderSize) {
                 FoldersRow rowFoldersRow = ((FoldersRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FolderId,
                         FolderName,
-                        FolderParentID};
+                        FolderParentID,
+                        FolderSize};
                 rowFoldersRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowFoldersRow);
                 return rowFoldersRow;
@@ -772,6 +783,7 @@ namespace PrecomputedHashDirDiff {
                 this.columnFolderId = base.Columns["FolderId"];
                 this.columnFolderName = base.Columns["FolderName"];
                 this.columnFolderParentID = base.Columns["FolderParentID"];
+                this.columnFolderSize = base.Columns["FolderSize"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -783,6 +795,8 @@ namespace PrecomputedHashDirDiff {
                 base.Columns.Add(this.columnFolderName);
                 this.columnFolderParentID = new global::System.Data.DataColumn("FolderParentID", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFolderParentID);
+                this.columnFolderSize = new global::System.Data.DataColumn("FolderSize", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFolderSize);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnFolderId}, true));
                 this.columnFolderId.AutoIncrementSeed = -1;
@@ -792,6 +806,7 @@ namespace PrecomputedHashDirDiff {
                 this.columnFolderName.AllowDBNull = false;
                 this.columnFolderName.MaxLength = 2147483647;
                 this.columnFolderParentID.AllowDBNull = false;
+                this.columnFolderSize.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1032,6 +1047,17 @@ namespace PrecomputedHashDirDiff {
                 }
                 set {
                     this[this.tableFolders.FolderParentIDColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public long FolderSize {
+                get {
+                    return ((long)(this[this.tableFolders.FolderSizeColumn]));
+                }
+                set {
+                    this[this.tableFolders.FolderSizeColumn] = value;
                 }
             }
         }
@@ -1529,12 +1555,13 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             tableMapping.ColumnMappings.Add("FolderId", "FolderId");
             tableMapping.ColumnMappings.Add("FolderName", "FolderName");
             tableMapping.ColumnMappings.Add("FolderParentID", "FolderParentID");
+            tableMapping.ColumnMappings.Add("FolderSize", "FolderSize");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
             this._adapter.DeleteCommand.CommandText = "DELETE FROM [main].[sqlite_default_schema].[Folders] WHERE (([FolderId] = @Origin" +
                 "al_FolderId) AND ([FolderName] = @Original_FolderName) AND ([FolderParentID] = @" +
-                "Original_FolderParentID))";
+                "Original_FolderParentID) AND ([FolderSize] = @Original_FolderSize))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_FolderId";
@@ -1556,10 +1583,18 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.SourceColumn = "FolderParentID";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.DeleteCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FolderSize";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "FolderSize";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.DeleteCommand.Parameters.Add(param);
             this._adapter.InsertCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [main].[sqlite_default_schema].[Folders] ([FolderId], [FolderName], [" +
-                "FolderParentID]) VALUES (@FolderId, @FolderName, @FolderParentID)";
+                "FolderParentID], [FolderSize]) VALUES (@FolderId, @FolderName, @FolderParentID, " +
+                "@FolderSize)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderId";
@@ -1578,9 +1613,15 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.DbType = global::System.Data.DbType.Int32;
             param.SourceColumn = "FolderParentID";
             this._adapter.InsertCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FolderSize";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "FolderSize";
+            this._adapter.InsertCommand.Parameters.Add(param);
             this._adapter.UpdateCommand = new global::System.Data.SQLite.SQLiteCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [main].[sqlite_default_schema].[Folders] SET [FolderId] = @FolderId, [FolderName] = @FolderName, [FolderParentID] = @FolderParentID WHERE (([FolderId] = @Original_FolderId) AND ([FolderName] = @Original_FolderName) AND ([FolderParentID] = @Original_FolderParentID))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [main].[sqlite_default_schema].[Folders] SET [FolderId] = @FolderId, [FolderName] = @FolderName, [FolderParentID] = @FolderParentID, [FolderSize] = @FolderSize WHERE (([FolderId] = @Original_FolderId) AND ([FolderName] = @Original_FolderName) AND ([FolderParentID] = @Original_FolderParentID) AND ([FolderSize] = @Original_FolderSize))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderId";
@@ -1598,6 +1639,12 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.DbType = global::System.Data.DbType.Int32;
             param.DbType = global::System.Data.DbType.Int32;
             param.SourceColumn = "FolderParentID";
+            this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FolderSize";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "FolderSize";
             this._adapter.UpdateCommand.Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Original_FolderId";
@@ -1619,6 +1666,13 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.SourceColumn = "FolderParentID";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
             this._adapter.UpdateCommand.Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Original_FolderSize";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.SourceColumn = "FolderSize";
+            param.SourceVersion = global::System.Data.DataRowVersion.Original;
+            this._adapter.UpdateCommand.Parameters.Add(param);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1634,12 +1688,13 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[4];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT [FolderId], [FolderName], [FolderParentID] FROM [Folders]";
+            this._commandCollection[0].CommandText = "SELECT        FolderId, FolderName, FolderParentID, FolderSize\r\nFROM            F" +
+                "olders";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        FolderId, FolderName, FolderParentID\r\nFROM            Folders\r\nWHER" +
-                "E        (FolderId = @Param1)";
+            this._commandCollection[1].CommandText = "SELECT FolderId, FolderName, FolderParentID, FolderSize FROM Folders WHERE (Folde" +
+                "rId = @Param1)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Param1";
@@ -1650,8 +1705,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[1].Parameters.Add(param);
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT        FolderId, FolderName, FolderParentID\r\nFROM            Folders\r\nWHER" +
-                "E        (FolderParentID = @Param1)";
+            this._commandCollection[2].CommandText = "SELECT FolderId, FolderName, FolderParentID, FolderSize FROM Folders WHERE (Folde" +
+                "rParentID = @Param1)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Param1";
@@ -1663,7 +1718,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[3] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[3].Connection = this.Connection;
             this._commandCollection[3].CommandText = "INSERT INTO Folders\r\n                         (FolderName, FolderParentID, Folder" +
-                "Id)\r\nVALUES        (@FolderName, @FolderParentID, @FolderId)";
+                "Id, FolderSize)\r\nVALUES        (@FolderName, @FolderParentID, @FolderId, @Folder" +
+                "Size)";
             this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FolderName";
@@ -1684,6 +1740,13 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.DbType = global::System.Data.DbType.Int32;
             param.Size = 4;
             param.SourceColumn = "FolderId";
+            this._commandCollection[3].Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FolderSize";
+            param.DbType = global::System.Data.DbType.Int64;
+            param.DbType = global::System.Data.DbType.Int64;
+            param.Size = 8;
+            param.SourceColumn = "FolderSize";
             this._commandCollection[3].Parameters.Add(param);
         }
         
@@ -1768,7 +1831,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_FolderId, string Original_FolderName, int Original_FolderParentID) {
+        public virtual int Delete(int Original_FolderId, string Original_FolderName, int Original_FolderParentID, long Original_FolderSize) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_FolderId));
             if ((Original_FolderName == null)) {
                 throw new global::System.ArgumentNullException("Original_FolderName");
@@ -1777,6 +1840,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
                 this.Adapter.DeleteCommand.Parameters[1].Value = ((string)(Original_FolderName));
             }
             this.Adapter.DeleteCommand.Parameters[2].Value = ((int)(Original_FolderParentID));
+            this.Adapter.DeleteCommand.Parameters[3].Value = ((long)(Original_FolderSize));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1797,7 +1861,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int FolderId, string FolderName, int FolderParentID) {
+        public virtual int Insert(int FolderId, string FolderName, int FolderParentID, long FolderSize) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((int)(FolderId));
             if ((FolderName == null)) {
                 throw new global::System.ArgumentNullException("FolderName");
@@ -1806,6 +1870,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
                 this.Adapter.InsertCommand.Parameters[1].Value = ((string)(FolderName));
             }
             this.Adapter.InsertCommand.Parameters[2].Value = ((int)(FolderParentID));
+            this.Adapter.InsertCommand.Parameters[3].Value = ((long)(FolderSize));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1826,7 +1891,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int FolderId, string FolderName, int FolderParentID, int Original_FolderId, string Original_FolderName, int Original_FolderParentID) {
+        public virtual int Update(int FolderId, string FolderName, int FolderParentID, long FolderSize, int Original_FolderId, string Original_FolderName, int Original_FolderParentID, long Original_FolderSize) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(FolderId));
             if ((FolderName == null)) {
                 throw new global::System.ArgumentNullException("FolderName");
@@ -1835,14 +1900,16 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
                 this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(FolderName));
             }
             this.Adapter.UpdateCommand.Parameters[2].Value = ((int)(FolderParentID));
-            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(Original_FolderId));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((long)(FolderSize));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Original_FolderId));
             if ((Original_FolderName == null)) {
                 throw new global::System.ArgumentNullException("Original_FolderName");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Original_FolderName));
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Original_FolderName));
             }
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_FolderParentID));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_FolderParentID));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((long)(Original_FolderSize));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1863,15 +1930,15 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string FolderName, int FolderParentID, int Original_FolderId, string Original_FolderName, int Original_FolderParentID) {
-            return this.Update(Original_FolderId, FolderName, FolderParentID, Original_FolderId, Original_FolderName, Original_FolderParentID);
+        public virtual int Update(string FolderName, int FolderParentID, long FolderSize, int Original_FolderId, string Original_FolderName, int Original_FolderParentID, long Original_FolderSize) {
+            return this.Update(Original_FolderId, FolderName, FolderParentID, FolderSize, Original_FolderId, Original_FolderName, Original_FolderParentID, Original_FolderSize);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int NewFolder(string FolderName, int FolderParentID, int FolderId) {
+        public virtual int NewFolder(string FolderName, int FolderParentID, int FolderId, long FolderSize) {
             global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[3];
             if ((FolderName == null)) {
                 throw new global::System.ArgumentNullException("FolderName");
@@ -1881,6 +1948,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             }
             command.Parameters[1].Value = ((int)(FolderParentID));
             command.Parameters[2].Value = ((int)(FolderId));
+            command.Parameters[3].Value = ((long)(FolderSize));
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
