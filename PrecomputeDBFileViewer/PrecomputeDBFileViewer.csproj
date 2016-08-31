@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Duplicates.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Duplicates.Designer.cs">
+      <DependentUpon>Duplicates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +66,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SQLiteDataset.xsd</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Duplicates.resx">
+      <DependentUpon>Duplicates.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
