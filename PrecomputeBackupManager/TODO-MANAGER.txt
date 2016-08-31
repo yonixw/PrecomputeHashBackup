@@ -1,0 +1,10 @@
+﻿[ ] Support stop\pause in case of sutdown.
+	[ ] Dont know when wake up, cancel on shutdown
+[ ] Have cancel option on the server.
+[ ] DB to save all perfences locally
+[ ] Unread log rows count (until opening the tab) but not while minimize?
+	[ ] Log max 100 rows 
+
+
+Future:
+[ ] Backup file manager that looks in the past.
