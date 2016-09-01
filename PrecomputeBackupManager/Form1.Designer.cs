@@ -31,65 +31,81 @@
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnStopBackup = new System.Windows.Forms.Button();
+            this.btnStartBackup = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.btnCurrentBackupFolderChoose = new System.Windows.Forms.Button();
+            this.txtCurrentBackupName = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtCurrentBackupFolderPath = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.btnRemoveCurrentFolder = new System.Windows.Forms.Button();
+            this.btnSaveCurrentFolderChanges = new System.Windows.Forms.Button();
+            this.lstvFoldersToBackup = new System.Windows.Forms.ListView();
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblNextBackupCountdown = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.numEveryMinutes = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.numEveryHours = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numEveryDays = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtLogFolderName = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numBackupMaxSize = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtBackupApiURL = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnSaveSettings = new System.Windows.Forms.Button();
+            this.txtUsernameCode = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbCurrentLog = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.lstLog = new System.Windows.Forms.ListBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtCurrentStatus = new System.Windows.Forms.TextBox();
+            this.txtStatusDescription = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.pbStatusProgress = new System.Windows.Forms.ProgressBar();
+            this.label21 = new System.Windows.Forms.Label();
+            this.btnAddBackupFolder = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.lstvBackupHistory = new System.Windows.Forms.ListView();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.prevPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryHours)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryDays)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numBackupMaxSize)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
             // 
             this.tabMain.Controls.Add(this.tabPage1);
             this.tabMain.Controls.Add(this.tabPage2);
+            this.tabMain.Controls.Add(this.tabPage4);
             this.tabMain.Controls.Add(this.tabPage3);
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Location = new System.Drawing.Point(0, 0);
@@ -100,9 +116,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnAddBackupFolder);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Controls.Add(this.lstvFoldersToBackup);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
@@ -114,8 +131,14 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.pbStatusProgress);
+            this.groupBox2.Controls.Add(this.txtStatusDescription);
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.txtCurrentStatus);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.btnStopBackup);
+            this.groupBox2.Controls.Add(this.btnStartBackup);
             this.groupBox2.Location = new System.Drawing.Point(21, 473);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(968, 258);
@@ -123,35 +146,35 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Current Status";
             // 
-            // button3
+            // btnStopBackup
             // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button3.Location = new System.Drawing.Point(702, 202);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(123, 31);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Stop backup";
-            this.button3.UseVisualStyleBackColor = false;
+            this.btnStopBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnStopBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.btnStopBackup.Location = new System.Drawing.Point(702, 202);
+            this.btnStopBackup.Name = "btnStopBackup";
+            this.btnStopBackup.Size = new System.Drawing.Size(123, 31);
+            this.btnStopBackup.TabIndex = 1;
+            this.btnStopBackup.Text = "Stop backup";
+            this.btnStopBackup.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btnStartBackup
             // 
-            this.button2.Location = new System.Drawing.Point(831, 202);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(123, 31);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Start backup";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnStartBackup.Location = new System.Drawing.Point(831, 202);
+            this.btnStartBackup.Name = "btnStartBackup";
+            this.btnStartBackup.Size = new System.Drawing.Size(123, 31);
+            this.btnStartBackup.TabIndex = 0;
+            this.btnStartBackup.Text = "Start backup";
+            this.btnStartBackup.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button6);
-            this.groupBox1.Controls.Add(this.textBox5);
+            this.groupBox1.Controls.Add(this.btnCurrentBackupFolderChoose);
+            this.groupBox1.Controls.Add(this.txtCurrentBackupName);
             this.groupBox1.Controls.Add(this.label18);
-            this.groupBox1.Controls.Add(this.textBox4);
+            this.groupBox1.Controls.Add(this.txtCurrentBackupFolderPath);
             this.groupBox1.Controls.Add(this.label17);
-            this.groupBox1.Controls.Add(this.button5);
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.btnRemoveCurrentFolder);
+            this.groupBox1.Controls.Add(this.btnSaveCurrentFolderChanges);
             this.groupBox1.Location = new System.Drawing.Point(21, 320);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(968, 147);
@@ -159,33 +182,77 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Edit Folder";
             // 
-            // button5
+            // btnCurrentBackupFolderChoose
             // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button5.Location = new System.Drawing.Point(702, 107);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(123, 31);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "Remove";
-            this.button5.UseVisualStyleBackColor = false;
+            this.btnCurrentBackupFolderChoose.Location = new System.Drawing.Point(527, 36);
+            this.btnCurrentBackupFolderChoose.Name = "btnCurrentBackupFolderChoose";
+            this.btnCurrentBackupFolderChoose.Size = new System.Drawing.Size(94, 26);
+            this.btnCurrentBackupFolderChoose.TabIndex = 8;
+            this.btnCurrentBackupFolderChoose.Text = "Choose...";
+            this.btnCurrentBackupFolderChoose.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // txtCurrentBackupName
             // 
-            this.button4.Location = new System.Drawing.Point(831, 107);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(123, 31);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Apply changes";
-            this.button4.UseVisualStyleBackColor = true;
+            this.txtCurrentBackupName.Location = new System.Drawing.Point(157, 68);
+            this.txtCurrentBackupName.Name = "txtCurrentBackupName";
+            this.txtCurrentBackupName.PasswordChar = ' ';
+            this.txtCurrentBackupName.Size = new System.Drawing.Size(364, 26);
+            this.txtCurrentBackupName.TabIndex = 7;
             // 
-            // listView1
+            // label18
             // 
-            this.listView1.Location = new System.Drawing.Point(21, 43);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(968, 257);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(25, 70);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(124, 20);
+            this.label18.TabIndex = 6;
+            this.label18.Text = "Name on server:";
+            // 
+            // txtCurrentBackupFolderPath
+            // 
+            this.txtCurrentBackupFolderPath.Location = new System.Drawing.Point(157, 36);
+            this.txtCurrentBackupFolderPath.Name = "txtCurrentBackupFolderPath";
+            this.txtCurrentBackupFolderPath.PasswordChar = ' ';
+            this.txtCurrentBackupFolderPath.ReadOnly = true;
+            this.txtCurrentBackupFolderPath.Size = new System.Drawing.Size(364, 26);
+            this.txtCurrentBackupFolderPath.TabIndex = 5;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(25, 38);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(95, 20);
+            this.label17.TabIndex = 4;
+            this.label17.Text = "Folder Path:";
+            // 
+            // btnRemoveCurrentFolder
+            // 
+            this.btnRemoveCurrentFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnRemoveCurrentFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.btnRemoveCurrentFolder.Location = new System.Drawing.Point(702, 107);
+            this.btnRemoveCurrentFolder.Name = "btnRemoveCurrentFolder";
+            this.btnRemoveCurrentFolder.Size = new System.Drawing.Size(123, 31);
+            this.btnRemoveCurrentFolder.TabIndex = 3;
+            this.btnRemoveCurrentFolder.Text = "Remove";
+            this.btnRemoveCurrentFolder.UseVisualStyleBackColor = false;
+            // 
+            // btnSaveCurrentFolderChanges
+            // 
+            this.btnSaveCurrentFolderChanges.Location = new System.Drawing.Point(831, 107);
+            this.btnSaveCurrentFolderChanges.Name = "btnSaveCurrentFolderChanges";
+            this.btnSaveCurrentFolderChanges.Size = new System.Drawing.Size(123, 31);
+            this.btnSaveCurrentFolderChanges.TabIndex = 2;
+            this.btnSaveCurrentFolderChanges.Text = "Apply changes";
+            this.btnSaveCurrentFolderChanges.UseVisualStyleBackColor = true;
+            // 
+            // lstvFoldersToBackup
+            // 
+            this.lstvFoldersToBackup.Location = new System.Drawing.Point(21, 43);
+            this.lstvFoldersToBackup.Name = "lstvFoldersToBackup";
+            this.lstvFoldersToBackup.Size = new System.Drawing.Size(968, 257);
+            this.lstvFoldersToBackup.TabIndex = 3;
+            this.lstvFoldersToBackup.UseCompatibleStateImageBehavior = false;
             // 
             // label5
             // 
@@ -202,15 +269,15 @@
             this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.textBox3);
+            this.tabPage2.Controls.Add(this.txtLogFolderName);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.numericUpDown1);
+            this.tabPage2.Controls.Add(this.numBackupMaxSize);
             this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.textBox2);
+            this.tabPage2.Controls.Add(this.txtBackupApiURL);
             this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.button1);
-            this.tabPage2.Controls.Add(this.textBox1);
+            this.tabPage2.Controls.Add(this.btnSaveSettings);
+            this.tabPage2.Controls.Add(this.txtUsernameCode);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
@@ -222,21 +289,40 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.label16);
+            this.groupBox4.Controls.Add(this.lblNextBackupCountdown);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.label14);
-            this.groupBox4.Controls.Add(this.numericUpDown4);
+            this.groupBox4.Controls.Add(this.numEveryMinutes);
             this.groupBox4.Controls.Add(this.label13);
-            this.groupBox4.Controls.Add(this.numericUpDown3);
+            this.groupBox4.Controls.Add(this.numEveryHours);
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Controls.Add(this.numericUpDown2);
+            this.groupBox4.Controls.Add(this.numEveryDays);
             this.groupBox4.Location = new System.Drawing.Point(19, 214);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(854, 125);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Backup schedule";
+            // 
+            // lblNextBackupCountdown
+            // 
+            this.lblNextBackupCountdown.AutoSize = true;
+            this.lblNextBackupCountdown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lblNextBackupCountdown.Location = new System.Drawing.Point(226, 83);
+            this.lblNextBackupCountdown.Name = "lblNextBackupCountdown";
+            this.lblNextBackupCountdown.Size = new System.Drawing.Size(196, 20);
+            this.lblNextBackupCountdown.TabIndex = 23;
+            this.lblNextBackupCountdown.Text = "<TIME\\UNDER BACKUP>";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(16, 83);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(195, 20);
+            this.label15.TabIndex = 22;
+            this.label15.Text = "Time left until next cackup:";
             // 
             // label14
             // 
@@ -248,17 +334,17 @@
             this.label14.TabIndex = 21;
             this.label14.Text = "Minutes.";
             // 
-            // numericUpDown4
+            // numEveryMinutes
             // 
-            this.numericUpDown4.Location = new System.Drawing.Point(512, 31);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
+            this.numEveryMinutes.Location = new System.Drawing.Point(512, 31);
+            this.numEveryMinutes.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(122, 26);
-            this.numericUpDown4.TabIndex = 20;
+            this.numEveryMinutes.Name = "numEveryMinutes";
+            this.numEveryMinutes.Size = new System.Drawing.Size(122, 26);
+            this.numEveryMinutes.TabIndex = 20;
             // 
             // label13
             // 
@@ -270,17 +356,17 @@
             this.label13.TabIndex = 19;
             this.label13.Text = "Hours,";
             // 
-            // numericUpDown3
+            // numEveryHours
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(292, 31);
-            this.numericUpDown3.Maximum = new decimal(new int[] {
+            this.numEveryHours.Location = new System.Drawing.Point(292, 31);
+            this.numEveryHours.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(122, 26);
-            this.numericUpDown3.TabIndex = 18;
+            this.numEveryHours.Name = "numEveryHours";
+            this.numEveryHours.Size = new System.Drawing.Size(122, 26);
+            this.numEveryHours.TabIndex = 18;
             // 
             // label12
             // 
@@ -301,17 +387,17 @@
             this.label11.TabIndex = 16;
             this.label11.Text = "Every:";
             // 
-            // numericUpDown2
+            // numEveryDays
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(93, 31);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
+            this.numEveryDays.Location = new System.Drawing.Point(93, 31);
+            this.numEveryDays.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(122, 26);
-            this.numericUpDown2.TabIndex = 16;
+            this.numEveryDays.Name = "numEveryDays";
+            this.numEveryDays.Size = new System.Drawing.Size(122, 26);
+            this.numEveryDays.TabIndex = 16;
             // 
             // label9
             // 
@@ -343,12 +429,12 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "Secret code, ask admin";
             // 
-            // textBox3
+            // txtLogFolderName
             // 
-            this.textBox3.Location = new System.Drawing.Point(147, 157);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(364, 26);
-            this.textBox3.TabIndex = 11;
+            this.txtLogFolderName.Location = new System.Drawing.Point(147, 157);
+            this.txtLogFolderName.Name = "txtLogFolderName";
+            this.txtLogFolderName.Size = new System.Drawing.Size(364, 26);
+            this.txtLogFolderName.TabIndex = 11;
             // 
             // label6
             // 
@@ -365,21 +451,21 @@
             this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(527, 113);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(160, 20);
+            this.label4.Size = new System.Drawing.Size(155, 20);
             this.label4.TabIndex = 9;
-            this.label4.Text = "(KB) , -1 for unlimited.";
+            this.label4.Text = "(KB) , 0 for unlimited.";
             // 
-            // numericUpDown1
+            // numBackupMaxSize
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(147, 111);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.numBackupMaxSize.Location = new System.Drawing.Point(147, 111);
+            this.numBackupMaxSize.Maximum = new decimal(new int[] {
             1000000000,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(364, 26);
-            this.numericUpDown1.TabIndex = 8;
+            this.numBackupMaxSize.Name = "numBackupMaxSize";
+            this.numBackupMaxSize.Size = new System.Drawing.Size(364, 26);
+            this.numBackupMaxSize.TabIndex = 8;
             // 
             // label3
             // 
@@ -390,12 +476,12 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Max backup size:";
             // 
-            // textBox2
+            // txtBackupApiURL
             // 
-            this.textBox2.Location = new System.Drawing.Point(147, 60);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(364, 26);
-            this.textBox2.TabIndex = 6;
+            this.txtBackupApiURL.Location = new System.Drawing.Point(147, 60);
+            this.txtBackupApiURL.Name = "txtBackupApiURL";
+            this.txtBackupApiURL.Size = new System.Drawing.Size(364, 26);
+            this.txtBackupApiURL.TabIndex = 6;
             // 
             // label2
             // 
@@ -406,22 +492,22 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Backup API url:";
             // 
-            // button1
+            // btnSaveSettings
             // 
-            this.button1.Location = new System.Drawing.Point(861, 685);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(134, 36);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Save Changes";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSaveSettings.Location = new System.Drawing.Point(457, 375);
+            this.btnSaveSettings.Name = "btnSaveSettings";
+            this.btnSaveSettings.Size = new System.Drawing.Size(134, 36);
+            this.btnSaveSettings.TabIndex = 4;
+            this.btnSaveSettings.Text = "Save Changes";
+            this.btnSaveSettings.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtUsernameCode
             // 
-            this.textBox1.Location = new System.Drawing.Point(147, 11);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = ' ';
-            this.textBox1.Size = new System.Drawing.Size(364, 26);
-            this.textBox1.TabIndex = 3;
+            this.txtUsernameCode.Location = new System.Drawing.Point(147, 11);
+            this.txtUsernameCode.Name = "txtUsernameCode";
+            this.txtUsernameCode.PasswordChar = ' ';
+            this.txtUsernameCode.Size = new System.Drawing.Size(364, 26);
+            this.txtUsernameCode.TabIndex = 3;
             // 
             // label1
             // 
@@ -434,9 +520,10 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label16);
             this.tabPage3.Controls.Add(this.groupBox3);
             this.tabPage3.Controls.Add(this.label10);
-            this.tabPage3.Controls.Add(this.listBox1);
+            this.tabPage3.Controls.Add(this.lstLog);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1014, 739);
@@ -446,7 +533,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.richTextBox1);
+            this.groupBox3.Controls.Add(this.rtbCurrentLog);
             this.groupBox3.Location = new System.Drawing.Point(12, 571);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(994, 149);
@@ -454,99 +541,149 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Current Item";
             // 
-            // richTextBox1
+            // rtbCurrentLog
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(3, 22);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(988, 124);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.rtbCurrentLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbCurrentLog.Location = new System.Drawing.Point(3, 22);
+            this.rtbCurrentLog.Name = "rtbCurrentLog";
+            this.rtbCurrentLog.ReadOnly = true;
+            this.rtbCurrentLog.Size = new System.Drawing.Size(988, 124);
+            this.rtbCurrentLog.TabIndex = 0;
+            this.rtbCurrentLog.Text = "";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.Red;
-            this.label10.Location = new System.Drawing.Point(8, 17);
+            this.label10.Location = new System.Drawing.Point(295, 17);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(209, 20);
+            this.label10.Size = new System.Drawing.Size(205, 20);
             this.label10.TabIndex = 14;
-            this.label10.Text = "Click on item to show bellow:";
+            this.label10.Text = "Click on item to show bellow";
             // 
-            // listBox1
+            // lstLog
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(12, 40);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(994, 524);
-            this.listBox1.TabIndex = 0;
+            this.lstLog.FormattingEnabled = true;
+            this.lstLog.ItemHeight = 20;
+            this.lstLog.Location = new System.Drawing.Point(12, 40);
+            this.lstLog.Name = "lstLog";
+            this.lstLog.Size = new System.Drawing.Size(994, 524);
+            this.lstLog.TabIndex = 0;
             // 
-            // label15
+            // label19
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(16, 83);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(195, 20);
-            this.label15.TabIndex = 22;
-            this.label15.Text = "Time left until next cackup:";
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(25, 58);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(117, 20);
+            this.label19.TabIndex = 9;
+            this.label19.Text = "Current Status:";
+            // 
+            // txtCurrentStatus
+            // 
+            this.txtCurrentStatus.Location = new System.Drawing.Point(148, 55);
+            this.txtCurrentStatus.Name = "txtCurrentStatus";
+            this.txtCurrentStatus.PasswordChar = ' ';
+            this.txtCurrentStatus.ReadOnly = true;
+            this.txtCurrentStatus.Size = new System.Drawing.Size(624, 26);
+            this.txtCurrentStatus.TabIndex = 9;
+            // 
+            // txtStatusDescription
+            // 
+            this.txtStatusDescription.Location = new System.Drawing.Point(172, 104);
+            this.txtStatusDescription.Name = "txtStatusDescription";
+            this.txtStatusDescription.PasswordChar = ' ';
+            this.txtStatusDescription.ReadOnly = true;
+            this.txtStatusDescription.Size = new System.Drawing.Size(600, 26);
+            this.txtStatusDescription.TabIndex = 10;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(25, 107);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(141, 20);
+            this.label20.TabIndex = 11;
+            this.label20.Text = "Status description:";
+            // 
+            // pbStatusProgress
+            // 
+            this.pbStatusProgress.Location = new System.Drawing.Point(172, 152);
+            this.pbStatusProgress.Name = "pbStatusProgress";
+            this.pbStatusProgress.Size = new System.Drawing.Size(600, 23);
+            this.pbStatusProgress.TabIndex = 12;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(25, 155);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(76, 20);
+            this.label21.TabIndex = 13;
+            this.label21.Text = "Progress:";
+            // 
+            // btnAddBackupFolder
+            // 
+            this.btnAddBackupFolder.Location = new System.Drawing.Point(895, 13);
+            this.btnAddBackupFolder.Name = "btnAddBackupFolder";
+            this.btnAddBackupFolder.Size = new System.Drawing.Size(94, 26);
+            this.btnAddBackupFolder.TabIndex = 9;
+            this.btnAddBackupFolder.Text = "Add Row";
+            this.btnAddBackupFolder.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.lstvBackupHistory);
+            this.tabPage4.Controls.Add(this.menuStrip1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 29);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1014, 739);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Backup History";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // lstvBackupHistory
+            // 
+            this.lstvBackupHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstvBackupHistory.Location = new System.Drawing.Point(3, 32);
+            this.lstvBackupHistory.Name = "lstvBackupHistory";
+            this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 704);
+            this.lstvBackupHistory.TabIndex = 4;
+            this.lstvBackupHistory.UseCompatibleStateImageBehavior = false;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.prevPageToolStripMenuItem,
+            this.nextPageToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(3, 3);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1008, 29);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // prevPageToolStripMenuItem
+            // 
+            this.prevPageToolStripMenuItem.Name = "prevPageToolStripMenuItem";
+            this.prevPageToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
+            this.prevPageToolStripMenuItem.Text = "<--- Prev Page";
+            // 
+            // nextPageToolStripMenuItem
+            // 
+            this.nextPageToolStripMenuItem.Name = "nextPageToolStripMenuItem";
+            this.nextPageToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
+            this.nextPageToolStripMenuItem.Text = "Next Page --->";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label16.Location = new System.Drawing.Point(226, 83);
+            this.label16.Location = new System.Drawing.Point(11, 17);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(196, 20);
-            this.label16.TabIndex = 23;
-            this.label16.Text = "<TIME\\UNDER BACKUP>";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(157, 36);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.PasswordChar = ' ';
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(364, 26);
-            this.textBox4.TabIndex = 5;
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(25, 38);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(95, 20);
-            this.label17.TabIndex = 4;
-            this.label17.Text = "Folder Path:";
-            this.label17.Click += new System.EventHandler(this.label17_Click);
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(157, 68);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.PasswordChar = ' ';
-            this.textBox5.Size = new System.Drawing.Size(364, 26);
-            this.textBox5.TabIndex = 7;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(25, 70);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(124, 20);
-            this.label18.TabIndex = 6;
-            this.label18.Text = "Name on server:";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(527, 36);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(94, 26);
-            this.button6.TabIndex = 8;
-            this.button6.Text = "Choose...";
-            this.button6.UseVisualStyleBackColor = true;
+            this.label16.Size = new System.Drawing.Size(276, 20);
+            this.label16.TabIndex = 16;
+            this.label16.Text = "Events since the last program started:";
             // 
             // Form1
             // 
@@ -555,6 +692,7 @@
             this.ClientSize = new System.Drawing.Size(1022, 772);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -563,19 +701,24 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryHours)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numEveryDays)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numBackupMaxSize)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -585,46 +728,59 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnStopBackup;
+        private System.Windows.Forms.Button btnStartBackup;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lstvFoldersToBackup;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtLogFolderName;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numBackupMaxSize;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtBackupApiURL;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnSaveSettings;
+        private System.Windows.Forms.TextBox txtUsernameCode;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbCurrentLog;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ListBox lstLog;
+        private System.Windows.Forms.Button btnRemoveCurrentFolder;
+        private System.Windows.Forms.Button btnSaveCurrentFolderChanges;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
+        private System.Windows.Forms.NumericUpDown numEveryMinutes;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numEveryHours;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown numEveryDays;
+        private System.Windows.Forms.Label lblNextBackupCountdown;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtCurrentBackupFolderPath;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button btnCurrentBackupFolderChoose;
+        private System.Windows.Forms.TextBox txtCurrentBackupName;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.ProgressBar pbStatusProgress;
+        private System.Windows.Forms.TextBox txtStatusDescription;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox txtCurrentStatus;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button btnAddBackupFolder;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.ListView lstvBackupHistory;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem prevPageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextPageToolStripMenuItem;
+        private System.Windows.Forms.Label label16;
     }
 }
 
