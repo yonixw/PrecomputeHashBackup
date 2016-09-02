@@ -89,6 +89,13 @@
             this.label10 = new System.Windows.Forms.Label();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
+            this.txtHistoryPages = new System.Windows.Forms.ToolStripTextBox();
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -617,35 +624,44 @@
             // 
             // lstvBackupHistory
             // 
+            this.lstvBackupHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4,
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7,
+            this.columnHeader8,
+            this.columnHeader9});
             this.lstvBackupHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstvBackupHistory.Location = new System.Drawing.Point(3, 32);
+            this.lstvBackupHistory.Location = new System.Drawing.Point(3, 36);
             this.lstvBackupHistory.Name = "lstvBackupHistory";
-            this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 704);
+            this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 700);
             this.lstvBackupHistory.TabIndex = 4;
             this.lstvBackupHistory.UseCompatibleStateImageBehavior = false;
+            this.lstvBackupHistory.View = System.Windows.Forms.View.Details;
             // 
             // menuStrip1
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.prevPageToolStripMenuItem,
+            this.txtHistoryPages,
             this.nextPageToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(3, 3);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1008, 29);
+            this.menuStrip1.Size = new System.Drawing.Size(1008, 33);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // prevPageToolStripMenuItem
             // 
             this.prevPageToolStripMenuItem.Name = "prevPageToolStripMenuItem";
-            this.prevPageToolStripMenuItem.Size = new System.Drawing.Size(123, 25);
+            this.prevPageToolStripMenuItem.Size = new System.Drawing.Size(123, 29);
             this.prevPageToolStripMenuItem.Text = "<--- Prev Page";
             // 
             // nextPageToolStripMenuItem
             // 
             this.nextPageToolStripMenuItem.Name = "nextPageToolStripMenuItem";
-            this.nextPageToolStripMenuItem.Size = new System.Drawing.Size(124, 25);
+            this.nextPageToolStripMenuItem.Size = new System.Drawing.Size(124, 29);
             this.nextPageToolStripMenuItem.Text = "Next Page --->";
             // 
             // tabPage3
@@ -716,6 +732,38 @@
             this.dlgChooseFolder.CheckFileExists = false;
             this.dlgChooseFolder.FileName = "Choose";
             this.dlgChooseFolder.ValidateNames = false;
+            // 
+            // txtHistoryPages
+            // 
+            this.txtHistoryPages.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.txtHistoryPages.Name = "txtHistoryPages";
+            this.txtHistoryPages.ReadOnly = true;
+            this.txtHistoryPages.Size = new System.Drawing.Size(100, 29);
+            this.txtHistoryPages.Text = "(0/0)";
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Folder Name";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Start time";
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "End time";
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Backup Size";
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Status Code";
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Status Description";
             // 
             // Form1
             // 
@@ -818,6 +866,13 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.OpenFileDialog dlgChooseFolder;
+        private System.Windows.Forms.ToolStripTextBox txtHistoryPages;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
     }
 }
 

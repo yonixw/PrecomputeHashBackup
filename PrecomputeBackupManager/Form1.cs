@@ -78,6 +78,7 @@ namespace PrecomputeBackupManager
             }
 
             AutoSizeLSTVColumn(lstvFoldersToBackup, -2);
+            Log("Reloaded all backup folders.");
         }
 
       
@@ -168,7 +169,7 @@ namespace PrecomputeBackupManager
         #endregion
 
 
-        #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [2]
+        #region >>>>>>>>>>>>>>>>>>>>>>>>> Setting Tab [2]
 
         internal class KnownConfigKeys {
             public static string Usercode = "USER_CODE";
