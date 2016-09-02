@@ -1119,7 +1119,6 @@ namespace PrecomputeBackupManager {
                 this.columnid.Unique = true;
                 this.columnKey.AllowDBNull = false;
                 this.columnKey.MaxLength = 254;
-                this.columnValue.AllowDBNull = false;
                 this.columnValue.MaxLength = 2147483647;
             }
             
@@ -1466,7 +1465,12 @@ namespace PrecomputeBackupManager {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string Value {
                 get {
-                    return ((string)(this[this.tableConfig.ValueColumn]));
+                    try {
+                        return ((string)(this[this.tableConfig.ValueColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Value\' in table \'Config\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tableConfig.ValueColumn] = value;
@@ -1483,6 +1487,18 @@ namespace PrecomputeBackupManager {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetidNull() {
                 this[this.tableConfig.idColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsValueNull() {
+                return this.IsNull(this.tableConfig.ValueColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetValueNull() {
+                this[this.tableConfig.ValueColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2769,7 +2785,7 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[4];
+            this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[5];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT [id], [Key], [Value] FROM [Config]";
@@ -2780,39 +2796,49 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "INSERT INTO Config\r\n                         ([Key], Value)\r\nVALUES        (@Key," +
-                " @Value)";
+            this._commandCollection[2].CommandText = "SELECT COUNT(*) FROM Config WHERE [Key] = @key";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
-            param.ParameterName = "@Key";
+            param.ParameterName = "@key";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 254;
             param.SourceColumn = "Key";
             this._commandCollection[2].Parameters.Add(param);
+            this._commandCollection[3] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "INSERT INTO Config\r\n                         ([Key], Value)\r\nVALUES        (@Key," +
+                " @Value)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@Key";
+            param.DbType = global::System.Data.DbType.String;
+            param.Size = 254;
+            param.SourceColumn = "Key";
+            this._commandCollection[3].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Value";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 2147483647;
             param.SourceColumn = "Value";
-            this._commandCollection[2].Parameters.Add(param);
-            this._commandCollection[3] = new global::System.Data.SQLite.SQLiteCommand();
-            this._commandCollection[3].Connection = this.Connection;
-            this._commandCollection[3].CommandText = "UPDATE       Config\r\nSET               Value = @value\r\nWHERE        ([Key] = @key" +
+            this._commandCollection[3].Parameters.Add(param);
+            this._commandCollection[4] = new global::System.Data.SQLite.SQLiteCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "UPDATE       Config\r\nSET               Value = @value\r\nWHERE        ([Key] = @key" +
                 ")";
-            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@value";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 2147483647;
             param.SourceColumn = "Value";
-            this._commandCollection[3].Parameters.Add(param);
+            this._commandCollection[4].Parameters.Add(param);
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@key";
             param.DbType = global::System.Data.DbType.String;
             param.Size = 254;
             param.SourceColumn = "Key";
             param.SourceVersion = global::System.Data.DataRowVersion.Original;
-            this._commandCollection[3].Parameters.Add(param);
+            this._commandCollection[4].Parameters.Add(param);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2897,7 +2923,7 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
                 this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Key));
             }
             if ((Value == null)) {
-                throw new global::System.ArgumentNullException("Value");
+                this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Value));
@@ -2921,9 +2947,43 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual object KeyExist(string key) {
+            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[2];
+            if ((key == null)) {
+                throw new global::System.ArgumentNullException("key");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(key));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            object returnValue;
+            try {
+                returnValue = command.ExecuteScalar();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            if (((returnValue == null) 
+                        || (returnValue.GetType() == typeof(global::System.DBNull)))) {
+                return null;
+            }
+            else {
+                return ((object)(returnValue));
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
         public virtual int NewKey(string Key, string Value) {
-            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[2];
+            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[3];
             if ((Key == null)) {
                 throw new global::System.ArgumentNullException("Key");
             }
@@ -2931,7 +2991,7 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
                 command.Parameters[0].Value = ((string)(Key));
             }
             if ((Value == null)) {
-                throw new global::System.ArgumentNullException("Value");
+                command.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
                 command.Parameters[1].Value = ((string)(Value));
@@ -2958,9 +3018,9 @@ namespace PrecomputeBackupManager.DataSet1TableAdapters {
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, false)]
         public virtual int UpdateKey(string value, string key) {
-            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[3];
+            global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[4];
             if ((value == null)) {
-                throw new global::System.ArgumentNullException("value");
+                command.Parameters[0].Value = global::System.DBNull.Value;
             }
             else {
                 command.Parameters[0].Value = ((string)(value));

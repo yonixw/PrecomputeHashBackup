@@ -20,7 +20,11 @@ namespace PrecomputeBackupManager
             InitializeComponent();
         }
 
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            reloadBackupFolders();
+            LoadAllSettings();
+        }
 
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [4]
@@ -76,10 +80,7 @@ namespace PrecomputeBackupManager
             AutoSizeLSTVColumn(lstvFoldersToBackup, -2);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            reloadBackupFolders();
-        }
+      
 
         private void btnAddBackupFolder_Click(object sender, EventArgs e)
         {
@@ -167,6 +168,79 @@ namespace PrecomputeBackupManager
         #endregion
 
 
+        #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [2]
+
+        internal class KnownConfigKeys {
+            public static string Usercode = "USER_CODE";
+            public static string BackupAPIurl = "BACKUP_API_URL";
+            public static string MaxBackupSize = "MAX_BACKUP_SIZE";
+            public static string LogFolderServerName = "LOG_FOLDER_NAME";
+            public static string ScheduleDays = "SCHEDULE_DAYS";
+            public static string ScheduleHours = "SCHEDULE_HOURS";
+            public static string ScheduleMinutes = "SCHEDULE_MINUTES";
+        }
+
+        Dictionary<string, string> LoadSettingsFromDB() {
+            DataSet1.ConfigDataTable dt = adapConfig.GetAllEntries();
+            Dictionary<string, string> settings = new Dictionary<string, string>();
+
+            foreach (DataSet1.ConfigRow row in dt) {
+                settings.Add(row.Key, DBNull.Value.Equals(row.Value) ?   "0" : row.Value);
+            }
+
+            return settings;
+        }
+
+        void LoadAllSettings()
+        {
+            Dictionary<string, string> allSettings = LoadSettingsFromDB();
+
+            txtUsernameCode.Text = allSettings[KnownConfigKeys.Usercode];
+            txtBackupApiURL.Text = allSettings[KnownConfigKeys.BackupAPIurl];
+            numBackupMaxSize.Value = Int64.Parse(allSettings[KnownConfigKeys.MaxBackupSize]);
+            txtLogFolderName.Text = allSettings[KnownConfigKeys.LogFolderServerName];
+            numEveryDays.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleDays]);
+            numEveryHours.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleHours]);
+            numEveryMinutes.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleMinutes]);
+
+            Log("All settings were loaded from DB.");
+        }
+
+
+        void SaveAllSettings()
+        {
+            Dictionary<string, string> allSettings = LoadSettingsFromDB();
+
+            allSettings[KnownConfigKeys.Usercode] = txtUsernameCode.Text ?? "0000";
+            allSettings[KnownConfigKeys.BackupAPIurl] = txtBackupApiURL.Text ?? "HTTP";
+            allSettings[KnownConfigKeys.MaxBackupSize] = numBackupMaxSize.Value.ToString() ;
+            allSettings[KnownConfigKeys.LogFolderServerName] = txtLogFolderName.Text ?? "SERVER NAME";
+            allSettings[KnownConfigKeys.ScheduleDays] = numEveryDays.Value.ToString();
+            allSettings[KnownConfigKeys.ScheduleHours] = numEveryHours.Value.ToString();
+            allSettings[KnownConfigKeys.ScheduleMinutes]= numEveryMinutes.Value.ToString();
+
+            foreach (string key in allSettings.Keys)
+            {
+                if ((long)adapConfig.KeyExist(key) > 0) {
+                    // Update
+                    adapConfig.UpdateKey(allSettings[key], key);
+                }
+                else
+                {
+                    // Insert
+                    adapConfig.NewKey(key, allSettings[key]);
+                }
+            }
+
+            Log("All settings were saved to DB.");
+        }
+
+        private void btnSaveSettings_Click(object sender, EventArgs e)
+        {
+            SaveAllSettings();
+        }
+
+        #endregion
 
 
     }
