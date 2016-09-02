@@ -185,6 +185,7 @@ namespace PrecomputeBackupManager
             public static string ScheduleDays = "SCHEDULE_DAYS";
             public static string ScheduleHours = "SCHEDULE_HOURS";
             public static string ScheduleMinutes = "SCHEDULE_MINUTES";
+            public static string ServerUploadPath = "SERVER_UPLOAD_PATH";
         }
 
         Dictionary<string, string> LoadSettingsFromDB() {
@@ -202,6 +203,7 @@ namespace PrecomputeBackupManager
         {
             Dictionary<string, string> allSettings = LoadSettingsFromDB();
 
+            txtServerUploadPath.Text = allSettings[KnownConfigKeys.ServerUploadPath];
             txtUsernameCode.Text = allSettings[KnownConfigKeys.Usercode];
             txtBackupApiURL.Text = allSettings[KnownConfigKeys.BackupAPIurl];
             numBackupMaxSize.Value = Int64.Parse(allSettings[KnownConfigKeys.MaxBackupSize]);
@@ -218,6 +220,7 @@ namespace PrecomputeBackupManager
         {
             Dictionary<string, string> allSettings = LoadSettingsFromDB();
 
+            allSettings[KnownConfigKeys.ServerUploadPath] = txtServerUploadPath.Text ?? "\\pi\\";
             allSettings[KnownConfigKeys.Usercode] = txtUsernameCode.Text ?? "0000";
             allSettings[KnownConfigKeys.BackupAPIurl] = txtBackupApiURL.Text ?? "HTTP";
             allSettings[KnownConfigKeys.MaxBackupSize] = numBackupMaxSize.Value.ToString() ;
@@ -248,6 +251,7 @@ namespace PrecomputeBackupManager
         }
 
         #endregion
+
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> History Tab [3]
 

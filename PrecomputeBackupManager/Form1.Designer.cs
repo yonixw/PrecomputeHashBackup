@@ -97,6 +97,9 @@
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtServerUploadPath = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -357,6 +360,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label22);
+            this.tabPage2.Controls.Add(this.txtServerUploadPath);
+            this.tabPage2.Controls.Add(this.label23);
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.label8);
@@ -390,7 +396,7 @@
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.numEveryDays);
-            this.groupBox4.Location = new System.Drawing.Point(19, 214);
+            this.groupBox4.Location = new System.Drawing.Point(19, 246);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(854, 125);
             this.groupBox4.TabIndex = 15;
@@ -495,7 +501,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.ForeColor = System.Drawing.Color.Red;
-            this.label9.Location = new System.Drawing.Point(527, 161);
+            this.label9.Location = new System.Drawing.Point(527, 197);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(346, 20);
             this.label9.TabIndex = 14;
@@ -505,7 +511,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.Red;
-            this.label8.Location = new System.Drawing.Point(527, 60);
+            this.label8.Location = new System.Drawing.Point(527, 96);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(185, 20);
             this.label8.TabIndex = 13;
@@ -523,7 +529,7 @@
             // 
             // txtLogFolderName
             // 
-            this.txtLogFolderName.Location = new System.Drawing.Point(147, 157);
+            this.txtLogFolderName.Location = new System.Drawing.Point(147, 193);
             this.txtLogFolderName.Name = "txtLogFolderName";
             this.txtLogFolderName.Size = new System.Drawing.Size(364, 26);
             this.txtLogFolderName.TabIndex = 11;
@@ -531,7 +537,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 161);
+            this.label6.Location = new System.Drawing.Point(15, 197);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(128, 20);
             this.label6.TabIndex = 10;
@@ -541,7 +547,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(527, 113);
+            this.label4.Location = new System.Drawing.Point(527, 149);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(155, 20);
             this.label4.TabIndex = 9;
@@ -549,7 +555,7 @@
             // 
             // numBackupMaxSize
             // 
-            this.numBackupMaxSize.Location = new System.Drawing.Point(147, 111);
+            this.numBackupMaxSize.Location = new System.Drawing.Point(147, 147);
             this.numBackupMaxSize.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -562,7 +568,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 113);
+            this.label3.Location = new System.Drawing.Point(15, 149);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(130, 20);
             this.label3.TabIndex = 7;
@@ -570,7 +576,7 @@
             // 
             // txtBackupApiURL
             // 
-            this.txtBackupApiURL.Location = new System.Drawing.Point(147, 60);
+            this.txtBackupApiURL.Location = new System.Drawing.Point(147, 96);
             this.txtBackupApiURL.Name = "txtBackupApiURL";
             this.txtBackupApiURL.Size = new System.Drawing.Size(364, 26);
             this.txtBackupApiURL.TabIndex = 6;
@@ -578,7 +584,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 63);
+            this.label2.Location = new System.Drawing.Point(15, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(118, 20);
             this.label2.TabIndex = 5;
@@ -586,7 +592,7 @@
             // 
             // btnSaveSettings
             // 
-            this.btnSaveSettings.Location = new System.Drawing.Point(457, 375);
+            this.btnSaveSettings.Location = new System.Drawing.Point(457, 400);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(134, 36);
             this.btnSaveSettings.TabIndex = 4;
@@ -780,6 +786,32 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.Red;
+            this.label22.Location = new System.Drawing.Point(527, 52);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(362, 20);
+            this.label22.TabIndex = 18;
+            this.label22.Text = "Path of the designated upload folder on the server";
+            // 
+            // txtServerUploadPath
+            // 
+            this.txtServerUploadPath.Location = new System.Drawing.Point(147, 52);
+            this.txtServerUploadPath.Name = "txtServerUploadPath";
+            this.txtServerUploadPath.Size = new System.Drawing.Size(364, 26);
+            this.txtServerUploadPath.TabIndex = 17;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(15, 55);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(100, 20);
+            this.label23.TabIndex = 16;
+            this.label23.Text = "Upload path:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -889,6 +921,9 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox txtServerUploadPath;
+        private System.Windows.Forms.Label label23;
     }
 }
 
