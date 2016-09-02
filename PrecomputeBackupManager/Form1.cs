@@ -24,6 +24,7 @@ namespace PrecomputeBackupManager
         {
             reloadBackupFolders();
             LoadAllSettings();
+            LoadBackupHistory();
         }
 
 
@@ -42,10 +43,15 @@ namespace PrecomputeBackupManager
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            lstLog.Items.Clear();
+        }
+
         #endregion
 
 
-        #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [1]
+        #region >>>>>>>>>>>>>>>>>>>>>>>>> Backup Folder Tab [1]
 
         public static void AutoSizeLSTVColumn(ListView lstv, int width)
         {
@@ -245,25 +251,47 @@ namespace PrecomputeBackupManager
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> History Tab [3]
 
-        void LoadBackupHistory(int page = 1, int limit = 10) {
+        int currentPage = 1;
+        void LoadBackupHistory(int limit = 28) { // 28 came from brute trying.
 
             long historyCount = (long)adapStatus.GetCount();
             int pages = (int)Math.Ceiling(historyCount * 1.0f / limit);
-            page = Math.Min(page, pages);
+            currentPage = Math.Max(Math.Min(currentPage, pages),1); // 1 <= page <= pages
 
-            DataSet1.BackupStatusDataTable dt = adapStatus.GetDataByPageOffset(limit, limit* (page -1));
+            DataSet1.BackupStatusDataTable dt = adapStatus.GetDataByPageOffset(limit, limit* (currentPage - 1));
 
             // Clear items from prev pages.
             lstvBackupHistory.Items.Clear();
 
             // Add history:
             foreach (DataSet1.BackupStatusRow row in dt) {
-                
+                ListViewItem item = new ListViewItem(new[] {
+                    row.folderid.ToString()
+                });
                 lstvBackupHistory.Items.Add(item);
             }
 
+            AutoSizeLSTVColumn(lstvBackupHistory, -2);
+            txtHistoryCurrentBackup.Text = "(" + currentPage + "/" + pages + ")";
+            Log("Loaded all backup history.");
+
         }
 
+        private void nextPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            currentPage++;
+            LoadBackupHistory();
+        }
+
+        private void prevPageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            currentPage--;
+            LoadBackupHistory();
+        }
+
+
         #endregion
+
+        
     }
 }

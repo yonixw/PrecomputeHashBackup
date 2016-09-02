@@ -79,8 +79,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.lstvBackupHistory = new System.Windows.Forms.ListView();
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.prevPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtHistoryCurrentBackup = new System.Windows.Forms.ToolStripTextBox();
             this.nextPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label16 = new System.Windows.Forms.Label();
@@ -89,13 +96,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
-            this.txtHistoryPages = new System.Windows.Forms.ToolStripTextBox();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.button1 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -632,6 +633,7 @@
             this.columnHeader8,
             this.columnHeader9});
             this.lstvBackupHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstvBackupHistory.FullRowSelect = true;
             this.lstvBackupHistory.Location = new System.Drawing.Point(3, 36);
             this.lstvBackupHistory.Name = "lstvBackupHistory";
             this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 700);
@@ -639,12 +641,36 @@
             this.lstvBackupHistory.UseCompatibleStateImageBehavior = false;
             this.lstvBackupHistory.View = System.Windows.Forms.View.Details;
             // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Folder Name";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Start time";
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "End time";
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Backup Size";
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Status Code";
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Status Description";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.prevPageToolStripMenuItem,
-            this.txtHistoryPages,
+            this.txtHistoryCurrentBackup,
             this.nextPageToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(3, 3);
             this.menuStrip1.Name = "menuStrip1";
@@ -657,15 +683,26 @@
             this.prevPageToolStripMenuItem.Name = "prevPageToolStripMenuItem";
             this.prevPageToolStripMenuItem.Size = new System.Drawing.Size(123, 29);
             this.prevPageToolStripMenuItem.Text = "<--- Prev Page";
+            this.prevPageToolStripMenuItem.Click += new System.EventHandler(this.prevPageToolStripMenuItem_Click);
+            // 
+            // txtHistoryCurrentBackup
+            // 
+            this.txtHistoryCurrentBackup.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.txtHistoryCurrentBackup.Name = "txtHistoryCurrentBackup";
+            this.txtHistoryCurrentBackup.ReadOnly = true;
+            this.txtHistoryCurrentBackup.Size = new System.Drawing.Size(100, 29);
+            this.txtHistoryCurrentBackup.Text = "(0/0)";
             // 
             // nextPageToolStripMenuItem
             // 
             this.nextPageToolStripMenuItem.Name = "nextPageToolStripMenuItem";
             this.nextPageToolStripMenuItem.Size = new System.Drawing.Size(124, 29);
             this.nextPageToolStripMenuItem.Text = "Next Page --->";
+            this.nextPageToolStripMenuItem.Click += new System.EventHandler(this.nextPageToolStripMenuItem_Click);
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.label16);
             this.tabPage3.Controls.Add(this.groupBox3);
             this.tabPage3.Controls.Add(this.label10);
@@ -720,9 +757,9 @@
             // 
             this.lstLog.FormattingEnabled = true;
             this.lstLog.ItemHeight = 20;
-            this.lstLog.Location = new System.Drawing.Point(12, 40);
+            this.lstLog.Location = new System.Drawing.Point(12, 60);
             this.lstLog.Name = "lstLog";
-            this.lstLog.Size = new System.Drawing.Size(994, 524);
+            this.lstLog.Size = new System.Drawing.Size(994, 504);
             this.lstLog.TabIndex = 0;
             this.lstLog.SelectedIndexChanged += new System.EventHandler(this.lstLog_SelectedIndexChanged);
             // 
@@ -733,37 +770,15 @@
             this.dlgChooseFolder.FileName = "Choose";
             this.dlgChooseFolder.ValidateNames = false;
             // 
-            // txtHistoryPages
+            // button1
             // 
-            this.txtHistoryPages.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.txtHistoryPages.Name = "txtHistoryPages";
-            this.txtHistoryPages.ReadOnly = true;
-            this.txtHistoryPages.Size = new System.Drawing.Size(100, 29);
-            this.txtHistoryPages.Text = "(0/0)";
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Folder Name";
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Start time";
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "End time";
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Backup Size";
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Status Code";
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Status Description";
+            this.button1.Location = new System.Drawing.Point(905, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(98, 34);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Clear log";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -866,13 +881,14 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.OpenFileDialog dlgChooseFolder;
-        private System.Windows.Forms.ToolStripTextBox txtHistoryPages;
+        private System.Windows.Forms.ToolStripTextBox txtHistoryCurrentBackup;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.Button button1;
     }
 }
 
