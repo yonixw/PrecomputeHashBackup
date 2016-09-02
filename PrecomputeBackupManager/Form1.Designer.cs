@@ -54,6 +54,9 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtServerUploadPath = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lblNextBackupCountdown = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -90,16 +93,13 @@
             this.txtHistoryCurrentBackup = new System.Windows.Forms.ToolStripTextBox();
             this.nextPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.rtbCurrentLog = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label22 = new System.Windows.Forms.Label();
-            this.txtServerUploadPath = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -347,7 +347,7 @@
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Last History";
+            this.columnHeader3.Text = "Last Backup end";
             // 
             // label5
             // 
@@ -384,6 +384,32 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Backup Setting";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.Red;
+            this.label22.Location = new System.Drawing.Point(527, 52);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(362, 20);
+            this.label22.TabIndex = 18;
+            this.label22.Text = "Path of the designated upload folder on the server";
+            // 
+            // txtServerUploadPath
+            // 
+            this.txtServerUploadPath.Location = new System.Drawing.Point(147, 52);
+            this.txtServerUploadPath.Name = "txtServerUploadPath";
+            this.txtServerUploadPath.Size = new System.Drawing.Size(364, 26);
+            this.txtServerUploadPath.TabIndex = 17;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(15, 55);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(100, 20);
+            this.label23.TabIndex = 16;
+            this.label23.Text = "Upload path:";
             // 
             // groupBox4
             // 
@@ -662,6 +688,7 @@
             // columnHeader7
             // 
             this.columnHeader7.Text = "Backup Size";
+            this.columnHeader7.Width = 104;
             // 
             // columnHeader8
             // 
@@ -720,6 +747,16 @@
             this.tabPage3.Text = "Log";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(905, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(98, 34);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Clear log";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
@@ -775,42 +812,6 @@
             this.dlgChooseFolder.CheckFileExists = false;
             this.dlgChooseFolder.FileName = "Choose";
             this.dlgChooseFolder.ValidateNames = false;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(905, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(98, 34);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "Clear log";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.ForeColor = System.Drawing.Color.Red;
-            this.label22.Location = new System.Drawing.Point(527, 52);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(362, 20);
-            this.label22.TabIndex = 18;
-            this.label22.Text = "Path of the designated upload folder on the server";
-            // 
-            // txtServerUploadPath
-            // 
-            this.txtServerUploadPath.Location = new System.Drawing.Point(147, 52);
-            this.txtServerUploadPath.Name = "txtServerUploadPath";
-            this.txtServerUploadPath.Size = new System.Drawing.Size(364, 26);
-            this.txtServerUploadPath.TabIndex = 17;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(15, 55);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(100, 20);
-            this.label23.TabIndex = 16;
-            this.label23.Text = "Upload path:";
             // 
             // Form1
             // 

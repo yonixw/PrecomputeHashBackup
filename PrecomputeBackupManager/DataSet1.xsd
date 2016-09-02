@@ -217,7 +217,7 @@ WHERE        (id = @id)</CommandText>
                   </DbCommand>
                 </UpdateCommand>
               </DbSource>
-              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetCount" Modifier="Public" Name="GetCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="GetCount">
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetCount" Modifier="Public" Name="GetCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="GetCount">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT COUNT(*) FROM BackupStatus</CommandText>
@@ -240,7 +240,7 @@ LIMIT @limit OFFSET @offset</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateState" Modifier="Public" Name="UpdateState" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="UpdateState">
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateState" Modifier="Public" Name="UpdateState" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy3" UserSourceName="UpdateState">
                 <UpdateCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>UPDATE       BackupStatus
@@ -291,7 +291,7 @@ WHERE        (id = @id)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="KeyExist" Modifier="Public" Name="KeyExist" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="KeyExist">
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="KeyExist" Modifier="Public" Name="KeyExist" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="KeyExist">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT COUNT(*) FROM Config WHERE [Key] = @key</CommandText>
@@ -301,7 +301,7 @@ WHERE        (id = @id)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewKey" Modifier="Public" Name="NewKey" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="NewKey">
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewKey" Modifier="Public" Name="NewKey" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="NewKey">
                 <InsertCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>INSERT INTO Config
@@ -314,7 +314,7 @@ VALUES        (@Key, @Value)</CommandText>
                   </DbCommand>
                 </InsertCommand>
               </DbSource>
-              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateKey" Modifier="Public" Name="UpdateKey" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="UpdateKey">
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateKey" Modifier="Public" Name="UpdateKey" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="UpdateKey">
                 <UpdateCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>UPDATE       Config
@@ -326,6 +326,67 @@ WHERE        ([Key] = @key)</CommandText>
                     </Parameters>
                   </DbCommand>
                 </UpdateCommand>
+              </DbSource>
+            </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="BackupFolderExTableAdapter" GeneratorDataComponentClassName="BackupFolderExTableAdapter" Name="BackupFolderEx" UserDataComponentName="BackupFolderExTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="main.BackupFolderEx" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        FolderPath, FolderName, endtime, id
+FROM            BackupFolderEx
+ORDER BY id</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="FolderPath" DataSetColumn="FolderPath" />
+              <Mapping SourceColumn="FolderName" DataSetColumn="FolderName" />
+              <Mapping SourceColumn="endtime" DataSetColumn="endtime" />
+              <Mapping SourceColumn="id" DataSetColumn="id" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="BackupLogsExTableAdapter" GeneratorDataComponentClassName="BackupLogsExTableAdapter" Name="BackupLogsEx" UserDataComponentName="BackupLogsExTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="main.BackupLogsEx" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        folderid, starttime, endtime, status, statusdesc, size, FolderName, id
+FROM            BackupLogsEx</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="folderid" DataSetColumn="folderid" />
+              <Mapping SourceColumn="starttime" DataSetColumn="starttime" />
+              <Mapping SourceColumn="endtime" DataSetColumn="endtime" />
+              <Mapping SourceColumn="status" DataSetColumn="status" />
+              <Mapping SourceColumn="statusdesc" DataSetColumn="statusdesc" />
+              <Mapping SourceColumn="size" DataSetColumn="size" />
+              <Mapping SourceColumn="FolderName" DataSetColumn="FolderName" />
+              <Mapping SourceColumn="id" DataSetColumn="id" />
+            </Mappings>
+            <Sources>
+              <DbSource ConnectionRef="configConnectionString (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetDataByPageOffset" GetMethodModifier="Public" GetMethodName="GetDataByPageOffset" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataByPageOffset" UserSourceName="GetDataByPageOffset">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT * FROM (
+SELECT        id, folderid, starttime, endtime, size, status, statusdesc, FolderName
+FROM            BackupLogsEx
+ORDER BY id DESC )
+LIMIT @limit OFFSET @offset</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Int32" Direction="Input" ParameterName="limit" Precision="0" ProviderType="Int32" Scale="0" Size="0" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="" DataSourceName="" DbType="Int32" Direction="Input" ParameterName="offset" Precision="0" ProviderType="Int32" Scale="0" Size="0" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
               </DbSource>
             </Sources>
           </TableAdapter>
@@ -395,6 +456,54 @@ WHERE        ([Key] = @key)</CommandText>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="BackupFolderEx" msprop:Generator_TableClassName="BackupFolderExDataTable" msprop:Generator_TableVarName="tableBackupFolderEx" msprop:Generator_RowChangedName="BackupFolderExRowChanged" msprop:Generator_TablePropName="BackupFolderEx" msprop:Generator_RowDeletingName="BackupFolderExRowDeleting" msprop:Generator_RowChangingName="BackupFolderExRowChanging" msprop:Generator_RowEvHandlerName="BackupFolderExRowChangeEventHandler" msprop:Generator_RowDeletedName="BackupFolderExRowDeleted" msprop:Generator_RowClassName="BackupFolderExRow" msprop:Generator_UserTableName="BackupFolderEx" msprop:Generator_RowEvArgName="BackupFolderExRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FolderPath" msprop:Generator_ColumnVarNameInTable="columnFolderPath" msprop:Generator_ColumnPropNameInRow="FolderPath" msprop:Generator_ColumnPropNameInTable="FolderPathColumn" msprop:Generator_UserColumnName="FolderPath">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="FolderName" msprop:Generator_ColumnVarNameInTable="columnFolderName" msprop:Generator_ColumnPropNameInRow="FolderName" msprop:Generator_ColumnPropNameInTable="FolderNameColumn" msprop:Generator_UserColumnName="FolderName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="endtime" msprop:Generator_ColumnVarNameInTable="columnendtime" msprop:Generator_ColumnPropNameInRow="endtime" msprop:Generator_ColumnPropNameInTable="endtimeColumn" msprop:Generator_UserColumnName="endtime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:long" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="BackupLogsEx" msprop:Generator_TableClassName="BackupLogsExDataTable" msprop:Generator_TableVarName="tableBackupLogsEx" msprop:Generator_TablePropName="BackupLogsEx" msprop:Generator_RowDeletingName="BackupLogsExRowDeleting" msprop:Generator_RowChangingName="BackupLogsExRowChanging" msprop:Generator_RowEvHandlerName="BackupLogsExRowChangeEventHandler" msprop:Generator_RowDeletedName="BackupLogsExRowDeleted" msprop:Generator_UserTableName="BackupLogsEx" msprop:Generator_RowChangedName="BackupLogsExRowChanged" msprop:Generator_RowEvArgName="BackupLogsExRowChangeEvent" msprop:Generator_RowClassName="BackupLogsExRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="folderid" msprop:Generator_ColumnVarNameInTable="columnfolderid" msprop:Generator_ColumnPropNameInRow="folderid" msprop:Generator_ColumnPropNameInTable="folderidColumn" msprop:Generator_UserColumnName="folderid" type="xs:int" minOccurs="0" />
+              <xs:element name="starttime" msprop:Generator_ColumnVarNameInTable="columnstarttime" msprop:Generator_ColumnPropNameInRow="starttime" msprop:Generator_ColumnPropNameInTable="starttimeColumn" msprop:Generator_UserColumnName="starttime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="endtime" msprop:Generator_ColumnVarNameInTable="columnendtime" msprop:Generator_ColumnPropNameInRow="endtime" msprop:Generator_ColumnPropNameInTable="endtimeColumn" msprop:Generator_UserColumnName="endtime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="status" msprop:Generator_ColumnVarNameInTable="columnstatus" msprop:Generator_ColumnPropNameInRow="status" msprop:Generator_ColumnPropNameInTable="statusColumn" msprop:Generator_UserColumnName="status" type="xs:int" minOccurs="0" />
+              <xs:element name="statusdesc" msprop:Generator_ColumnVarNameInTable="columnstatusdesc" msprop:Generator_ColumnPropNameInRow="statusdesc" msprop:Generator_ColumnPropNameInTable="statusdescColumn" msprop:Generator_UserColumnName="statusdesc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="size" msprop:Generator_ColumnVarNameInTable="columnsize" msprop:Generator_ColumnPropNameInRow="size" msprop:Generator_ColumnPropNameInTable="sizeColumn" msprop:Generator_UserColumnName="size" type="xs:long" minOccurs="0" />
+              <xs:element name="FolderName" msprop:Generator_ColumnVarNameInTable="columnFolderName" msprop:Generator_ColumnPropNameInRow="FolderName" msprop:Generator_ColumnPropNameInTable="FolderNameColumn" msprop:Generator_UserColumnName="FolderName">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:long" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

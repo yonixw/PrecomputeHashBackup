@@ -27,6 +27,32 @@ namespace PrecomputeBackupManager
             LoadBackupHistory();
         }
 
+        public object safeDBNull(string column,DataRow dr, object fallback) {
+            try {
+                object result = Convert.ChangeType(dr[column] ?? fallback, fallback.GetType());
+                return result;
+            }
+            catch (Exception ex) {
+                Log(ex);
+                return fallback;
+            }
+        }
+
+        public string safeDateDBnull(string column, DataRow dr) {
+            return ((DateTime)safeDBNull(column, dr, DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+        }
+
+        /**************************
+           STATIC ADAPTERS
+       ***************************/
+        static BackupFoldersTableAdapter adapFolders = new BackupFoldersTableAdapter();
+        static BackupStatusTableAdapter adapStatus = new BackupStatusTableAdapter();
+        static ConfigTableAdapter adapConfig = new ConfigTableAdapter();
+
+        // Views:
+        static BackupFolderExTableAdapter adapFoldersEx = new BackupFolderExTableAdapter();
+        static BackupLogsExTableAdapter adapLogsEx = new BackupLogsExTableAdapter();
+
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [4]
 
@@ -34,6 +60,12 @@ namespace PrecomputeBackupManager
         {
             lstLog.Items.Insert(0, "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
                                 CultureInfo.InvariantCulture) + "] " + text);
+        }
+
+        public void Log(Exception ex)
+        {
+            lstLog.Items.Insert(0, "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                                CultureInfo.InvariantCulture) + "] " + ex.Message + "\n" + ex.StackTrace);
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)
@@ -61,24 +93,17 @@ namespace PrecomputeBackupManager
             }
         }
 
-
-
-        /**************************
-            STATIC ADAPTERS
-        ***************************/
-        static BackupFoldersTableAdapter adapFolders = new BackupFoldersTableAdapter();
-        static BackupStatusTableAdapter adapStatus = new BackupStatusTableAdapter();
-        static ConfigTableAdapter adapConfig = new ConfigTableAdapter();
-
         void reloadBackupFolders()
         {
             // Clear Items:
             lstvFoldersToBackup.Items.Clear();
 
             // Load backup folders:
-            foreach (DataSet1.BackupFoldersRow row in adapFolders.GetBackupFolders())
+            foreach (DataSet1.BackupFolderExRow row in adapFoldersEx.GetData())
             {
-                ListViewItem item = new ListViewItem(new[] { row.FolderPath, row.FolderName, row.id.ToString() });
+                ListViewItem item = new ListViewItem(new[] { row.FolderPath, row.FolderName,
+                    ((DateTime)safeDBNull("endtime",row,DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss",CultureInfo.InvariantCulture) 
+                });
                 item.Tag = row.id;
                 lstvFoldersToBackup.Items.Add(item);
             }
@@ -86,8 +111,6 @@ namespace PrecomputeBackupManager
             AutoSizeLSTVColumn(lstvFoldersToBackup, -2);
             Log("Reloaded all backup folders.");
         }
-
-      
 
         private void btnAddBackupFolder_Click(object sender, EventArgs e)
         {
@@ -262,15 +285,20 @@ namespace PrecomputeBackupManager
             int pages = (int)Math.Ceiling(historyCount * 1.0f / limit);
             currentPage = Math.Max(Math.Min(currentPage, pages),1); // 1 <= page <= pages
 
-            DataSet1.BackupStatusDataTable dt = adapStatus.GetDataByPageOffset(limit, limit* (currentPage - 1));
+            DataSet1.BackupLogsExDataTable dt = adapLogsEx.GetDataByPageOffset(limit, limit* (currentPage - 1));
 
             // Clear items from prev pages.
             lstvBackupHistory.Items.Clear();
 
             // Add history:
-            foreach (DataSet1.BackupStatusRow row in dt) {
+            foreach (DataSet1.BackupLogsExRow row in dt) {
                 ListViewItem item = new ListViewItem(new[] {
-                    row.folderid.ToString()
+                    (string)safeDBNull("FolderName",row,"???"),
+                    safeDateDBnull("starttime", row),
+                    safeDateDBnull("endtime", row),
+                    (string)safeDBNull("size",row,"???"),
+                    (string)safeDBNull("status",row,"???"),
+                    (string)safeDBNull("statusdesc",row,"???"),
                 });
                 lstvBackupHistory.Items.Add(item);
             }
