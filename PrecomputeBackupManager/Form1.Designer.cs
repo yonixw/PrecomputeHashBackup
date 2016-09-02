@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnAddBackupFolder = new System.Windows.Forms.Button();
@@ -100,6 +102,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
+            this.ntfIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -813,6 +816,14 @@
             this.dlgChooseFolder.FileName = "Choose";
             this.dlgChooseFolder.ValidateNames = false;
             // 
+            // ntfIcon
+            // 
+            this.ntfIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ntfIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ntfIcon.Icon")));
+            this.ntfIcon.Text = "PreBackup Manager";
+            this.ntfIcon.Visible = true;
+            this.ntfIcon.DoubleClick += new System.EventHandler(this.ntfIcon_DoubleClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -925,6 +936,7 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.TextBox txtServerUploadPath;
         private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.NotifyIcon ntfIcon;
     }
 }
 

@@ -322,8 +322,12 @@ namespace PrecomputeBackupManager
         }
 
 
+
         #endregion
 
-        
+        private void ntfIcon_DoubleClick(object sender, EventArgs e)
+        {
+            this.Visible = !this.Visible;
+        }
     }
 }

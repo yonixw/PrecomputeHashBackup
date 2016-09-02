@@ -123,4 +123,32 @@
   <metadata name="dlgChooseFolder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
   </metadata>
+  <metadata name="ntfIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>276, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ntfIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAAAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAATAAAALQprAI8LgADNC4AAzQprAI8AAAAzAAAAMwAAADMAAAAzCmsAjwuAAM0LgADNCmsAjwAA
+        AC0AAAATAAAASQAAAK8JTADNYupR/2LqUf8JTADNAAAAzQAAAM0AAADNAAAAzQlMAM1i6lH/YupR/wlM
+        AM0AAACxAAAAS////wH///8BFaYAmRB9AM0QfQDNFaYAmf///wH///8B////Af///wEVpgCZEH0AzRB9
+        AM0VpgCZ////Af///wEAAAAPAAAAFwYrABsAAACHAAAAhwYrABsAAAAbAAAAGwAAABsAAAAbBisAGwAA
+        AIcAAACHBisAGwAAABcAAAAPAQEBXwICAqUCAgKlAgICtQICArUCAgKlAgICpQEBAV8BAQFfAgICpQIC
+        AqUCAgK1AgICtQICAqUCAgKlAQEBXwICAiUEBASPh4eH/4ODg/+Dg4P/h4eH/wQEBI8DAwMlAwMDJQQE
+        BI+Hh4f/g4OD/4ODg/+Hh4f/BAQEjwICAiX///8BBAQEk25ubv9qamr/M8wz/25ubv8EBAST////Af//
+        /wEEBASTbm5u/2pqav8zzDP/bm5u/wQEBJP///8B////AQICAqlVVVX/VVVV/1VVVf9VVVX/AgICqf//
+        /wH///8BAgICqVVVVf9VVVX/VVVV/1VVVf8CAgKp////Af///wEpKSl7yMjI/729vf/R0dH/yMjI/ykp
+        KXv///8B////ASkpKXvIyMj/vb29/9HR0f/IyMj/KSkpe////wH///8BMzMzdc3Nzf/CwsL/mZmZ/83N
+        zf8zMzN1////Af///wEzMzN1zc3N/8LCwv+ZmZn/zc3N/zMzM3X///8B////ATo6OnPX19f/0tLS/9LS
+        0v/X19f/Ojo6c////wH///8BOjo6c9fX1//S0tL/0tLS/9fX1/86Ojpz////Af///wFBQUFvurq6/729
+        vf+9vb3/urq6/0FBQW////8B////AUFBQW+6urr/vb29/729vf+6urr/QUFBb////wH///8BR0dHbeLi
+        4v/d3d3/3d3d/+Li4v9HR0dt////Af///wFHR0dt4uLi/93d3f/d3d3/4uLi/0dHR23///8B////AUxM
+        TGvCwsL/x8fH/8fHx//CwsL/TExMa////wH///8BTExMa8LCwv/Hx8f/x8fH/8LCwv9MTExr////Af//
+        /wFRUVFp6urq/+Xl5f/l5eX/6urq/1FRUWn///8B////AVFRUWnq6ur/5eXl/+Xl5f/q6ur/UVFRaf//
+        /wH///8BVFRUTVRUVGdUVFRnVFRUZ1RUVGdUVFRN////Af///wFUVFRNVFRUZ1RUVGdUVFRnVFRUZ1RU
+        VE3///8BAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA
+        //8AAP//AAD//w==
+</value>
+  </data>
 </root>
