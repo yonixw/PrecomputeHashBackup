@@ -243,6 +243,27 @@ namespace PrecomputeBackupManager
 
         #endregion
 
+        #region >>>>>>>>>>>>>>>>>>>>>>>>> History Tab [3]
 
+        void LoadBackupHistory(int page = 1, int limit = 10) {
+
+            long historyCount = (long)adapStatus.GetCount();
+            int pages = (int)Math.Ceiling(historyCount * 1.0f / limit);
+            page = Math.Min(page, pages);
+
+            DataSet1.BackupStatusDataTable dt = adapStatus.GetDataByPageOffset(limit, limit* (page -1));
+
+            // Clear items from prev pages.
+            lstvBackupHistory.Items.Clear();
+
+            // Add history:
+            foreach (DataSet1.BackupStatusRow row in dt) {
+                
+                lstvBackupHistory.Items.Add(item);
+            }
+
+        }
+
+        #endregion
     }
 }
