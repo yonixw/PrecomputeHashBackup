@@ -199,6 +199,7 @@ namespace PrecomputedHashDirDiff
 
     public interface GenericFolder {
         string Name();
+        long Size();
         GenericFolder Parent();
         List<GenericFile> OrderedFiles();
         List<GenericFolder> OrderedFolders();
@@ -245,7 +246,10 @@ namespace PrecomputedHashDirDiff
             return result;
         }
 
-       
+        public long Size()
+        {
+            return 0;
+        }
     }
 
     [DebuggerDisplay("{_folder.FolderName}")]
@@ -311,6 +315,11 @@ namespace PrecomputedHashDirDiff
             }
 
             return result;
+        }
+
+        public long Size()
+        {
+            return _folder.FolderSize;
         }
     }
 }

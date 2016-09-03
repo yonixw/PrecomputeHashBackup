@@ -16,12 +16,14 @@ namespace PrecomputedHashDirDiff
         // Stats:
         public long AddedFileSize = 0; 
         public long AddedFilesCount = 0;
+        public long AddedFoldersSize = 0;
         public long AddedFoldersCount = 0;
         
         public long ChangedFilesCount = 0;
-        
+
         public long DeletedFileSize = 0;
         public long DeletedFilesCount = 0;
+        public long DeletedFoldersSize = 0;
         public long DeletedFoldersCount = 0;
 
         public void Init(string backupDB, string targetDB) {
@@ -119,8 +121,14 @@ namespace PrecomputedHashDirDiff
                     if (backupFiles[backupIndx].Hash() !=  targetFiles[targetIndx].Hash() ) {
                         Console.WriteLine("\t3. Changed file: [" + backupFiles[backupIndx].Name() + "]");
 
-                        // Stats:
+                        // Stats ( Changed, delete old and add new )
                         ChangedFilesCount++;
+
+                        DeletedFilesCount++;
+                        DeletedFileSize += backupFiles[backupIndx].Size();
+
+                        AddedFilesCount++;
+                        AddedFileSize += targetFiles[targetIndx].Size();
                     }
                     targetIndx++;
                     backupIndx++;
@@ -187,6 +195,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     DeletedFoldersCount++;
+                    DeletedFoldersSize += backupFolders[backupIndx].Size();
                 }
 
                 if (comp > 0)
@@ -197,6 +206,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     AddedFoldersCount++;
+                    AddedFoldersSize += targetFolders[targetIndx].Size();
                 }
 
                 if (comp == 0)
@@ -220,6 +230,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     DeletedFoldersCount++;
+                    DeletedFoldersSize += backupFolders[backupIndx].Size();
 
                     backupIndx++;
                 }
@@ -234,6 +245,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     AddedFoldersCount++;
+                    AddedFoldersSize += targetFolders[targetIndx].Size();
 
                     targetIndx++;
                 }
