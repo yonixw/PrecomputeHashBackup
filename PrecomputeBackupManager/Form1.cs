@@ -42,6 +42,11 @@ namespace PrecomputeBackupManager
             return ((DateTime)safeDBNull(column, dr, DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         }
 
+        private void ntfIcon_DoubleClick(object sender, EventArgs e)
+        {
+            this.Visible = !this.Visible;
+        }
+
         /**************************
            STATIC ADAPTERS
        ***************************/
@@ -325,9 +330,6 @@ namespace PrecomputeBackupManager
 
         #endregion
 
-        private void ntfIcon_DoubleClick(object sender, EventArgs e)
-        {
-            this.Visible = !this.Visible;
-        }
+
     }
 }

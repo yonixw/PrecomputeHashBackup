@@ -5,6 +5,8 @@
 [ ] Unread log rows count (until opening the tab) but not while minimize?
 	[ ] Log max 100 rows 
 
+[ ] Yes no for schedlue (manuall only)
+[ ] Yes no for showing verbose  in notify icon.
 
 Future:
 [ ] Backup file manager that looks in the past.
