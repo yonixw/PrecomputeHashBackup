@@ -50,6 +50,7 @@ namespace PrecomputeBackupManager
         /**************************
            STATIC ADAPTERS
        ***************************/
+       // Tables:
         static BackupFoldersTableAdapter adapFolders = new BackupFoldersTableAdapter();
         static BackupStatusTableAdapter adapStatus = new BackupStatusTableAdapter();
         static ConfigTableAdapter adapConfig = new ConfigTableAdapter();
@@ -61,15 +62,25 @@ namespace PrecomputeBackupManager
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [4]
 
+        Queue<string> LogQue = new Queue<string>();
+
+        private void logTimer_Tick(object sender, EventArgs e)
+        {
+            // For multi thread logging.
+            while (LogQue.Count > 0) {
+                lstLog.Items.Insert(0, LogQue.Dequeue());
+            }
+        }
+
         public void Log(string text)
         {
-            lstLog.Items.Insert(0, "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+            LogQue.Enqueue("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
                                 CultureInfo.InvariantCulture) + "] " + text);
         }
 
         public void Log(Exception ex)
         {
-            lstLog.Items.Insert(0, "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+            LogQue.Enqueue( "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
                                 CultureInfo.InvariantCulture) + "] " + ex.Message + "\n" + ex.StackTrace);
         }
 
@@ -328,8 +339,147 @@ namespace PrecomputeBackupManager
 
 
 
+
         #endregion
 
 
+        #region Backup Step 1 - Hash
+        DirectoryInfo saveHashPath;
+
+        private void HashSetup () {
+            // SO? 16500080
+
+            // Create Temp dir for db3 storage The folder for the roaming current user 
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager\HashedDbFiles");
+
+            // Check if folder exists and if not, create it
+            saveHashPath = saveHashPath ?? new DirectoryInfo(specificFolder);
+            if (!saveHashPath.Exists) {
+                saveHashPath.Create();
+                Log("Created temp folder for saving hash in:" + saveHashPath.FullName);
+            }
+
+            // Remove db3 files from last time if exists
+            foreach(FileInfo fi in saveHashPath.GetFiles()) {
+                if (fi.Extension == ".db3") {
+                    fi.Delete();
+                    Log("Deleted db3 file in temp:" + fi.FullName);
+                }
+            }
+
+            backworkHashFiles.RunWorkerAsync();
+        }
+
+        private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Example:
+
+            currentWorker = backworkHashFiles;
+            Log("Started hashing files in the background");
+
+            while (!backworkHashFiles.CancellationPending){}
+
+            if (backworkHashFiles.CancellationPending) { 
+                Log("Backup was cancelled.");
+                backupRunning = false;
+                return;
+            }
+        }
+
+        private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void backworkHashFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            
+        }
+
+        #endregion
+
+        #region Backup Step 2 - Unlock
+
+        private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backworkUnlock_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void backworkUnlock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Backup Step 3 - Upload
+
+        private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void backworkUploadFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region Backup Step 4 - Lock
+
+        private void backworkLock_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backworkLock_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void backworkLock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+
+        // Current background thread, so we can cancel it if we want.
+        bool backupRunning = false;
+        BackgroundWorker currentWorker = null;
+
+        private void btnStartBackup_Click(object sender, EventArgs e)
+        {
+            if (backupRunning) {
+                MessageBox.Show("A backup is already active. cancel it first.");
+            }
+            else
+            {
+                backupRunning = true;
+                HashSetup();
+            }
+        }
+
+        private void btnStopBackup_Click(object sender, EventArgs e)
+        {
+            if (currentWorker != null) {
+                currentWorker.CancelAsync();
+            }
+        }
+
+      
     }
 }

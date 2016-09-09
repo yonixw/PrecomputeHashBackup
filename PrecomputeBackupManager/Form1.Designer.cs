@@ -103,6 +103,11 @@
             this.lstLog = new System.Windows.Forms.ListBox();
             this.dlgChooseFolder = new System.Windows.Forms.OpenFileDialog();
             this.ntfIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.backworkHashFiles = new System.ComponentModel.BackgroundWorker();
+            this.backworkUnlock = new System.ComponentModel.BackgroundWorker();
+            this.backworkUploadFiles = new System.ComponentModel.BackgroundWorker();
+            this.backworkLock = new System.ComponentModel.BackgroundWorker();
+            this.logTimer = new System.Windows.Forms.Timer(this.components);
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -234,6 +239,7 @@
             this.btnStopBackup.TabIndex = 1;
             this.btnStopBackup.Text = "Stop backup";
             this.btnStopBackup.UseVisualStyleBackColor = false;
+            this.btnStopBackup.Click += new System.EventHandler(this.btnStopBackup_Click);
             // 
             // btnStartBackup
             // 
@@ -243,6 +249,7 @@
             this.btnStartBackup.TabIndex = 0;
             this.btnStartBackup.Text = "Start backup";
             this.btnStartBackup.UseVisualStyleBackColor = true;
+            this.btnStartBackup.Click += new System.EventHandler(this.btnStartBackup_Click);
             // 
             // groupBox1
             // 
@@ -824,6 +831,44 @@
             this.ntfIcon.Visible = true;
             this.ntfIcon.DoubleClick += new System.EventHandler(this.ntfIcon_DoubleClick);
             // 
+            // backworkHashFiles
+            // 
+            this.backworkHashFiles.WorkerReportsProgress = true;
+            this.backworkHashFiles.WorkerSupportsCancellation = true;
+            this.backworkHashFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backworkHashFiles_DoWork);
+            this.backworkHashFiles.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backworkHashFiles_ProgressChanged);
+            this.backworkHashFiles.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backworkHashFiles_RunWorkerCompleted);
+            // 
+            // backworkUnlock
+            // 
+            this.backworkUnlock.WorkerReportsProgress = true;
+            this.backworkUnlock.WorkerSupportsCancellation = true;
+            this.backworkUnlock.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backworkUnlock_DoWork);
+            this.backworkUnlock.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backworkUnlock_ProgressChanged);
+            this.backworkUnlock.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backworkUnlock_RunWorkerCompleted);
+            // 
+            // backworkUploadFiles
+            // 
+            this.backworkUploadFiles.WorkerReportsProgress = true;
+            this.backworkUploadFiles.WorkerSupportsCancellation = true;
+            this.backworkUploadFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backworkUploadFiles_DoWork);
+            this.backworkUploadFiles.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backworkUploadFiles_ProgressChanged);
+            this.backworkUploadFiles.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backworkUploadFiles_RunWorkerCompleted);
+            // 
+            // backworkLock
+            // 
+            this.backworkLock.WorkerReportsProgress = true;
+            this.backworkLock.WorkerSupportsCancellation = true;
+            this.backworkLock.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backworkLock_DoWork);
+            this.backworkLock.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backworkLock_ProgressChanged);
+            this.backworkLock.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backworkLock_RunWorkerCompleted);
+            // 
+            // logTimer
+            // 
+            this.logTimer.Enabled = true;
+            this.logTimer.Interval = 750;
+            this.logTimer.Tick += new System.EventHandler(this.logTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -937,6 +982,11 @@
         private System.Windows.Forms.TextBox txtServerUploadPath;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.NotifyIcon ntfIcon;
+        private System.ComponentModel.BackgroundWorker backworkHashFiles;
+        private System.ComponentModel.BackgroundWorker backworkUnlock;
+        private System.ComponentModel.BackgroundWorker backworkUploadFiles;
+        private System.ComponentModel.BackgroundWorker backworkLock;
+        private System.Windows.Forms.Timer logTimer;
     }
 }
 
