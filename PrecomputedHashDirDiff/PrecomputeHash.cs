@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace PrecomputedHashDirDiff
 {
-    class PrecomputeHash
+    public class PrecomputeHash
     {
 
         public int FolderIdCounter = 0;
@@ -40,6 +40,36 @@ namespace PrecomputedHashDirDiff
 
             FoldersTableAdapter _adptFolders = new FoldersTableAdapter();
             _adptFolders.Connection.ConnectionString = "data source=\"" + dbPath + "\\dirHash.db3" + "\"";
+
+            DirectoryInfo sourceDi = new DirectoryInfo(DirectoryPath);
+
+            multisql = new MultiInsertSQLite(_adptFiles, _adptFolders, 499);
+
+            // Start Recurtion:
+            HashFiles(sourceDi, -1, _adptFiles, _adptFolders, bwCalcHash);
+
+            // Flush any rows in cache:
+            multisql.FlushAll();
+        }
+
+        public void InitGeneric(string DirectoryPath, string DBpath, BackgroundWorker bwCalcHash)
+        {
+            // To make sure each db ids start from 0.
+            FolderIdCounter = 0;
+            FileIdCounter = 0;
+            totalFilesSize = 0;
+
+            if (!Directory.Exists(DirectoryPath))
+            {
+                Console.WriteLine("Source folder not found.");
+                return;
+            }
+
+            FilesTableAdapter _adptFiles = new FilesTableAdapter();
+            _adptFiles.Connection.ConnectionString = "data source=\"" + DBpath + "\"";
+
+            FoldersTableAdapter _adptFolders = new FoldersTableAdapter();
+            _adptFolders.Connection.ConnectionString = "data source=\"" + DBpath +  "\"";
 
             DirectoryInfo sourceDi = new DirectoryInfo(DirectoryPath);
 

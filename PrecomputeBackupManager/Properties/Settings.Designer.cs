@@ -26,11 +26,20 @@ namespace PrecomputeBackupManager.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHa" +
-            "shDirDiff\\PrecomputeBackupManager\\bin\\Debug\\config.db3\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"config.db3\"")]
         public string configConnectionString {
             get {
                 return ((string)(this["configConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"template.db3\"")]
+        public string templateConnectionString1 {
+            get {
+                return ((string)(this["templateConnectionString1"]));
             }
         }
     }

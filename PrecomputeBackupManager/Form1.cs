@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
+using PrecomputeBackupManager.HashFileDatasetTableAdapters;
 
 namespace PrecomputeBackupManager
 {
@@ -98,6 +99,17 @@ namespace PrecomputeBackupManager
 
         #endregion
 
+        private Boolean TryCancel() {
+            if (!currentWorker.CancellationPending) return false;
+
+            Log("Backup was cancelled.");
+            backupRunning = false;
+            return true;
+        }
+
+        string ProgressStat = null;
+        string ProgressDesc = null;
+        int ProgressProgress = -1;
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Backup Folder Tab [1]
 
@@ -367,29 +379,52 @@ namespace PrecomputeBackupManager
                     Log("Deleted db3 file in temp:" + fi.FullName);
                 }
             }
-
-            backworkHashFiles.RunWorkerAsync();
         }
 
         private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Example:
-
+            // Start worker:
+            // =================================
             currentWorker = backworkHashFiles;
             Log("Started hashing files in the background");
 
-            while (!backworkHashFiles.CancellationPending){}
+            // Do work:
+            // =================================
+            HashSetup();
 
-            if (backworkHashFiles.CancellationPending) { 
-                Log("Backup was cancelled.");
-                backupRunning = false;
-                return;
+            // Save the list, to avoid changes:
+            List<KeyValuePair<string, string>> _FoldersToBackup = new List<KeyValuePair<string, string>>();
+
+            lstvFoldersToBackup.Invoke(new Action(() => { 
+                foreach (ListViewItem item in lstvFoldersToBackup.Items) {
+                    // Server Name ---> Path locally
+                    _FoldersToBackup.Add(new KeyValuePair<string, string>(item.SubItems[1].Text, item.SubItems[0].Text));
+                }
+            }));
+
+            string currentExePath = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location).DirectoryName;
+            FileInfo templateDB3 = new FileInfo(Path.Combine(currentExePath,"template.db3"));
+
+            foreach (KeyValuePair<string,string> currentFolder in _FoldersToBackup) {
+                if (TryCancel()) return;
+
+                string currentHashDB = Path.Combine(saveHashPath.FullName, currentFolder.Key + ".db3");
+
+                // Copy template of hash db
+                templateDB3.CopyTo(currentHashDB, true);
+
+                // Set up adapters:
+                PrecomputedHashDirDiff.PrecomputeHash hashClass = new PrecomputedHashDirDiff.PrecomputeHash();
+                hashClass.InitGeneric(currentFolder.Value, currentHashDB, currentWorker);
+
+                
             }
+
         }
 
         private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            pbStatusProgress.Value = e.ProgressPercentage;
         }
 
         private void backworkHashFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -469,7 +504,9 @@ namespace PrecomputeBackupManager
             else
             {
                 backupRunning = true;
-                HashSetup();
+
+                // Start background work:
+                backworkHashFiles.RunWorkerAsync();
             }
         }
 
