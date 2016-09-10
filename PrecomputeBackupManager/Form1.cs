@@ -477,6 +477,7 @@ namespace PrecomputeBackupManager
         {
             if (currentWorker != null) {
                 currentWorker.CancelAsync();
+                // Dont say backupRunning = false, let the runner do that.
             }
         }
 
