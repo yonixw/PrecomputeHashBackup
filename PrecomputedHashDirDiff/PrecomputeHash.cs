@@ -65,21 +65,40 @@ namespace PrecomputedHashDirDiff
                 return;
             }
 
-            FilesTableAdapter _adptFiles = new FilesTableAdapter();
-            _adptFiles.Connection.ConnectionString = "data source=\"" + DBpath + "\"";
+            using (FilesTableAdapter _adptFiles = new FilesTableAdapter())
+            {
+                _adptFiles.Connection.ConnectionString = "data source=\"" + DBpath + "\"";
 
-            FoldersTableAdapter _adptFolders = new FoldersTableAdapter();
-            _adptFolders.Connection.ConnectionString = "data source=\"" + DBpath +  "\"";
+                using (FoldersTableAdapter _adptFolders = new FoldersTableAdapter())
+                {
+                    _adptFolders.Connection.ConnectionString = "data source=\"" + DBpath + "\"";
 
-            DirectoryInfo sourceDi = new DirectoryInfo(DirectoryPath);
+                    DirectoryInfo sourceDi = new DirectoryInfo(DirectoryPath);
 
-            multisql = new MultiInsertSQLite(_adptFiles, _adptFolders, 499);
+                    multisql = new MultiInsertSQLite(_adptFiles, _adptFolders, 499);
 
-            // Start Recurtion:
-            HashFiles(sourceDi, -1, _adptFiles, _adptFolders, bwCalcHash);
+                    // Start Recurtion:
+                    HashFiles(sourceDi, -1, _adptFiles, _adptFolders, bwCalcHash);
 
-            // Flush any rows in cache:
-            multisql.FlushAll();
+                    // Flush any rows in cache:
+                    multisql.FlushAll();
+
+                    _adptFiles.Connection.Close();
+                    _adptFolders.Connection.Close();
+
+                    // Need these 2 to relese after use: (bug, read SO?8511901)
+                    System.Data.SQLite.SQLiteConnection.ClearAllPools();
+                    GC.Collect();
+
+                    Console.WriteLine("Released db3.");
+                }
+
+            }
+
+    
+
+
+
         }
 
         const int progresscols = 30;
@@ -94,7 +113,7 @@ namespace PrecomputedHashDirDiff
             foreach (FileInfo fi in di.GetFiles())
             {
                 Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... [");
-
+                bwCalcHash.ReportProgress(0, fi.Name);
 
                 // Compute Hash
                 SHA256 hash256 = SHA256.Create();
@@ -111,6 +130,8 @@ namespace PrecomputedHashDirDiff
 
                     while (bytesRead < size)
                     {
+                        if (bwCalcHash.CancellationPending) return 0;
+
                         int lastBytesRead = filestream.Read(buffer, 0, buffer.Length);
                         hash256.TransformBlock(buffer, 0, lastBytesRead, buffer, 0);
                         bytesRead += lastBytesRead;
@@ -140,7 +161,10 @@ namespace PrecomputedHashDirDiff
             foreach (DirectoryInfo childdi in di.GetDirectories())
             {
                myFolderSize += HashFiles(childdi, myFolderId, aFiles, aFolders,bwCalcHash);
+                if (bwCalcHash.CancellationPending) return 0;
             }
+
+            if (bwCalcHash.CancellationPending) return 0;
 
             // After finding my size add it:
             //      Note: this method will make deeper folders have lower ids (the root having the highest id)

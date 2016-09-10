@@ -30,7 +30,15 @@ namespace PrecomputeBackupManager
 
         public object safeDBNull(string column,DataRow dr, object fallback) {
             try {
-                object result = Convert.ChangeType(dr[column] ?? fallback, fallback.GetType());
+                object result = null;
+                if (!(dr[column] is DBNull))
+                {
+                    result = Convert.ChangeType(dr[column] ?? fallback, fallback.GetType());
+                }
+                else
+                {
+                    result = fallback;
+                }
                 return result;
             }
             catch (Exception ex) {
@@ -104,12 +112,31 @@ namespace PrecomputeBackupManager
 
             Log("Backup was cancelled.");
             backupRunning = false;
+            currentCancelled = true;
             return true;
         }
 
-        string ProgressStat = null;
-        string ProgressDesc = null;
-        int ProgressProgress = -1;
+        private void UpdateProgress(string Status = null, string Desc = null, int progress = -1) {
+            if (Status != null) {
+                txtCurrentStatus.Invoke(new Action(() => {
+                    txtCurrentStatus.Text = Status;
+                }));
+            }
+
+            if (Desc != null)
+            {
+                txtStatusDescription.Invoke(new Action(() => {
+                    txtStatusDescription.Text = Desc;
+                }));
+            }
+
+            if (progress > -1)
+            {
+                pbStatusProgress.Invoke(new Action(() => {
+                    pbStatusProgress.Value = Math.Min(100, progress);
+                }));
+            }
+        }
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Backup Folder Tab [1]
 
@@ -387,6 +414,7 @@ namespace PrecomputeBackupManager
             // =================================
             currentWorker = backworkHashFiles;
             Log("Started hashing files in the background");
+            UpdateProgress(Status: "Step 1/4: Hashing folders");
 
             // Do work:
             // =================================
@@ -405,6 +433,7 @@ namespace PrecomputeBackupManager
             string currentExePath = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location).DirectoryName;
             FileInfo templateDB3 = new FileInfo(Path.Combine(currentExePath,"template.db3"));
 
+            // For each folder 
             foreach (KeyValuePair<string,string> currentFolder in _FoldersToBackup) {
                 if (TryCancel()) return;
 
@@ -415,21 +444,43 @@ namespace PrecomputeBackupManager
 
                 // Set up adapters:
                 PrecomputedHashDirDiff.PrecomputeHash hashClass = new PrecomputedHashDirDiff.PrecomputeHash();
+
+                // Hash Folder
+                UpdateProgress(Status: "Step 1/4: Hashing folder:" + currentFolder.Key);
                 hashClass.InitGeneric(currentFolder.Value, currentHashDB, currentWorker);
 
                 
             }
 
+            if (TryCancel()) return;
+
         }
 
         private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            pbStatusProgress.Value = e.ProgressPercentage;
+            if (e.UserState == null)
+            {
+                pbStatusProgress.Value = e.ProgressPercentage;
+            }
+            else
+            {
+                UpdateProgress(Desc: (string)e.UserState);
+            }
         }
 
         private void backworkHashFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            if (currentCancelled) {
+                backupRunning = false;
+                Log("Aborting hashing all folders.");
+                UpdateProgress(Status: "Step 1/4: Aborted all hashing", Desc: " ", progress: 100);
+            }
+            else
+            {
+                Log("Step 1/4: Finished hashing all folders.");
+                UpdateProgress(progress: 100);
+                backworkUnlock.RunWorkerAsync();
+            }
         }
 
         #endregion
@@ -494,6 +545,7 @@ namespace PrecomputeBackupManager
 
         // Current background thread, so we can cancel it if we want.
         bool backupRunning = false;
+        bool currentCancelled = false;
         BackgroundWorker currentWorker = null;
 
         private void btnStartBackup_Click(object sender, EventArgs e)
@@ -504,6 +556,7 @@ namespace PrecomputeBackupManager
             else
             {
                 backupRunning = true;
+                currentCancelled = false;
 
                 // Start background work:
                 backworkHashFiles.RunWorkerAsync();
