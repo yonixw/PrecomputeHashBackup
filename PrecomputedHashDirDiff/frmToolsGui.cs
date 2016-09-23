@@ -83,13 +83,11 @@ namespace PrecomputedHashDirDiff
         **************** STEP 2 : Comapre db or io with db or io
         */
 
-        DateTime startDiffDB;
         DiffDB secondStep;
 
         private void btnDiffDB_Click(object sender, EventArgs e)
         {
             pbDiffStatus.Value = 0;
-            startDiffDB = DateTime.Now;
             bwDBdiff.RunWorkerAsync();
         }
 
@@ -120,7 +118,7 @@ namespace PrecomputedHashDirDiff
         {
             pbDiffStatus.Value = 100;
             Console.WriteLine("Diff Background worker: All done!");
-            TimeSpan duration = DateTime.Now - startDiffDB;
+            TimeSpan duration = secondStep.duration;
 
             Console.WriteLine("Duration: " +
                 String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.",
@@ -131,13 +129,13 @@ namespace PrecomputedHashDirDiff
             Console.WriteLine(" * Files:");
             Console.WriteLine("           [COUNT]        [SIZE]");
             Console.WriteLine("  + Added:    "+ secondStep.AddedFilesCount + "       " + Utils.byte2hum(secondStep.AddedFilesSize));
-            Console.WriteLine("  + Changed:  " + secondStep.ChangedFilesCount + "       XXXX" );
+            Console.WriteLine("  + Changed:  " + secondStep.ChangedFilesCount + "       " + Utils.byte2hum(secondStep.ChangedFilesSize));
             Console.WriteLine("  + Deleted:  " + secondStep.DeletedFilesCount + "       " + Utils.byte2hum(secondStep.DeletedFilesSize));
 
             Console.WriteLine("* Folders:");
             Console.WriteLine("           [COUNT]");
-            Console.WriteLine("  + Added:    " + secondStep.AddedFoldersCount);
-            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFoldersCount);
+            Console.WriteLine("  + Added:    " + secondStep.AddedFoldersCount + "       " + Utils.byte2hum(secondStep.AddedFoldersSize));
+            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFoldersCount + "       " + Utils.byte2hum(secondStep.DeletedFoldersSize));
 
 
 

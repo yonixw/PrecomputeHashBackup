@@ -28,23 +28,23 @@ namespace PrecomputedHashDirDiff
             return new IOFile(fi);
         }
 
-        public static GenericFile FileObject(DataSet1.FilesRow fr, string ConnectionString)
+        public static GenericFile FileObject(DataSet1.FilesRow fr, string ConnectionString, string DirectoryName = "")
         {
             // In addition to the row describing the file,
             //      to be aware of other files\folders "in the filesystem" 
             //      we need to know the database this file came from.
-            return new SQLite3File(fr,ConnectionString);
+            return new SQLite3File(fr,ConnectionString, DirectoryName);
         }
 
         public static GenericFolder FolderObject(DirectoryInfo di) {
             return new IOFolder(di);
         }
 
-        public static GenericFolder FolderObject(DataSet1.FoldersRow fr, string ConnectionString) {
+        public static GenericFolder FolderObject(DataSet1.FoldersRow fr, string ConnectionString, string ParentDirectoryName = "") {
             // In addition to the row describing the folder,
             //      to be aware of other files\folders "in the filesystem" 
             //      we need to know the database this file came from.
-            return new SQLite3Folder(fr, ConnectionString);
+            return new SQLite3Folder(fr, ConnectionString, ParentDirectoryName);
         }
 
         public static GenericFolder FolderObject(int FolderID, string ConnectionString) {
@@ -53,7 +53,7 @@ namespace PrecomputedHashDirDiff
 
             DataSet1.FoldersDataTable dt = adapt.GetFolderById(FolderID);
             if (dt.Count > 0 ) {
-                return GenericTools.FolderObject(dt[0], ConnectionString);
+                return GenericTools.FolderObject(dt[0], ConnectionString); // No parent for specific id
             }
             else
             {
@@ -75,11 +75,14 @@ namespace PrecomputedHashDirDiff
         string Hash();
         GenericFolder Folder();
         long Size();
+
+        string FullRelativeName();
     }
 
     public class IOFile : GenericFile
     {
         FileInfo _file;
+        string _DirectoryName;
         public IOFile(FileInfo fi) {
             _file = fi;
         }
@@ -145,6 +148,11 @@ namespace PrecomputedHashDirDiff
         {
             return _file.Length;
         }
+
+        public string FullRelativeName()
+        {
+            return _file.Directory.FullName;
+        }
     }
 
     [DebuggerDisplay("{_file.FileName}")]
@@ -152,9 +160,12 @@ namespace PrecomputedHashDirDiff
     {
         DataSet1.FilesRow _file;
         string _conn;
-        public SQLite3File(DataSet1.FilesRow fr, string ConnectionString) {
+        string _DirectoryName;
+
+        public SQLite3File(DataSet1.FilesRow fr, string ConnectionString, string DirectoryName) {
             _file = fr;
             _conn = ConnectionString;
+            _DirectoryName = DirectoryName;
         }
 
         public GenericFolder Folder()
@@ -187,6 +198,11 @@ namespace PrecomputedHashDirDiff
         {
             return _file.FileSize;
         }
+
+        public string FullRelativeName()
+        {
+            return _DirectoryName + '\\' +  _file.FileName;
+        }
     }
 
 
@@ -203,6 +219,8 @@ namespace PrecomputedHashDirDiff
         GenericFolder Parent();
         List<GenericFile> OrderedFiles();
         List<GenericFolder> OrderedFolders();
+
+        string FullRelativeName();
     }
 
     public class IOFolder : GenericFolder
@@ -250,6 +268,11 @@ namespace PrecomputedHashDirDiff
         {
             return 0;
         }
+
+        public string FullRelativeName()
+        {
+            return _folder.FullName;
+        }
     }
 
     [DebuggerDisplay("{_folder.FolderName}")]
@@ -257,10 +280,12 @@ namespace PrecomputedHashDirDiff
     {
         DataSet1.FoldersRow _folder;
         string _conn;
-        public SQLite3Folder(DataSet1.FoldersRow fr, string ConnectionString)
+        string _ParentDirectoryName;
+        public SQLite3Folder(DataSet1.FoldersRow fr, string ConnectionString,string ParentDirectoryName = "")
         {
             _folder = fr;
             _conn = ConnectionString;
+            _ParentDirectoryName = ParentDirectoryName;
         }
 
         public string Name()
@@ -295,7 +320,7 @@ namespace PrecomputedHashDirDiff
 
             foreach (DataSet1.FilesRow fr in Rows) 
             {
-                result.Add(GenericTools.FileObject(fr, _conn));
+                result.Add(GenericTools.FileObject(fr, _conn, _ParentDirectoryName + "\\" + _folder.FolderName ));
             }
 
             return result;
@@ -311,7 +336,7 @@ namespace PrecomputedHashDirDiff
 
             foreach (DataSet1.FoldersRow fr in Rows)
             {
-                result.Add(GenericTools.FolderObject(fr, _conn));
+                result.Add(GenericTools.FolderObject(fr, _conn, _ParentDirectoryName + "\\" + _folder.FolderName));
             }
 
             return result;
@@ -320,6 +345,11 @@ namespace PrecomputedHashDirDiff
         public long Size()
         {
             return _folder.FolderSize;
+        }
+
+        public string FullRelativeName()
+        {
+            return _ParentDirectoryName + '\\' + _folder.FolderName;
         }
     }
 }
