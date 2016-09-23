@@ -82,7 +82,6 @@ namespace PrecomputedHashDirDiff
     public class IOFile : GenericFile
     {
         FileInfo _file;
-        string _DirectoryName;
         public IOFile(FileInfo fi) {
             _file = fi;
         }
