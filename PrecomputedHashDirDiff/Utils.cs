@@ -10,7 +10,7 @@ namespace PrecomputedHashDirDiff
     {
         public static string byte2hum(long bytes)
         {
-            string result = "";
+            string result = bytes  > -1 ? "(+) " : "(-) "; // Negative can happen in changed after only deletion
 
             long KB = 1024;
             long MB = 1024 * KB;
