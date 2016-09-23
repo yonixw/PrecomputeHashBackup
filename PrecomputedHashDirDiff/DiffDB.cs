@@ -14,19 +14,68 @@ namespace PrecomputedHashDirDiff
         // Comparing two files based loosly on logic from http://www.codeproject.com/Articles/312484/
 
         // Stats:
-        public long AddedFileSize = 0; 
+        public long AddedFilesSize = 0; 
         public long AddedFilesCount = 0;
         public long AddedFoldersSize = 0;
         public long AddedFoldersCount = 0;
-        
-        public long ChangedFilesCount = 0;
 
-        public long DeletedFileSize = 0;
+        public long ChangedFilesSize = 0;
+        public long ChangedFilesCount = 0;
+        
+
+        public long DeletedFilesSize = 0;
         public long DeletedFilesCount = 0;
         public long DeletedFoldersSize = 0;
         public long DeletedFoldersCount = 0;
 
-        public void Init(string backupDB, string targetDB) {
+        bool useIOLog = false;
+        FileInfo AddedFiles;
+        FileInfo AddedFolders;
+        FileInfo DeletedFiles;
+        FileInfo DeletedFolders;
+
+        enum KnownDiffKeys : int
+        {
+            SecondDuration ,
+
+            AddedFilesCount,
+            AddedFilesSize,
+            ChangedFilesCount,
+            ChangedFilesSize,
+            DeletedFilesCount,
+            DeletedFilesSize,
+
+            AddedFoldersCount,
+            AddedFoldersSize,
+           
+            DeletedFoldersCount,
+            DeletedFoldersSize,
+
+        }
+
+        Dictionary<int, long> lastDiffStat = new Dictionary<int, long>();
+        DateTime startDiff;
+        TimeSpan duration;
+
+        void calcDictyStat() {
+            lastDiffStat.Add((int)KnownDiffKeys.SecondDuration,         (long)duration.TotalSeconds);
+            lastDiffStat.Add((int)KnownDiffKeys.AddedFilesCount,        (long)AddedFilesCount);
+            lastDiffStat.Add((int)KnownDiffKeys.AddedFilesSize,         (long)AddedFilesSize);
+            lastDiffStat.Add((int)KnownDiffKeys.ChangedFilesCount,      (long)ChangedFilesCount);
+            lastDiffStat.Add((int)KnownDiffKeys.ChangedFilesSize,       (long)ChangedFilesSize);
+            lastDiffStat.Add((int)KnownDiffKeys.DeletedFilesCount,      (long)DeletedFilesCount);
+            lastDiffStat.Add((int)KnownDiffKeys.DeletedFilesSize,       (long)DeletedFilesSize);
+            lastDiffStat.Add((int)KnownDiffKeys.AddedFoldersCount,      (long)AddedFoldersCount);
+            lastDiffStat.Add((int)KnownDiffKeys.AddedFoldersSize,       (long)AddedFoldersSize);
+            lastDiffStat.Add((int)KnownDiffKeys.DeletedFoldersCount,    (long)DeletedFoldersCount);
+            lastDiffStat.Add((int)KnownDiffKeys.DeletedFoldersSize,     (long)DeletedFoldersSize);
+        }
+
+        void IOLog(string text,FileInfo fi) {
+            
+        }
+
+        public bool Init(string backupDB, string targetDB) {
             // Make generic objects based on path
 
             GenericFolder backupRootDir = null;
@@ -63,8 +112,18 @@ namespace PrecomputedHashDirDiff
             if (backupRootDir != null && targetRootDir != null)
             {
                 // Start recursion:
+                lastDiffStat = new Dictionary<int, long>();
+
+                startDiff = DateTime.Now;
                 compareDirs(backupRootDir, targetRootDir);
+                duration = DateTime.Now - startDiff;
+
+                calcDictyStat();
+
             }
+
+            // Assume error:
+            return false;
         }
 
 
@@ -102,7 +161,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     DeletedFilesCount++;
-                    DeletedFileSize += backupFiles[backupIndx].Size();
+                    DeletedFilesSize += backupFiles[backupIndx].Size();
                 }
 
                 if (comp > 0)
@@ -113,7 +172,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     AddedFilesCount++;
-                    AddedFileSize += targetFiles[targetIndx].Size();
+                    AddedFilesSize += targetFiles[targetIndx].Size();
                 }
 
                 if (comp == 0 ) {
@@ -125,10 +184,12 @@ namespace PrecomputedHashDirDiff
                         ChangedFilesCount++;
 
                         DeletedFilesCount++;
-                        DeletedFileSize += backupFiles[backupIndx].Size();
+                        DeletedFilesSize += backupFiles[backupIndx].Size();
+                        ChangedFilesSize -= backupFiles[backupIndx].Size();
 
                         AddedFilesCount++;
-                        AddedFileSize += targetFiles[targetIndx].Size();
+                        AddedFilesSize += targetFiles[targetIndx].Size();
+                        ChangedFilesSize += targetFiles[targetIndx].Size();
                     }
                     targetIndx++;
                     backupIndx++;
@@ -144,7 +205,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     DeletedFilesCount++;
-                    DeletedFileSize += backupFiles[backupIndx].Size();
+                    DeletedFilesSize += backupFiles[backupIndx].Size();
 
                     backupIndx++;
                 }
@@ -158,7 +219,7 @@ namespace PrecomputedHashDirDiff
 
                     // Stats:
                     AddedFilesCount++;
-                    AddedFileSize += targetFiles[targetIndx].Size();
+                    AddedFilesSize += targetFiles[targetIndx].Size();
 
                     targetIndx++;
                 }

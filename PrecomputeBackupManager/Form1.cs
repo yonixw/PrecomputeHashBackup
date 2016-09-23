@@ -433,7 +433,7 @@ namespace PrecomputeBackupManager
             string currentExePath = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location).DirectoryName;
             FileInfo templateDB3 = new FileInfo(Path.Combine(currentExePath,"template.db3"));
 
-            // For each folder 
+            // For each folder, Calculate db3 hash 
             foreach (KeyValuePair<string,string> currentFolder in _FoldersToBackup) {
                 if (TryCancel()) return;
 
@@ -447,12 +447,16 @@ namespace PrecomputeBackupManager
 
                 // Hash Folder
                 UpdateProgress(Status: "Step 1/4: Hashing folder:" + currentFolder.Key);
+                Log("Hashing Server Folder: " + currentFolder.Key);
                 hashClass.InitGeneric(currentFolder.Value, currentHashDB, currentWorker);
 
                 
             }
 
             if (TryCancel()) return;
+
+            // Copy db3 folder from current on the server
+            // TODO - Cotinue from here...
 
         }
 

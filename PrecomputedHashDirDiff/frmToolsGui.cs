@@ -106,6 +106,8 @@ namespace PrecomputedHashDirDiff
             pbDiffStatus.Value  = e.ProgressPercentage;
         }
 
+        
+
         private void bwDBdiff_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pbDiffStatus.Value = 100;
@@ -120,14 +122,17 @@ namespace PrecomputedHashDirDiff
 
             Console.WriteLine(" * Files:");
             Console.WriteLine("           [COUNT]        [SIZE]");
-            Console.WriteLine("  + Added:    "+ secondStep.AddedFilesCount + "       " + Utils.byte2hum(secondStep.AddedFileSize));
+            Console.WriteLine("  + Added:    "+ secondStep.AddedFilesCount + "       " + Utils.byte2hum(secondStep.AddedFilesSize));
             Console.WriteLine("  + Changed:  " + secondStep.ChangedFilesCount + "       XXXX" );
-            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFilesCount + "       " + Utils.byte2hum(secondStep.DeletedFileSize));
+            Console.WriteLine("  + Deleted:  " + secondStep.DeletedFilesCount + "       " + Utils.byte2hum(secondStep.DeletedFilesSize));
 
             Console.WriteLine("* Folders:");
             Console.WriteLine("           [COUNT]");
             Console.WriteLine("  + Added:    " + secondStep.AddedFoldersCount);
             Console.WriteLine("  + Deleted:  " + secondStep.DeletedFoldersCount);
+
+
+
         }
     }
 }

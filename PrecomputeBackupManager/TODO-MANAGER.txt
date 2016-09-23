@@ -1,12 +1,16 @@
-﻿[ ] Support stop\pause in case of sutdown.
-	[ ] Dont know when wake up, cancel on shutdown
+﻿[V] Support stop\pause in case of sutdown.
+	[V] Dont know when wake up, cancel on shutdown
 [ ] Have cancel option on the server.
-[ ] DB to save all perfences locally
+[V] DB to save all perfences locally
 [ ] Unread log rows count (until opening the tab) but not while minimize?
 	[ ] Log max 100 rows 
 
 [ ] Yes no for schedlue (manuall only)
 [ ] Yes no for showing verbose  in notify icon.
+
+Urgent:
+[ ] Cop db3 from remote to local and then compare
+[ ] Complete other 3 stpes with cancel support.
 
 Future:
 [ ] Backup file manager that looks in the past.
