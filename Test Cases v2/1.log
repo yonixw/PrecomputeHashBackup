@@ -1,0 +1,29 @@
+add:
+[ADD]:\added\First - Copy.txt
+[ADD]:\added\New hash.txt
+[ADD]:\added\Underline\Extrea Loot - Copy.txt
+[ADD]:\added\Underline\Extrea Loot.txt
+
+change:
+[DEL]:\Backup\Underline\Loot.txt
+[ADD]:\changed\Underline\Loot.txt
+
+del:
+[DEL]:\Backup\Second (Copy).txt
+[DEL]:\Backup\Underline\Loot.txt
+
+folders:
+[ADD]:\folders\Underline - 2
+[ADD]:\folders\Underline\Underline - Deeper
+
+folders-more:
+[DEL]:\Backup\Underline
+[ADD]:\folders\Underline - 2
+
+from io:
+[DEL]:C:\Users\YoniWas\Documents\Visual Studio 2015\Projects\PrecomputedHashDirDiff\Test Cases v2\Backup\Underline
+[ADD]:C:\Users\YoniWas\Documents\Visual Studio 2015\Projects\PrecomputedHashDirDiff\Test Cases v2\folders\Underline - 2
+
+minus (minus changed size)
+[DEL]:\Backup\First.txt
+[ADD]:\minus\First.txt
