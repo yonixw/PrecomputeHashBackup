@@ -34,6 +34,8 @@ namespace PrecomputedHashDirDiff
         public FileInfo logDeletedFiles;
         public FileInfo logDeletedFolders;
 
+        public TimeSpan duration;
+
         enum KnownDiffKeys : int
         {
             SecondDuration ,
@@ -55,7 +57,6 @@ namespace PrecomputedHashDirDiff
 
         Dictionary<int, long> lastDiffStat = new Dictionary<int, long>();
         DateTime startDiff;
-        TimeSpan duration;
 
         void calcDictyStat() {
             lastDiffStat.Add((int)KnownDiffKeys.SecondDuration,         (long)duration.TotalSeconds);
@@ -167,28 +168,30 @@ namespace PrecomputedHashDirDiff
                 if (comp < 0 ) {
                     // backup is smaller than target
                     Console.WriteLine("\t1. Deleted file: [" + backupFiles[backupIndx].Name() + "]");
-                    backupIndx++;
 
                     // Stats:
                     DeletedFilesCount++;
                     DeletedFilesSize += backupFiles[backupIndx].Size();
 
                     //Log
-                    IOLog("[DEL]:" + backupFiles[backupIndx].Name(), logDeletedFiles);
+                    IOLog("[DEL]:" + backupFiles[backupIndx].FullRelativeName(), logDeletedFiles);
+
+                    backupIndx++;
                 }
 
                 if (comp > 0)
                 {
                     // backup is bigger than target
                     Console.WriteLine("\t2. Added file: [" + targetFiles[targetIndx].Name() + "]");
-                    targetIndx++;
 
                     // Stats:
                     AddedFilesCount++;
                     AddedFilesSize += targetFiles[targetIndx].Size();
 
                     //Log
-                    IOLog("[ADD]:" + targetFiles[targetIndx].Name(), logAddedFiles);
+                    IOLog("[ADD]:" + targetFiles[targetIndx].FullRelativeName(), logAddedFiles);
+
+                    targetIndx++;
                 }
 
                 if (comp == 0 ) {
@@ -208,8 +211,8 @@ namespace PrecomputedHashDirDiff
                         ChangedFilesSize += targetFiles[targetIndx].Size();
 
                         //Log
-                        IOLog("[DEL]:" + backupFiles[backupIndx].Name(), logDeletedFiles);
-                        IOLog("[ADD]:" + targetFiles[targetIndx].Name(), logAddedFiles);
+                        IOLog("[DEL]:" + backupFiles[backupIndx].FullRelativeName(), logDeletedFiles);
+                        IOLog("[ADD]:" + targetFiles[targetIndx].FullRelativeName(), logAddedFiles);
                     }
                     targetIndx++;
                     backupIndx++;
@@ -227,10 +230,10 @@ namespace PrecomputedHashDirDiff
                     DeletedFilesCount++;
                     DeletedFilesSize += backupFiles[backupIndx].Size();
 
-                    backupIndx++;
-
                     //Log
-                    IOLog("[DEL]:" + backupFiles[backupIndx].Name(), logDeletedFiles);
+                    IOLog("[DEL]:" + backupFiles[backupIndx].FullRelativeName(), logDeletedFiles);
+
+                    backupIndx++;
                 }
             }
 
@@ -244,10 +247,10 @@ namespace PrecomputedHashDirDiff
                     AddedFilesCount++;
                     AddedFilesSize += targetFiles[targetIndx].Size();
 
-                    targetIndx++;
-
                     //Log
-                    IOLog("[ADD]:" + targetFiles[targetIndx].Name(), logAddedFiles);
+                    IOLog("[ADD]:" + targetFiles[targetIndx].FullRelativeName(), logAddedFiles);
+
+                    targetIndx++;
                 }
                 
             }
@@ -278,28 +281,30 @@ namespace PrecomputedHashDirDiff
                 {
                     // backup is smaller than target
                     Console.WriteLine("\t1. Deleted Folder: [" + backupFolders[backupIndx].Name() + "]");
-                    backupIndx++;
 
                     // Stats:
                     DeletedFoldersCount++;
                     DeletedFoldersSize += backupFolders[backupIndx].Size();
 
                     //Log
-                    IOLog("[DEL]:" + backupFolders[backupIndx].Name(), logDeletedFolders);
+                    IOLog("[DEL]:" + backupFolders[backupIndx].FullRelativeName(), logDeletedFolders);
+
+                    backupIndx++;
                 }
 
                 if (comp > 0)
                 {
                     // backup is bigger than target
                     Console.WriteLine("\t2. Added Folder: [" + targetFolders[targetIndx].Name() + "]");
-                    targetIndx++;
 
                     // Stats:
                     AddedFoldersCount++;
                     AddedFoldersSize += targetFolders[targetIndx].Size();
 
                     //Log
-                    IOLog("[ADD]:" + targetFolders[targetIndx].Name(), logAddedFolders);
+                    IOLog("[ADD]:" + targetFolders[targetIndx].FullRelativeName(), logAddedFolders);
+
+                    targetIndx++;
                 }
 
                 if (comp == 0)
@@ -325,10 +330,10 @@ namespace PrecomputedHashDirDiff
                     DeletedFoldersCount++;
                     DeletedFoldersSize += backupFolders[backupIndx].Size();
 
-                    backupIndx++;
-
                     //Log
-                    IOLog("[DEL]:" + backupFolders[backupIndx].Name(), logDeletedFolders);
+                    IOLog("[DEL]:" + backupFolders[backupIndx].FullRelativeName(), logDeletedFolders);
+
+                    backupIndx++;
                 }
             }
 
@@ -343,10 +348,10 @@ namespace PrecomputedHashDirDiff
                     AddedFoldersCount++;
                     AddedFoldersSize += targetFolders[targetIndx].Size();
 
-                    targetIndx++;
-
                     //Log
-                    IOLog("[ADD]:" + targetFolders[targetIndx].Name(), logAddedFolders);
+                    IOLog("[ADD]:" + targetFolders[targetIndx].FullRelativeName(), logAddedFolders);
+
+                    targetIndx++;
                 }
             }
 
