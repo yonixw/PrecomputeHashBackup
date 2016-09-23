@@ -28,11 +28,11 @@ namespace PrecomputedHashDirDiff
         public long DeletedFoldersSize = 0;
         public long DeletedFoldersCount = 0;
 
-        bool useIOLog = false;
-        FileInfo logAddedFiles;
-        FileInfo logAddedFolders;
-        FileInfo logDeletedFiles;
-        FileInfo logDeletedFolders;
+        public bool useIOLog = false;
+        public FileInfo logAddedFiles;
+        public FileInfo logAddedFolders;
+        public FileInfo logDeletedFiles;
+        public FileInfo logDeletedFolders;
 
         enum KnownDiffKeys : int
         {

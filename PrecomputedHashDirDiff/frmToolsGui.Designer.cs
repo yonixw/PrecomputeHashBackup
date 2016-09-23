@@ -41,6 +41,8 @@
             this.btnDiffDB = new System.Windows.Forms.Button();
             this.bwDBdiff = new System.ComponentModel.BackgroundWorker();
             this.pbDiffStatus = new System.Windows.Forms.ProgressBar();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtDiffLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnCreateList
@@ -129,7 +131,7 @@
             // 
             // btnDiffDB
             // 
-            this.btnDiffDB.Location = new System.Drawing.Point(478, 233);
+            this.btnDiffDB.Location = new System.Drawing.Point(481, 309);
             this.btnDiffDB.Name = "btnDiffDB";
             this.btnDiffDB.Size = new System.Drawing.Size(101, 23);
             this.btnDiffDB.TabIndex = 9;
@@ -146,16 +148,35 @@
             // 
             // pbDiffStatus
             // 
-            this.pbDiffStatus.Location = new System.Drawing.Point(12, 233);
+            this.pbDiffStatus.Location = new System.Drawing.Point(15, 309);
             this.pbDiffStatus.Name = "pbDiffStatus";
             this.pbDiffStatus.Size = new System.Drawing.Size(459, 23);
             this.pbDiffStatus.TabIndex = 10;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(19, 235);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(128, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Log file (empty for no log):";
+            // 
+            // txtDiffLog
+            // 
+            this.txtDiffLog.Location = new System.Drawing.Point(12, 251);
+            this.txtDiffLog.Name = "txtDiffLog";
+            this.txtDiffLog.Size = new System.Drawing.Size(567, 20);
+            this.txtDiffLog.TabIndex = 11;
+            this.txtDiffLog.Text = "C:\\Users\\YoniWas\\Desktop\\1.log";
             // 
             // frmToolsGui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(601, 292);
+            this.ClientSize = new System.Drawing.Size(601, 359);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtDiffLog);
             this.Controls.Add(this.pbDiffStatus);
             this.Controls.Add(this.btnDiffDB);
             this.Controls.Add(this.label4);
@@ -190,6 +211,8 @@
         private System.Windows.Forms.Button btnDiffDB;
         private System.ComponentModel.BackgroundWorker bwDBdiff;
         private System.Windows.Forms.ProgressBar pbDiffStatus;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtDiffLog;
     }
 }
 

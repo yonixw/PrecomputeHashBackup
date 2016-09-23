@@ -96,6 +96,14 @@ namespace PrecomputedHashDirDiff
         private void bwDBdiff_DoWork(object sender, DoWorkEventArgs e)
         {
             secondStep = new DiffDB();
+
+            if (txtDiffLog.Text != "")
+            {
+                secondStep.useIOLog = true;
+                secondStep.logAddedFiles = secondStep.logAddedFolders =
+                    secondStep.logDeletedFiles = secondStep.logDeletedFolders = new FileInfo(txtDiffLog.Text);
+            }
+
             secondStep.Init(
                 txtBackup.Text, 
                 txtTartget.Text);
