@@ -395,7 +395,7 @@ namespace PrecomputeBackupManager
 
             // Create Temp dir for db3 storage The folder for the roaming current user 
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.PathSeparator + _FolderName_db3);
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _FolderName_db3);
 
             // Check if folder exists and if not, create it
             DirectoryInfo saveHashPath = new DirectoryInfo(specificFolder);
@@ -418,7 +418,7 @@ namespace PrecomputeBackupManager
         private DirectoryInfo BackupHashSetup() {
             // Create Temp dir for db3 storage The folder for the roaming current user 
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.PathSeparator + "recent-" + _FolderName_db3);
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "recent-" + _FolderName_db3);
 
             // Check if folder exists and if not, create it
             DirectoryInfo saveHashPath = new DirectoryInfo(specificFolder);
@@ -521,7 +521,7 @@ namespace PrecomputeBackupManager
             DirectoryInfo saveLastHashPath = BackupHashSetup();
 
             // Copy db3 folder from recent on the server
-            DirectoryInfo recentBackup = new DirectoryInfo( Path.Combine(txtServerUploadPath.Text, "recent" + Path.PathSeparator  + _FolderName_db3));
+            DirectoryInfo recentBackup = new DirectoryInfo( Path.Combine(txtServerUploadPath.Text, "recent" + Path.DirectorySeparatorChar  + _FolderName_db3));
             if (!recentBackup.Exists)
             {
                 // No comparison, upload all new.
@@ -552,6 +552,11 @@ namespace PrecomputeBackupManager
             // Compute lists from hash diffs
             UpdateProgress(Status: "Step 1.4: Compute differences between dbs");
 
+
+
+            // For debug, always fail:
+            backupRunning = false;
+            currentCancelled = true;
         }
 
         private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
