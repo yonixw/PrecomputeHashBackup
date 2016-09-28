@@ -604,6 +604,11 @@ namespace PrecomputeBackupManager
             }
 
 
+            // TODO:
+            // Copy added files and folders to destination (after unlock!!!)
+            // Release all DB3 Connections.... (hash step, diff step is ok?)
+
+
             // For debug, always fail:
             backupRunning = false;
             currentCancelled = true;
