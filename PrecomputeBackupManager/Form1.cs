@@ -441,6 +441,29 @@ namespace PrecomputeBackupManager
             return saveHashPath;
         }
 
+        private DirectoryInfo BackupListsSetup()
+        {
+            // Create Temp dir for db3 storage The folder for the roaming current user 
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _Foldername_DeltaLists);
+
+            // Check if folder exists and if not, create it
+            DirectoryInfo saveListPath = new DirectoryInfo(specificFolder);
+            if (!saveListPath.Exists)
+            {
+                saveListPath.Create();
+                Log("Created temp folder for copy last backup hash in:" + saveListPath.FullName);
+            }
+
+            // Remove list files in each sub directory
+            foreach (DirectoryInfo di in saveListPath.GetDirectories())
+            {
+                di.Delete(true);
+            }
+
+            return saveListPath;
+        }
+
         class BackupDirectoryInfo {
             // Report data
             public string ServerName;
@@ -463,7 +486,7 @@ namespace PrecomputeBackupManager
             Log("Started hashing files in the background");
             UpdateProgress(Status: "Step 1.1: Hashing folders");
 
-            // Do work:
+            // Hash
             // =================================
             DirectoryInfo saveHashPath = HashSetup();
 
@@ -517,6 +540,8 @@ namespace PrecomputeBackupManager
 
             if (TryCancel()) return;
 
+            // COPY
+            // =================================
             UpdateProgress(Status: "Step 1.3: Copy last backup db3");
             DirectoryInfo saveLastHashPath = BackupHashSetup();
 
@@ -549,9 +574,34 @@ namespace PrecomputeBackupManager
                 }
             }
 
+            // DIFF
+            // =================================
+
             // Compute lists from hash diffs
             UpdateProgress(Status: "Step 1.4: Compute differences between dbs");
 
+            DirectoryInfo listFolder =  BackupListsSetup();
+            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+            {
+                if (currentFolder.Value.HasRecent) {
+                    if (TryCancel()) return;
+
+                    string lastDB3 = Path.Combine(saveLastHashPath.FullName, currentFolder.Value.ServerName + ".db3");
+                    string freshDB3 = Path.Combine(saveHashPath.FullName, currentFolder.Value.ServerName + ".db3");
+
+                    PrecomputedHashDirDiff.DiffDB diffObj = new PrecomputedHashDirDiff.DiffDB();
+
+                    // Create folder for server name:
+                    string currentListFolder = Directory.CreateDirectory(Path.Combine(listFolder.FullName, currentFolder.Value.ServerName)).FullName;
+                    diffObj.logAddedFiles =         new FileInfo(Path.Combine(currentListFolder,"new-files.txt"));
+                    diffObj.logAddedFolders =       new FileInfo(Path.Combine(currentListFolder,"new-folders.txt"));
+                    diffObj.logDeletedFiles =       new FileInfo(Path.Combine(currentListFolder,"old-files.txt"));
+                    diffObj.logDeletedFolders =     new FileInfo(Path.Combine(currentListFolder,"old-folders.txt"));
+                    diffObj.useIOLog = true;
+
+                    diffObj.Init(lastDB3, freshDB3);
+                }
+            }
 
 
             // For debug, always fail:

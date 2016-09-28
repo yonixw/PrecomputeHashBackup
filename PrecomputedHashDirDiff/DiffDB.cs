@@ -9,7 +9,7 @@ using PrecomputedHashDirDiff.DataSet1TableAdapters;
 
 namespace PrecomputedHashDirDiff
 {
-    class DiffDB
+    public class DiffDB
     {
         // Comparing two files based loosly on logic from http://www.codeproject.com/Articles/312484/
 
