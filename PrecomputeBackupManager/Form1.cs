@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -382,51 +383,103 @@ namespace PrecomputeBackupManager
         #endregion
 
 
-        #region Backup Step 1 - Hash
-        DirectoryInfo saveHashPath;
+        const string _FolderName_db3 = "db3";
+        const string _FolderName_UploadedFiles = "delta-files";
+        const string _Foldername_DeltaLists = "delta-lists";
 
-        private void HashSetup () {
+
+        #region Backup Step 1 - Hash (offline\local)
+
+        private DirectoryInfo HashSetup () {
             // SO? 16500080
 
             // Create Temp dir for db3 storage The folder for the roaming current user 
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager\HashedDbFiles");
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.PathSeparator + _FolderName_db3);
 
             // Check if folder exists and if not, create it
-            saveHashPath = saveHashPath ?? new DirectoryInfo(specificFolder);
+            DirectoryInfo saveHashPath = new DirectoryInfo(specificFolder);
             if (!saveHashPath.Exists) {
                 saveHashPath.Create();
                 Log("Created temp folder for saving hash in:" + saveHashPath.FullName);
             }
 
-            // Remove db3 files from last time if exists
+            // Remove db3 files from last manager backup time if exists
             foreach(FileInfo fi in saveHashPath.GetFiles()) {
                 if (fi.Extension == ".db3") {
                     fi.Delete();
                     Log("Deleted db3 file in temp:" + fi.FullName);
                 }
             }
+
+            return saveHashPath;
         }
 
+        private DirectoryInfo BackupHashSetup() {
+            // Create Temp dir for db3 storage The folder for the roaming current user 
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string specificFolder = Path.Combine(folder, @"Precompute Backup Manager" + Path.PathSeparator + "recent-" + _FolderName_db3);
+
+            // Check if folder exists and if not, create it
+            DirectoryInfo saveHashPath = new DirectoryInfo(specificFolder);
+            if (!saveHashPath.Exists)
+            {
+                saveHashPath.Create();
+                Log("Created temp folder for copy last backup hash in:" + saveHashPath.FullName);
+            }
+
+            // Remove db3 files from last manager backup time if exists
+            foreach (FileInfo fi in saveHashPath.GetFiles())
+            {
+                if (fi.Extension == ".db3")
+                {
+                    fi.Delete();
+                    Log("Deleted db3 file in temp:" + fi.FullName);
+                }
+            }
+
+            return saveHashPath;
+        }
+
+        class BackupDirectoryInfo {
+            // Report data
+            public string ServerName;
+            public string LocalPath;
+            public TimeSpan HashDuration;
+            public TimeSpan DiffDuration;
+            public TimeSpan CopyDuration;
+            public string LastError; // Even if success error 0.
+
+            // Algo data:
+            public bool HasRecent;
+        }
+
+        List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;
         private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             // Start worker:
             // =================================
             currentWorker = backworkHashFiles;
             Log("Started hashing files in the background");
-            UpdateProgress(Status: "Step 1/4: Hashing folders");
+            UpdateProgress(Status: "Step 1.1: Hashing folders");
 
             // Do work:
             // =================================
-            HashSetup();
+            DirectoryInfo saveHashPath = HashSetup();
 
             // Save the list, to avoid changes:
-            List<KeyValuePair<string, string>> _FoldersToBackup = new List<KeyValuePair<string, string>>();
+            _FoldersToBackup = new List<KeyValuePair<string, BackupDirectoryInfo>>();
 
             lstvFoldersToBackup.Invoke(new Action(() => { 
                 foreach (ListViewItem item in lstvFoldersToBackup.Items) {
                     // Server Name ---> Path locally
-                    _FoldersToBackup.Add(new KeyValuePair<string, string>(item.SubItems[1].Text, item.SubItems[0].Text));
+                    BackupDirectoryInfo bdi = new BackupDirectoryInfo()
+                    {
+                        ServerName = item.SubItems[1].Text,
+                        LocalPath = item.SubItems[0].Text
+                    };
+
+                    _FoldersToBackup.Add(new KeyValuePair<string, BackupDirectoryInfo>(bdi.ServerName, bdi ));
                 }
             }));
 
@@ -434,7 +487,7 @@ namespace PrecomputeBackupManager
             FileInfo templateDB3 = new FileInfo(Path.Combine(currentExePath,"template.db3"));
 
             // For each folder, Calculate db3 hash 
-            foreach (KeyValuePair<string,string> currentFolder in _FoldersToBackup) {
+            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup) {
                 if (TryCancel()) return;
 
                 string currentHashDB = Path.Combine(saveHashPath.FullName, currentFolder.Key + ".db3");
@@ -446,17 +499,58 @@ namespace PrecomputeBackupManager
                 PrecomputedHashDirDiff.PrecomputeHash hashClass = new PrecomputedHashDirDiff.PrecomputeHash();
 
                 // Hash Folder
-                UpdateProgress(Status: "Step 1/4: Hashing folder:" + currentFolder.Key);
+                UpdateProgress(Status: "Step 1.2: Hashing folder:" + currentFolder.Key);
                 Log("Hashing Server Folder: " + currentFolder.Key);
-                hashClass.InitGeneric(currentFolder.Value, currentHashDB, currentWorker);
+
+                if (Directory.Exists(currentFolder.Value.LocalPath))
+                {
+                    hashClass.InitGeneric(currentFolder.Value.LocalPath, currentHashDB, currentWorker);
+                }
+                else
+                {
+                    _FoldersToBackup.Remove(currentFolder);
+                    Log("Cannot find local folder :'" + currentFolder.Value.LocalPath + "'... removing from backup process (not from db)");
+                }
 
                 
             }
 
             if (TryCancel()) return;
 
-            // Copy db3 folder from current on the server
-            // TODO - Cotinue from here...
+            UpdateProgress(Status: "Step 1.3: Copy last backup db3");
+            DirectoryInfo saveLastHashPath = BackupHashSetup();
+
+            // Copy db3 folder from recent on the server
+            DirectoryInfo recentBackup = new DirectoryInfo( Path.Combine(txtServerUploadPath.Text, "recent" + Path.PathSeparator  + _FolderName_db3));
+            if (!recentBackup.Exists)
+            {
+                // No comparison, upload all new.
+                foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+                {
+                    currentFolder.Value.HasRecent = false;
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+                {
+                    string remoteDB3 = Path.Combine(recentBackup.FullName, currentFolder.Value.ServerName + ".db3");
+                    string localDB3 = Path.Combine(saveLastHashPath.FullName, currentFolder.Value.ServerName + ".db3");
+
+                    currentFolder.Value.HasRecent = File.Exists(remoteDB3);
+
+                    if (currentFolder.Value.HasRecent) {
+                        if (TryCancel()) return;
+
+                        // Copy to our temp:
+                        UpdateProgress(Desc: "Download db3 for server folder: " + currentFolder.Value.ServerName);
+                        CopyFileWithProgress(remoteDB3, localDB3);
+                    }
+                }
+            }
+
+            // Compute lists from hash diffs
+            UpdateProgress(Status: "Step 1.4: Compute differences between dbs");
 
         }
 
@@ -575,6 +669,27 @@ namespace PrecomputeBackupManager
             }
         }
 
-      
+
+        #region Tools From OS
+
+        //SO? 19755317 A:1997873
+
+        //public delegate void IntDelegate(int Int);
+        //public static event IntDelegate FileCopyProgress;
+
+        public void CopyFileWithProgress(string source, string destination)
+        {
+            var webClient = new WebClient();
+            webClient.DownloadProgressChanged += DownloadProgress;
+            webClient.DownloadFileAsync(new Uri(source), destination);
+        }
+
+        private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            //if (FileCopyProgress != null)
+            //    FileCopyProgress(e.ProgressPercentage);
+            UpdateProgress(progress: e.ProgressPercentage);
+        }
+        #endregion
     }
 }
