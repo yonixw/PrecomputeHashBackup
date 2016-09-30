@@ -61,7 +61,9 @@
     <Compile Include="BackupFlow\3UploadFiles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BackupFlow\4LockUpload.cs" />
+    <Compile Include="BackupFlow\4LockUpload.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DataSet11.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -19,6 +19,24 @@ namespace PrecomputeBackupManager
     {
         #region Backup Step 3 - Upload
 
+        const string addedPrefix = "[ADD]:";
+
+        private void copyAllFiles(string path) {
+            if (!File.Exists(path)) return;
+            System.IO.StreamReader file = new System.IO.StreamReader(path);
+
+            string currentLine = null;
+            while ((currentLine=file.ReadLine()) != null) {
+                if (currentLine.StartsWith(addedPrefix)) {
+                    // TODO: continue from here, nee to sort root folder issue with lists.
+                }
+            }
+        }
+
+        private void copyAllFolders(string path) { 
+
+        }
+
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             Log("Starting to upload files");
