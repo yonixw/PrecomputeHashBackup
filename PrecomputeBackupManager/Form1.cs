@@ -388,65 +388,6 @@ namespace PrecomputeBackupManager
         const string _Foldername_DeltaLists = "delta-lists";
 
 
-       
-
-        #region Backup Step 2 - Unlock
-
-        private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
-
-        private void backworkUnlock_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-        private void backworkUnlock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        #endregion
-
-        #region Backup Step 3 - Upload
-
-        private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
-
-        private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-        private void backworkUploadFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        #endregion
-
-        #region Backup Step 4 - Lock
-
-        private void backworkLock_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-        }
-
-        private void backworkLock_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-        private void backworkLock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        #endregion
-
 
         // Current background thread, so we can cancel it if we want.
         bool backupRunning = false;
@@ -491,7 +432,7 @@ namespace PrecomputeBackupManager
         }
 
 
-        #region Tools From OS
+        #region Tools From StackOverflow
 
         //SO? 19755317 A:1997873
 

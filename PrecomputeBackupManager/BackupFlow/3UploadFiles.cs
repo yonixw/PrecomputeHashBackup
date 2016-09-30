@@ -17,5 +17,40 @@ namespace PrecomputeBackupManager
 {
     public partial class Form1 : Form
     {
+        #region Backup Step 3 - Upload
+
+        private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Log("Starting to upload files");
+            UpdateProgress(Status: "Uploading files:", progress: 0);
+
+            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+            {
+                if (currentFolder.Value.HasRecent)
+                {
+                    // Copy only delta
+                }
+                else 
+                {
+                    // Copy the entire folder
+                }
+            }
+        }
+
+        private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            pbStatusProgress.Value = e.ProgressPercentage;
+        }
+
+        private void backworkUploadFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Log("Finshed uploading files.");
+
+            // On cancel send "cancel to the server" (using user modal form);
+            backworkLock.RunWorkerAsync();
+        }
+
+        #endregion
+
     }
 }

@@ -17,5 +17,29 @@ namespace PrecomputeBackupManager
 {
     public partial class Form1 : Form
     {
+        #region Backup Step 2 - Unlock
+
+        private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //Unlock using remote url
+            Log("Asking server to unlock.");
+
+            // Wait until we get a response that 
+            // Of course, stop if we got a cancel and try to "cancel" (url should support 3 types: unlock, lock, cancel)
+        }
+
+        private void backworkUnlock_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            pbStatusProgress.Value = e.ProgressPercentage;
+        }
+
+        private void backworkUnlock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Check for cancel but for now just start uplaod:
+            Log("Folder was unlocked.");
+            backworkUploadFiles.RunWorkerAsync();
+        }
+
+        #endregion
     }
 }
