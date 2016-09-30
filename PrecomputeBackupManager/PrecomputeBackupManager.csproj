@@ -55,6 +55,13 @@
     <Compile Include="BackupFlow\1HashStep.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="BackupFlow\2UnlockUpload.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackupFlow\3UploadFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackupFlow\4LockUpload.cs" />
     <Compile Include="DataSet11.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

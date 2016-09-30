@@ -106,7 +106,6 @@ namespace PrecomputeBackupManager
             public TimeSpan HashDuration;
             public TimeSpan DiffDuration;
             public TimeSpan CopyDuration;
-            public string LastError; // Even if success error 0.
 
             // Algo data:
             public bool HasRecent;
@@ -164,7 +163,9 @@ namespace PrecomputeBackupManager
 
                 if (Directory.Exists(currentFolder.Value.LocalPath))
                 {
+                    DateTime start = DateTime.Now;
                     hashClass.InitGeneric(currentFolder.Value.LocalPath, currentHashDB, currentWorker);
+                    currentFolder.Value.HashDuration = DateTime.Now - start;
                 }
                 else
                 {
@@ -241,16 +242,18 @@ namespace PrecomputeBackupManager
 
                     Log("Starting diff for server folder: " + currentFolder.Value.ServerName);
                     diffObj.Init(lastDB3, freshDB3);
+                    currentFolder.Value.DiffDuration = diffObj.duration;
                 }
             }
 
 
             /* 
             After this step we have:
-                1) db3 from old backup
-                2) db3 for current folder
-                3) list of files that should be added\deleted (delta)
+                1) db3 from old backup - Useless after this step, we leave it for debugging.
+                2) db3 for current folder - We need to copy to upload folder
+                3) list of files that should be added\deleted (delta) - we need to copy them, and them use the add-delta to copy to upload folder
             */
+
         }
 
         private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
