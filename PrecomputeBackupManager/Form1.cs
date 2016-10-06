@@ -441,9 +441,21 @@ namespace PrecomputeBackupManager
 
         public void CopyFileWithProgress(string source, string destination)
         {
-            var webClient = new WebClient();
-            webClient.DownloadProgressChanged += DownloadProgress;
-            webClient.DownloadFileAsync(new Uri(source), destination);
+            try
+            {
+                // Make sure we have the folder tree ready to download, wont be created from webclient obj.
+                FileInfo fi = new FileInfo(destination);
+                if (!fi.Directory.Exists) fi.Directory.Create();
+
+                // Download file
+                var webClient = new WebClient();
+                webClient.DownloadProgressChanged += DownloadProgress;
+                webClient.DownloadFileAsync(new Uri(source), destination);
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            };
         }
 
         private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)

@@ -21,14 +21,26 @@ namespace PrecomputeBackupManager
 
         const string addedPrefix = "[ADD]:";
 
-        private void copyAllFiles(string path) {
-            if (!File.Exists(path)) return;
-            System.IO.StreamReader file = new System.IO.StreamReader(path);
+        private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
+        {
+            if (!File.Exists(filelistpath)) return;
+            System.IO.StreamReader file = new System.IO.StreamReader(filelistpath);
+
+            UpdateProgress(Desc: "Copying all files for:" + current.ServerName);
 
             string currentLine = null;
-            while ((currentLine=file.ReadLine()) != null) {
-                if (currentLine.StartsWith(addedPrefix)) {
+            while ((currentLine=file.ReadLine()) != null) 
+            {
+                if (currentLine.StartsWith(addedPrefix)) 
+                {
                     // TODO: continue from here, nee to sort root folder issue with lists.
+                    currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
+
+                    FileInfo fi = new FileInfo(current.LocalPath + currentLine);
+                    if (fi.Exists) 
+                    {
+                        CopyFileWithProgress(fi.FullName, txtServerUploadPath.Text + currentLine);
+                    }
                 }
             }
         }
@@ -42,11 +54,21 @@ namespace PrecomputeBackupManager
             Log("Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
 
+            // Get folder for all lists:
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            DirectoryInfo listFolder = new DirectoryInfo(Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _Foldername_DeltaLists));
+
+            // For each folder try to upload deltas.
             foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
             {
+                string currentListFolder = Directory.CreateDirectory(Path.Combine(listFolder.FullName, currentFolder.Value.ServerName)).FullName;
+                FileInfo logAddedFiles = new FileInfo(Path.Combine(currentListFolder, "new-files.txt"));
+                FileInfo logAddedFolders = new FileInfo(Path.Combine(currentListFolder, "new-folders.txt"));
+
                 if (currentFolder.Value.HasRecent)
                 {
                     // Copy only delta
+                    copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
                 }
                 else 
                 {

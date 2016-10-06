@@ -289,9 +289,9 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(25, 70);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(124, 20);
+            this.label18.Size = new System.Drawing.Size(114, 20);
             this.label18.TabIndex = 6;
-            this.label18.Text = "Name on server:";
+            this.label18.Text = "Friendly Name:";
             // 
             // txtCurrentBackupFolderPath
             // 
@@ -353,7 +353,7 @@
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Server Name";
+            this.columnHeader2.Text = "Friendly Name";
             // 
             // columnHeader3
             // 
