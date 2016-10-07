@@ -56,10 +56,25 @@ namespace PrecomputeBackupManager
             }
         }
 
-        private void copyFolderProgressRecursive (string sourceDir, string targetDir) {
+        private void copyFolderProgressRecursive(string sourceDir, string targetDir)
+        {
             UpdateProgress(Desc: "Copying all added/changed files in folder for:" + sourceDir);
 
+            DirectoryInfo sourceDi = new DirectoryInfo(sourceDir);
+            DirectoryInfo targetDi = new DirectoryInfo(targetDir);
+            if (!targetDi.Exists) targetDi.Create(); // In case of empty folder
 
+            // Copy Files:
+            foreach (FileInfo fi in sourceDi.GetFiles())
+            {
+                CopyFileWithProgress(fi.FullName, fi.FullName.Replace(sourceDir, targetDir));
+            }
+
+            // Recursive copy sub Folders:
+            foreach (DirectoryInfo subdi in sourceDi.GetDirectories())
+            {
+                copyFolderProgressRecursive(sourceDi + @"\" + subdi.Name, targetDir + @"\" + subdi.Name);
+            }
         }
 
         private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) {
@@ -114,11 +129,14 @@ namespace PrecomputeBackupManager
                 {
                     // Copy only delta
                     copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
-                    //TODO Copy all folders 
+                    copyAllFolders(logAddedFolders.FullName, currentFolder.Value);
                 }
                 else 
                 {
                     // Copy the entire folder but with progress!
+                    // Use local folder name to backup, name on list is only for easy handling!
+                    DirectoryInfo di = new DirectoryInfo(currentFolder.Value.LocalPath);
+                    copyFolderProgressRecursive(di.FullName, txtServerUploadPath.Text + filesUploadPath + @"\" + di.Name);
                 }
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
@@ -132,6 +150,11 @@ namespace PrecomputeBackupManager
         private void backworkUploadFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Log("Finshed uploading files.");
+
+            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+            {
+                Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
+            }
 
             // On cancel send "cancel to the server" (using user modal form);
             backworkLock.RunWorkerAsync();
