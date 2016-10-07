@@ -109,6 +109,8 @@ namespace PrecomputeBackupManager
 
             // Algo data:
             public bool HasRecent;
+
+            // TODO: Provide Stats about all del\add\changed size and count.
         }
 
         List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;

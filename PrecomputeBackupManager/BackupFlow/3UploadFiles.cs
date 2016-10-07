@@ -20,33 +20,42 @@ namespace PrecomputeBackupManager
         #region Backup Step 3 - Upload
 
         const string addedPrefix = "[ADD]:";
+        const string db3UploadPath = @"\upload\db3";
+        const string filesUploadPath = @"\upload\delta-files";
+        const string listsUploadPath = @"\upload\delta-lists"; // For delete files
 
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
         {
             if (!File.Exists(filelistpath)) return;
             System.IO.StreamReader file = new System.IO.StreamReader(filelistpath);
 
-            UpdateProgress(Desc: "Copying all files for:" + current.ServerName);
+            UpdateProgress(Desc: "Copying all added/changed files for:" + current.ServerName);
+
+            string uploadDeltaFilesLocation = txtServerUploadPath.Text;
 
             string currentLine = null;
             while ((currentLine=file.ReadLine()) != null) 
             {
-                if (currentLine.StartsWith(addedPrefix)) 
+                if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                 {
-                    // TODO: continue from here, nee to sort root folder issue with lists.
+                    // Get relative path from local folder
                     currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
 
                     FileInfo fi = new FileInfo(current.LocalPath + currentLine);
-                    if (fi.Exists) 
+                    if (fi.Exists) // if local file exist
                     {
-                        CopyFileWithProgress(fi.FullName, txtServerUploadPath.Text + currentLine);
+                        CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
+                    }
+                    else
+                    {
+                        Log("Couldn't find local file to upload: '" + fi.FullName + "'");
                     }
                 }
             }
         }
 
-        private void copyAllFolders(string path) { 
-
+        private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) { 
+            // But with progress!!
         }
 
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
@@ -65,15 +74,18 @@ namespace PrecomputeBackupManager
                 FileInfo logAddedFiles = new FileInfo(Path.Combine(currentListFolder, "new-files.txt"));
                 FileInfo logAddedFolders = new FileInfo(Path.Combine(currentListFolder, "new-folders.txt"));
 
+                DateTime startCopy = DateTime.Now;
                 if (currentFolder.Value.HasRecent)
                 {
                     // Copy only delta
                     copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
+                    //TODO Copy all folders 
                 }
                 else 
                 {
-                    // Copy the entire folder
+                    // Copy the entire folder but with progress!
                 }
+                currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
         }
 
