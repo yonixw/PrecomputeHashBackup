@@ -27,35 +27,70 @@ namespace PrecomputeBackupManager
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
         {
             if (!File.Exists(filelistpath)) return;
-            System.IO.StreamReader file = new System.IO.StreamReader(filelistpath);
-
-            UpdateProgress(Desc: "Copying all added/changed files for:" + current.ServerName);
-
-            string uploadDeltaFilesLocation = txtServerUploadPath.Text;
-
-            string currentLine = null;
-            while ((currentLine=file.ReadLine()) != null) 
+            using (System.IO.StreamReader file = new System.IO.StreamReader(filelistpath))
             {
-                if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
-                {
-                    // Get relative path from local folder
-                    currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
 
-                    FileInfo fi = new FileInfo(current.LocalPath + currentLine);
-                    if (fi.Exists) // if local file exist
+                UpdateProgress(Desc: "Copying all added/changed files for:" + current.ServerName);
+
+                string uploadDeltaFilesLocation = txtServerUploadPath.Text;
+
+                string currentLine = null;
+                while ((currentLine = file.ReadLine()) != null)
+                {
+                    if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                     {
-                        CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
-                    }
-                    else
-                    {
-                        Log("Couldn't find local file to upload: '" + fi.FullName + "'");
+                        // Get relative path from local folder
+                        currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
+
+                        FileInfo fi = new FileInfo(current.LocalPath + currentLine);
+                        if (fi.Exists) // if local file exist
+                        {
+                            CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
+                        }
+                        else
+                        {
+                            Log("Couldn't find local file to upload: '" + fi.FullName + "'");
+                        }
                     }
                 }
             }
         }
 
-        private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) { 
-            // But with progress!!
+        private void copyFolderProgressRecursive (string sourceDir, string targetDir) {
+            UpdateProgress(Desc: "Copying all added/changed files in folder for:" + sourceDir);
+
+
+        }
+
+        private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) {
+
+            if (!File.Exists(folderlistpath)) return;
+            using (System.IO.StreamReader file = new System.IO.StreamReader(folderlistpath))
+            {
+
+                string uploadDeltaFilesLocation = txtServerUploadPath.Text;
+
+                string currentLine = null;
+                while ((currentLine = file.ReadLine()) != null)
+                {
+                    if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
+                    {
+                        // Get relative path from local folder
+                        currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
+
+                        DirectoryInfo di = new DirectoryInfo(current.LocalPath + currentLine);
+                        if (di.Exists) // if local file exist
+                        {
+                            copyFolderProgressRecursive(di.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
+                        }
+                        else
+                        {
+                            Log("Couldn't find local folder to upload: '" + di.FullName + "'");
+                        }
+                    }
+                }
+            }
+
         }
 
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)

@@ -431,6 +431,7 @@ namespace PrecomputeBackupManager
             }
         }
 
+        // TODO: Class to hold all setting before backup to avoid Invoke and Data change with backup.
 
         #region Tools From StackOverflow
 
