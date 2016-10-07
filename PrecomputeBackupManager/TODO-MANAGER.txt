@@ -6,10 +6,11 @@
 	[ ] Log max 100 rows 
 
 [ ] Yes no for schedlue (manuall only)
+	[ ] Schedule should only be days of the week [check box] and unique hour
 [ ] Yes no for showing verbose  in notify icon.
 
 Urgent:
-[ ] Cop db3 from remote to local and then compare
+[V] Cop db3 from remote to local and then compare
 [ ] Complete other 3 stpes with cancel support.
 
 Future:

@@ -140,6 +140,8 @@ namespace PrecomputeBackupManager
                 }
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
+
+            // TODO: Upload fresh db3 and fresh file lists from current backup.
         }
 
         private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)

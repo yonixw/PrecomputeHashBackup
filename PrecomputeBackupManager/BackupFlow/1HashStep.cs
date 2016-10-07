@@ -112,7 +112,23 @@ namespace PrecomputeBackupManager
 
             // TODO: Provide Stats about all del\add\changed size and count.
 
-            
+            private string durText(TimeSpan duration) {
+                if (duration == null) return "[Not Set]";
+                return String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.", duration.Days, duration.Hours, duration.Minutes, duration.Seconds);
+            }
+
+            public override string ToString()
+            {
+                string Result = "";
+
+                Result += "Friendly name:" + ServerName + "\n";
+                Result += "Local Path:" + LocalPath + "\n";
+                Result += "Hash Duration: " + durText(HashDuration) + "\n";
+                Result += "Diff Duration: " + durText(DiffDuration) + "\n";
+                Result += "Copy Duration: " + durText(CopyDuration) + "\n";
+
+                return Result;
+            }
         }
 
         List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;
