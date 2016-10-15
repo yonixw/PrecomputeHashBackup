@@ -274,6 +274,14 @@ namespace PrecomputeBackupManager
                 3) list of files that should be added\deleted (delta) - we need to copy them, and them use the add-delta to copy to upload folder
             */
 
+
+            releaseSQLiteFiles();
+        }
+
+        private void releaseSQLiteFiles() {
+            // Need these 2 to relese after use: (bug, read SO?8511901)
+            System.Data.SQLite.SQLiteConnection.ClearAllPools();
+            GC.Collect();
         }
 
         private void backworkHashFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)

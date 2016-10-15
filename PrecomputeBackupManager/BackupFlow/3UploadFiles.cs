@@ -116,6 +116,7 @@ namespace PrecomputeBackupManager
             // Get folder for all lists:
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             DirectoryInfo listFolder = new DirectoryInfo(Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _Foldername_DeltaLists));
+            DirectoryInfo db3Folder = new DirectoryInfo(Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _FolderName_db3));
 
             // For each folder try to upload deltas.
             foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
@@ -141,7 +142,18 @@ namespace PrecomputeBackupManager
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
 
-            // TODO: Upload fresh db3 and fresh file lists from current backup.
+            if (listFolder.Exists) {
+                // Copy list of added\rem\del  to server
+                copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
+            }
+
+            if (db3Folder.Exists) {
+                // Copy fresh db3  to server:
+                copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
+            }
+            
+
+            // TODO - Add cancel support to 'CopyFileWithProgress'
         }
 
         private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
