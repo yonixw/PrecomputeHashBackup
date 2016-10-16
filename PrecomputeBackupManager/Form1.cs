@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
@@ -27,6 +28,7 @@ namespace PrecomputeBackupManager
             reloadBackupFolders();
             LoadAllSettings();
             LoadBackupHistory();
+            initDownloadAsync();
         }
 
         public object safeDBNull(string column,DataRow dr, object fallback) {
@@ -438,7 +440,7 @@ namespace PrecomputeBackupManager
         // TODO: Class to hold all setting before backup to avoid Invoke and Data change with backup.
 
 
-      
+
 
         #region Tools From StackOverflow
 
@@ -446,6 +448,15 @@ namespace PrecomputeBackupManager
 
         //public delegate void IntDelegate(int Int);
         //public static event IntDelegate FileCopyProgress;
+
+        WebClient webClient;
+        AutoResetEvent downloadLock = new AutoResetEvent(false);
+
+        private void initDownloadAsync() {
+            webClient = new WebClient();
+            webClient.DownloadProgressChanged += DownloadProgress;
+            webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+        }
 
         public void CopyFileWithProgress(string source, string destination)
         {
@@ -456,17 +467,23 @@ namespace PrecomputeBackupManager
                 if (!fi.Directory.Exists) fi.Directory.Create();
 
                 // Download file
-                var webClient = new WebClient();
-                webClient.DownloadProgressChanged += DownloadProgress;
 
                 if (isBackupCancelled()) return;
 
+                string trimSource = (source.Length > 20) ? "..." + source.Substring(source.Length - 20, 20) : source;
+                UpdateProgress(progress: 0, Desc: trimSource);
                 webClient.DownloadFileAsync(new Uri(source), destination, webClient);
+                downloadLock.WaitOne();
             }
             catch (Exception ex)
             {
                 Log(ex);
             };
+        }
+
+        private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            downloadLock.Set(); // Unblock the download thread
         }
 
         private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
@@ -476,7 +493,9 @@ namespace PrecomputeBackupManager
 
             if (isBackupCancelled())
             {
+               
                 (e.UserState as WebClient).CancelAsync();
+                downloadLock.Set(); // Unblock the download thread
                 return;
             }
             UpdateProgress(progress: e.ProgressPercentage);

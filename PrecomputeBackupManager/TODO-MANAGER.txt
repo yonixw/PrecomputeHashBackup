@@ -16,3 +16,8 @@ Urgent:
 
 Future:
 [ ] Backup file manager that looks in the past. (compare debug and production?)
+
+
+TESTS:
+[ ] Internet down in mid-upload od in mid download (step 1)
+[ ] Cancel on each step (can done with code, cancel = true);
