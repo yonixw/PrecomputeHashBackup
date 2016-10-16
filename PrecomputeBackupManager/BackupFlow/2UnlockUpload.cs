@@ -22,7 +22,7 @@ namespace PrecomputeBackupManager
         private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
         {
             //Unlock using remote url
-            Log("Asking server to unlock.");
+            Log("Step 2/4: Asking server to unlock.");
 
             // Wait until we get a response that 
             // Of course, stop if we got a cancel and try to "cancel" (url should support 3 types: unlock, lock, cancel)
@@ -36,7 +36,7 @@ namespace PrecomputeBackupManager
         private void backworkUnlock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Check for cancel but for now just start uplaod:
-            Log("Folder was unlocked.");
+            Log("Step 2/4: Folder was unlocked.");
             backworkUploadFiles.RunWorkerAsync();
         }
 

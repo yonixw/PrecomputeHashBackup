@@ -121,11 +121,11 @@ namespace PrecomputeBackupManager
             {
                 string Result = "";
 
-                Result += "Friendly name:" + ServerName + "\n";
-                Result += "Local Path:" + LocalPath + "\n";
-                Result += "Hash Duration: " + durText(HashDuration) + "\n";
-                Result += "Diff Duration: " + durText(DiffDuration) + "\n";
-                Result += "Copy Duration: " + durText(CopyDuration) + "\n";
+                Result += "\tFriendly name:" + ServerName + "\n";
+                Result += "\tLocal Path:" + LocalPath + "\n";
+                Result += "\tHash Duration: " + durText(HashDuration) + "\n";
+                Result += "\tDiff Duration: " + durText(DiffDuration) + "\n";
+                Result += "\tCopy Duration: " + durText(CopyDuration) + "\n";
 
                 return Result;
             }
@@ -137,7 +137,7 @@ namespace PrecomputeBackupManager
             // Start worker:
             // =================================
             currentWorker = backworkHashFiles;
-            Log("Started hashing files in the background");
+            Log("Step 1/4: Started hashing files in the background");
             UpdateProgress(Status: "Step 1.1: Hashing folders");
 
             // Hash

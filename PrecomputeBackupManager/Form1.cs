@@ -85,13 +85,13 @@ namespace PrecomputeBackupManager
         public void Log(string text)
         {
             LogQue.Enqueue("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
-                                CultureInfo.InvariantCulture) + "] " + text);
+                                CultureInfo.InvariantCulture) + "]\n " + text);
         }
 
         public void Log(Exception ex)
         {
             LogQue.Enqueue( "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
-                                CultureInfo.InvariantCulture) + "] " + ex.Message + "\n" + ex.StackTrace);
+                                CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)

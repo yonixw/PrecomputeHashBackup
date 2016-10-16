@@ -128,7 +128,7 @@ namespace PrecomputeBackupManager
 
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
         {
-            Log("Starting to upload files");
+            Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
 
             // Get folder for all lists:
@@ -149,7 +149,9 @@ namespace PrecomputeBackupManager
                 if (currentFolder.Value.HasRecent)
                 {
                     // Copy only delta
+                    UpdateProgress(Status: "Step 3.1.1 Case 1: Upload delta files for:" + currentFolder.Key);
                     copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
+                    UpdateProgress(Status: "Step 3.1.2 Case 1: Upload delta folders for:" + currentFolder.Key);
                     copyAllFolders(logAddedFolders.FullName, currentFolder.Value);
                 }
                 else 
@@ -157,6 +159,7 @@ namespace PrecomputeBackupManager
                     // Copy the entire folder but with progress!
                     // Use local folder name to backup, name on list is only for easy handling!
                     DirectoryInfo di = new DirectoryInfo(currentFolder.Value.LocalPath);
+                    UpdateProgress(Status: "Step 3.1 Case 2: Upload entire folder for:" + currentFolder.Key);
                     copyFolderProgressRecursive(di.FullName, txtServerUploadPath.Text + filesUploadPath + @"\" + di.Name);
                 }
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
@@ -166,6 +169,7 @@ namespace PrecomputeBackupManager
 
             if (listFolder.Exists) {
                 // Copy list of added\rem\del  to server
+                UpdateProgress(Status: "Step 3.2: Upload delta lists");
                 copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
             }
 
@@ -173,6 +177,7 @@ namespace PrecomputeBackupManager
 
             if (db3Folder.Exists) {
                 // Copy fresh db3  to server:
+                UpdateProgress(Status: "Step 3.2: Upload db3's");
                 copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
             }
             
@@ -195,13 +200,12 @@ namespace PrecomputeBackupManager
             }
             else
             {
-                Log("Finished uploading files.");
-
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
                     Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
                 }
 
+                Log("Step 3/4: Finished uploading files.");
                 // TODO: On cancel send "cancel to the server" (using user modal form);
                 backworkLock.RunWorkerAsync();
             }

@@ -22,7 +22,7 @@ namespace PrecomputeBackupManager
         private void backworkLock_DoWork(object sender, DoWorkEventArgs e)
         {
             //Lock using remote url
-            Log("Asking server to lock.");
+            Log("Step 4/4: Asking server to lock.");
         }
 
         private void backworkLock_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -33,7 +33,7 @@ namespace PrecomputeBackupManager
         private void backworkLock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Check for cancel but for now just start lock:
-            Log("Folder was locked.");
+            Log("Step 4/4: Folder was locked.");
             backupRunning = false;
             UpdateProgress(Desc: "Finished backup by locking folder", Status: "Backup finished sucessfully", progress: 100);
             
