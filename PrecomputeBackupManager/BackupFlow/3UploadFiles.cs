@@ -181,8 +181,6 @@ namespace PrecomputeBackupManager
                 copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
             }
             
-
-            // TODO - Add cancel support to 'CopyFileWithProgress'
         }
 
         private void backworkUploadFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -200,6 +198,7 @@ namespace PrecomputeBackupManager
             }
             else
             {
+                // Log each dir stats:
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
                     Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());

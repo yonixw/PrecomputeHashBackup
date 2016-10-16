@@ -8,10 +8,11 @@
 [ ] Yes no for schedlue (manuall only)
 	[ ] Schedule should only be days of the week [check box] and unique hour
 [ ] Yes no for showing verbose  in notify icon.
+[ ] Export log to text file
 
 Urgent:
 [V] Cop db3 from remote to local and then compare
 [ ] Complete other 3 stpes with cancel support.
 
 Future:
-[ ] Backup file manager that looks in the past.
+[ ] Backup file manager that looks in the past. (compare debug and production?)
