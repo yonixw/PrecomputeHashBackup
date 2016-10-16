@@ -108,8 +108,14 @@ namespace PrecomputeBackupManager
 
         #endregion
 
+        public bool isBackupCancelled()
+        {
+            // Only checks if canceled.
+            return (currentCancelled || (currentWorker != null && currentWorker.CancellationPending));
+        }
+
         private Boolean TryCancel() {
-            if (!currentWorker.CancellationPending) return false;
+            if (!isBackupCancelled()) return false;
 
             Log("Backup was cancelled.");
             backupRunning = false;
@@ -387,11 +393,9 @@ namespace PrecomputeBackupManager
         const string _FolderName_UploadedFiles = "delta-files";
         const string _Foldername_DeltaLists = "delta-lists";
 
-
-
         // Current background thread, so we can cancel it if we want.
         bool backupRunning = false;
-        bool currentCancelled = false;
+        bool currentCancelled = false; // Cause from code side, currentWorker.Cancel is from user side
         BackgroundWorker currentWorker = null;
 
         private bool checkRemote() {
@@ -433,6 +437,9 @@ namespace PrecomputeBackupManager
 
         // TODO: Class to hold all setting before backup to avoid Invoke and Data change with backup.
 
+
+      
+
         #region Tools From StackOverflow
 
         //SO? 19755317 A:1997873
@@ -451,7 +458,10 @@ namespace PrecomputeBackupManager
                 // Download file
                 var webClient = new WebClient();
                 webClient.DownloadProgressChanged += DownloadProgress;
-                webClient.DownloadFileAsync(new Uri(source), destination);
+
+                if (isBackupCancelled()) return;
+
+                webClient.DownloadFileAsync(new Uri(source), destination, webClient);
             }
             catch (Exception ex)
             {
@@ -463,7 +473,14 @@ namespace PrecomputeBackupManager
         {
             //if (FileCopyProgress != null)
             //    FileCopyProgress(e.ProgressPercentage);
+
+            if (isBackupCancelled())
+            {
+                (e.UserState as WebClient).CancelAsync();
+                return;
+            }
             UpdateProgress(progress: e.ProgressPercentage);
+            
         }
         #endregion
     }

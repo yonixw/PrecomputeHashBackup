@@ -26,6 +26,8 @@ namespace PrecomputeBackupManager
 
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
         {
+            if (TryCancel()) return;
+
             if (!File.Exists(filelistpath)) return;
             using (System.IO.StreamReader file = new System.IO.StreamReader(filelistpath))
             {
@@ -37,6 +39,8 @@ namespace PrecomputeBackupManager
                 string currentLine = null;
                 while ((currentLine = file.ReadLine()) != null)
                 {
+                    if (TryCancel()) return;
+
                     if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                     {
                         // Get relative path from local folder
@@ -45,6 +49,8 @@ namespace PrecomputeBackupManager
                         FileInfo fi = new FileInfo(current.LocalPath + currentLine);
                         if (fi.Exists) // if local file exist
                         {
+                            if (TryCancel()) return;
+
                             CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
                         }
                         else
@@ -58,6 +64,8 @@ namespace PrecomputeBackupManager
 
         private void copyFolderProgressRecursive(string sourceDir, string targetDir)
         {
+            if (TryCancel()) return;
+
             UpdateProgress(Desc: "Copying all added/changed files in folder for:" + sourceDir);
 
             DirectoryInfo sourceDi = new DirectoryInfo(sourceDir);
@@ -67,17 +75,23 @@ namespace PrecomputeBackupManager
             // Copy Files:
             foreach (FileInfo fi in sourceDi.GetFiles())
             {
+                if (TryCancel()) return;
+
                 CopyFileWithProgress(fi.FullName, fi.FullName.Replace(sourceDir, targetDir));
             }
 
             // Recursive copy sub Folders:
             foreach (DirectoryInfo subdi in sourceDi.GetDirectories())
             {
+                if (TryCancel()) return;
+
                 copyFolderProgressRecursive(sourceDi + @"\" + subdi.Name, targetDir + @"\" + subdi.Name);
             }
         }
 
-        private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) {
+        private void copyAllFolders(string folderlistpath, BackupDirectoryInfo current) 
+        {
+            if (TryCancel()) return;
 
             if (!File.Exists(folderlistpath)) return;
             using (System.IO.StreamReader file = new System.IO.StreamReader(folderlistpath))
@@ -88,6 +102,8 @@ namespace PrecomputeBackupManager
                 string currentLine = null;
                 while ((currentLine = file.ReadLine()) != null)
                 {
+                    if (TryCancel()) return;
+
                     if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                     {
                         // Get relative path from local folder
@@ -96,6 +112,8 @@ namespace PrecomputeBackupManager
                         DirectoryInfo di = new DirectoryInfo(current.LocalPath + currentLine);
                         if (di.Exists) // if local file exist
                         {
+                            if (TryCancel()) return;
+
                             copyFolderProgressRecursive(di.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
                         }
                         else
@@ -121,6 +139,8 @@ namespace PrecomputeBackupManager
             // For each folder try to upload deltas.
             foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
             {
+                if (TryCancel()) return;
+
                 string currentListFolder = Directory.CreateDirectory(Path.Combine(listFolder.FullName, currentFolder.Value.ServerName)).FullName;
                 FileInfo logAddedFiles = new FileInfo(Path.Combine(currentListFolder, "new-files.txt"));
                 FileInfo logAddedFolders = new FileInfo(Path.Combine(currentListFolder, "new-folders.txt"));
@@ -142,10 +162,14 @@ namespace PrecomputeBackupManager
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
 
+            if (TryCancel()) return;
+
             if (listFolder.Exists) {
                 // Copy list of added\rem\del  to server
                 copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
             }
+
+            if (TryCancel()) return;
 
             if (db3Folder.Exists) {
                 // Copy fresh db3  to server:
@@ -163,15 +187,24 @@ namespace PrecomputeBackupManager
 
         private void backworkUploadFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Log("Finshed uploading files.");
-
-            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+            if (currentCancelled) // From TryCancel()
             {
-                Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
+                backupRunning = false;
+                Log("Aborting uploading to server.");
+                UpdateProgress(Status: "Step 3/4: Aborted all uploading", Desc: " ", progress: 100);
             }
+            else
+            {
+                Log("Finished uploading files.");
 
-            // On cancel send "cancel to the server" (using user modal form);
-            backworkLock.RunWorkerAsync();
+                foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+                {
+                    Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
+                }
+
+                // TODO: On cancel send "cancel to the server" (using user modal form);
+                backworkLock.RunWorkerAsync();
+            }
         }
 
         #endregion

@@ -298,7 +298,7 @@ namespace PrecomputeBackupManager
 
         private void backworkHashFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (currentCancelled)
+            if (currentCancelled)  // From TryCancel()
             {
                 backupRunning = false;
                 Log("Aborting hashing all folders.");
