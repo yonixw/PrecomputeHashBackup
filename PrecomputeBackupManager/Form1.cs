@@ -452,11 +452,38 @@ namespace PrecomputeBackupManager
         WebClient webClient;
         AutoResetEvent downloadLock = new AutoResetEvent(false);
 
+        // File timeout handling:
+        System.Timers.Timer downloadTimeOut;
+        bool isDownloadingFile = false;
+        bool lastUpdateFlag = false; // Flag that get rising every time timer is elapsed
+
+
         private void initDownloadAsync() {
             webClient = new WebClient();
             webClient.DownloadProgressChanged += DownloadProgress;
             webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+
+            downloadTimeOut = new System.Timers.Timer();
+            downloadTimeOut.Interval = 25000; // TODO: Add to db settings
+            downloadTimeOut.Elapsed += DownloadTimeOut_Elapsed;
+            downloadTimeOut.Start();
         }
+
+        private void DownloadTimeOut_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            // Why timeout is needed for webclient internet drop? SO? 4745553
+
+            if (isDownloadingFile && !lastUpdateFlag) {
+                // Downloading and update falg wasnt risen since last interval so timeout 
+                // was occured!
+                webClient.CancelAsync();
+            }
+            lastUpdateFlag = false;
+
+            Console.WriteLine("Timeout elapsed, timeout?" + (isDownloadingFile && !lastUpdateFlag).ToString());
+        }
+
+
 
         public void CopyFileWithProgress(string source, string destination)
         {
@@ -467,13 +494,20 @@ namespace PrecomputeBackupManager
                 if (!fi.Directory.Exists) fi.Directory.Create();
 
                 // Download file
-
+                //===============================================
                 if (isBackupCancelled()) return;
 
+                // Update truncked file
                 string trimSource = (source.Length > 20) ? "..." + source.Substring(source.Length - 20, 20) : source;
                 UpdateProgress(progress: 0, Desc: trimSource);
-                webClient.DownloadFileAsync(new Uri(source), destination, webClient);
-                downloadLock.WaitOne();
+
+                // For timeout
+                lastUpdateFlag = true; //Up the flag
+                isDownloadingFile = true;
+
+                // Start downloading and wait
+                webClient.DownloadFileAsync(new Uri(source), destination);
+                downloadLock.WaitOne(); // Block downloading thread.
             }
             catch (Exception ex)
             {
@@ -483,6 +517,16 @@ namespace PrecomputeBackupManager
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            if (e.Error != null) {
+                // Some error occured uploading file.
+                // Since many we cant predict the reason and if retrying will work, we just abort file.
+                Log("Backup was aborted with because of error while uploading files.");
+                Log(e.Error);
+
+                currentCancelled = true; // Cancel the uploading stage and abort backup.
+            }
+
+            isDownloadingFile = false;
             downloadLock.Set(); // Unblock the download thread
         }
 
@@ -491,13 +535,17 @@ namespace PrecomputeBackupManager
             //if (FileCopyProgress != null)
             //    FileCopyProgress(e.ProgressPercentage);
 
-            if (isBackupCancelled())
+            lastUpdateFlag = true; // Some progress done, notify using the flag!
+
+            if (isBackupCancelled()) // By user
             {
                
-                (e.UserState as WebClient).CancelAsync();
+                webClient.CancelAsync();
+                isDownloadingFile = false;
                 downloadLock.Set(); // Unblock the download thread
                 return;
             }
+
             UpdateProgress(progress: e.ProgressPercentage);
             
         }
