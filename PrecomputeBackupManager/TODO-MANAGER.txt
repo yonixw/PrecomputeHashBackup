@@ -10,6 +10,8 @@
 [ ] Yes no for showing verbose  in notify icon.
 [ ] Export log to text file
 
+[ ] If fail only in stage 3 maby just reupload all files? or continue?
+
 Urgent:
 [V] Cop db3 from remote to local and then compare
 [ ] Complete other 3 stpes with cancel support.

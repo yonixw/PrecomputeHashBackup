@@ -478,9 +478,11 @@ namespace PrecomputeBackupManager
                 // was occured!
                 webClient.CancelAsync();
             }
-            lastUpdateFlag = false;
-
             Console.WriteLine("Timeout elapsed, timeout?" + (isDownloadingFile && !lastUpdateFlag).ToString());
+
+
+            // Reset flag:
+            lastUpdateFlag = false;
         }
 
 
