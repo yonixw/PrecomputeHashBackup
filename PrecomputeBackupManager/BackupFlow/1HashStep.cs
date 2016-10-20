@@ -301,7 +301,7 @@ namespace PrecomputeBackupManager
             if (currentCancelled)  // From TryCancel()
             {
                 backupRunning = false;
-                Log("Aborting hashing all folders.");
+                Log("Aborting hashing all folders. (in step 1)");
                 UpdateProgress(Status: "Step 1/4: Aborted all hashing", Desc: " ", progress: 100);
             }
             else

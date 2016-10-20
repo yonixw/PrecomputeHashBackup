@@ -136,6 +136,27 @@ namespace PrecomputeBackupManager
             DirectoryInfo listFolder = new DirectoryInfo(Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _Foldername_DeltaLists));
             DirectoryInfo db3Folder = new DirectoryInfo(Path.Combine(folder, @"Precompute Backup Manager" + Path.DirectorySeparatorChar + _FolderName_db3));
 
+            // First copy db3 and delta list which almost always smaller, so better rate for sucess.
+            //      Secondly, copy the actual files.
+
+            if (TryCancel()) return;
+
+            if (listFolder.Exists)
+            {
+                // Copy list of added\rem\del  to server
+                UpdateProgress(Status: "Step 3.1: Upload delta lists");
+                copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
+            }
+
+            if (TryCancel()) return;
+
+            if (db3Folder.Exists)
+            {
+                // Copy fresh db3  to server:
+                UpdateProgress(Status: "Step 3.2: Upload db3's");
+                copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
+            }
+
             // For each folder try to upload deltas.
             foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
             {
@@ -149,9 +170,9 @@ namespace PrecomputeBackupManager
                 if (currentFolder.Value.HasRecent)
                 {
                     // Copy only delta
-                    UpdateProgress(Status: "Step 3.1.1 Case 1: Upload delta files for:" + currentFolder.Key);
+                    UpdateProgress(Status: "Step 3.3.1 Case 1: Upload delta files for:" + currentFolder.Key);
                     copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
-                    UpdateProgress(Status: "Step 3.1.2 Case 1: Upload delta folders for:" + currentFolder.Key);
+                    UpdateProgress(Status: "Step 3.3.2 Case 1: Upload delta folders for:" + currentFolder.Key);
                     copyAllFolders(logAddedFolders.FullName, currentFolder.Value);
                 }
                 else 
@@ -165,21 +186,7 @@ namespace PrecomputeBackupManager
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
 
-            if (TryCancel()) return;
-
-            if (listFolder.Exists) {
-                // Copy list of added\rem\del  to server
-                UpdateProgress(Status: "Step 3.2: Upload delta lists");
-                copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
-            }
-
-            if (TryCancel()) return;
-
-            if (db3Folder.Exists) {
-                // Copy fresh db3  to server:
-                UpdateProgress(Status: "Step 3.2: Upload db3's");
-                copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
-            }
+            
             
         }
 
@@ -193,7 +200,7 @@ namespace PrecomputeBackupManager
             if (currentCancelled) // From TryCancel()
             {
                 backupRunning = false;
-                Log("Aborting uploading to server.");
+                Log("Aborting uploading to server. (in step 3)");
                 UpdateProgress(Status: "Step 3/4: Aborted all uploading", Desc: " ", progress: 100);
             }
             else
