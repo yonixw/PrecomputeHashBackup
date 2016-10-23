@@ -417,6 +417,9 @@ namespace PrecomputeBackupManager
             {
                 if (checkRemote())
                 {
+                    //TODO: 
+                    // If db3,lists,delta-files folder doesnt exist, create them!
+
                     backupRunning = true;
                     currentCancelled = false;
 

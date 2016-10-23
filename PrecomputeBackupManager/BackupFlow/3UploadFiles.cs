@@ -24,6 +24,7 @@ namespace PrecomputeBackupManager
         const string filesUploadPath = @"\upload\delta-files";
         const string listsUploadPath = @"\upload\delta-lists"; // For delete files
 
+        // Only used in delta copying:
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
         {
             if (TryCancel()) return;
@@ -44,14 +45,16 @@ namespace PrecomputeBackupManager
                     if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                     {
                         // Get relative path from local folder
-                        currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
+                        // current.Localpath include current folder name so we do some extra work
+                        string currentFolderName = currentLine.Split('\\')[1];
+                        currentLine = currentLine.Substring(addedPrefix.Length + (1 /*dash*/ + currentFolderName.Length)); // Remove root folder and add prefix
 
-                        FileInfo fi = new FileInfo(current.LocalPath + currentLine);
+                        FileInfo fi = new FileInfo(current.LocalPath + currentLine); 
                         if (fi.Exists) // if local file exist
                         {
                             if (TryCancel()) return;
 
-                            CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
+                            CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + "\\" + currentFolderName + currentLine);
                         }
                         else
                         {
