@@ -110,6 +110,8 @@ namespace PrecomputeBackupManager
                     if (currentLine.StartsWith(addedPrefix)) // might be delete if using same files for all.
                     {
                         // Get relative path from local folder
+                        // current.Localpath include current folder name so we do some extra work
+                        string currentFolderName = currentLine.Split('\\')[1];
                         currentLine = currentLine.Substring(addedPrefix.Length + 1 + currentLine.Split('\\')[1].Length); // Remove root folder and add prefix
 
                         DirectoryInfo di = new DirectoryInfo(current.LocalPath + currentLine);
@@ -117,7 +119,7 @@ namespace PrecomputeBackupManager
                         {
                             if (TryCancel()) return;
 
-                            copyFolderProgressRecursive(di.FullName, uploadDeltaFilesLocation + filesUploadPath + currentLine);
+                            copyFolderProgressRecursive(di.FullName, uploadDeltaFilesLocation + filesUploadPath + "\\" + currentFolderName + currentLine);
                         }
                         else
                         {
