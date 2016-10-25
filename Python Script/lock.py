@@ -119,7 +119,7 @@ for root, subdirs, files in os.walk(walk_dir): # Recursive file enumeration SO? 
             removeFromList(pathjoin([root, filename]),walk_dir)
             
 # Hardlink the deltafiles inside recent:
-print("* Copy delta files to -all- in -recent-")
+print("* Copy delta files from -recent:delta-files- to -recent:all-")
 src = pathjoin([BDIR,"recent","delta-files"])
 trg = pathjoin([BDIR,"recent","all"])
 hardlinkTree(src,trg)
