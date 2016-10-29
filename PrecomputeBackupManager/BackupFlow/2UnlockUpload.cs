@@ -230,7 +230,7 @@ namespace PrecomputeBackupManager
                 Log("Step 2/4: Folder was unlocked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startWaiting));
                 backworkUploadFiles.RunWorkerAsync();
             }
-
+        }
         #endregion
     }
 }
