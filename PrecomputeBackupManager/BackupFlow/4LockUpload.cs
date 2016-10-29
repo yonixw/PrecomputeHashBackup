@@ -19,10 +19,46 @@ namespace PrecomputeBackupManager
     {
         #region Backup Step 4 - Lock
 
+        DateTime startLockWaiting;
         private void backworkLock_DoWork(object sender, DoWorkEventArgs e)
         {
+            int tryCount = 0;
+
             //Lock using remote url
             Log("Step 4/4: Asking server to lock.");
+            UpdateProgress(Status: "Step 4.1: Waiting for lock", Desc: "Sending request to server", progress: 0);
+            startLockWaiting = DateTime.Now;
+
+            if (TryCancel()) return;
+
+            // Wait until we get a response that 
+            // Of course, stop if we got a cancel and try to "cancel" (url should support 3 types: unlock, lock, cancel)
+            BackupActionResult actionResult = serverlock(int.Parse(txtUsernameCode.Text),CurrentBackupUpdateID, 0); // TODO
+            if (actionResult == null || actionResult.updateid < 0)
+            {
+                currentCancelled = true;
+                Log("Error while locking. is result Null? " + (actionResult == null).ToString());
+                return;
+            }
+
+            if (TryCancel()) return;
+
+            // Now check satus until ready (4)
+            // Status code 3 is still locking, status code 4 is locked and ready to go!
+
+            BackupProcessStatus status = getBackupProcessUpdate(CurrentBackupUpdateID);
+            while (status != null && status.statuscode < 4)
+            {
+                tryCount++;
+                UpdateProgress(Desc: "Try number: " + tryCount.ToString());
+                CancableSleep(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1));
+
+                if (TryCancel()) return;
+
+                status = getBackupProcessUpdate(CurrentBackupUpdateID);
+            }
+
+            // Now ready to upload !
         }
 
         private void backworkLock_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -32,10 +68,20 @@ namespace PrecomputeBackupManager
 
         private void backworkLock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // Check for cancel but for now just start lock:
-            Log("Step 4/4: Folder was locked.");
-            backupRunning = false;
-            UpdateProgress(Desc: "Finished backup by locking folder", Status: "Backup finished sucessfully", progress: 100);
+            if (currentCancelled) // From TryCancel()
+            {
+                backupRunning = false;
+                Log("Aborting unlocking to server. (in step 2)");
+                UpdateProgress(Status: "Step 2/4: Aborted unlocking", Desc: " ", progress: 100);
+            }
+            else
+            {
+                // Check for cancel but for now just start lock:
+                Log("Step 4/4: Folder was locked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startUnlockWaiting));
+                backupRunning = false;
+                UpdateProgress(Desc: "Finished backup by locking folder", Status: "Backup finished sucessfully", progress: 100);
+            }
+               
             
         }
 

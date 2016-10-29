@@ -154,7 +154,7 @@ namespace PrecomputeBackupManager
         #region Backup Step 2 - Unlock
 
 
-        DateTime startWaiting;
+        DateTime startUnlockWaiting;
         int CurrentBackupUpdateID = -1;
 
         private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
@@ -164,7 +164,7 @@ namespace PrecomputeBackupManager
             //Unlock using remote url
             Log("Step 2/4: Asking server to unlock.");
             UpdateProgress(Status: "Step 2.1: Waiting for unlock", Desc: "Sending request to server",  progress: 0);
-            startWaiting = DateTime.Now;
+            startUnlockWaiting = DateTime.Now;
 
             if (TryCancel()) return;
 
@@ -227,7 +227,7 @@ namespace PrecomputeBackupManager
             }
             else
             {
-                Log("Step 2/4: Folder was unlocked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startWaiting));
+                Log("Step 2/4: Folder was unlocked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startUnlockWaiting));
                 backworkUploadFiles.RunWorkerAsync();
             }
         }
