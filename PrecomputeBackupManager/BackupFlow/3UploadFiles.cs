@@ -24,6 +24,8 @@ namespace PrecomputeBackupManager
         const string filesUploadPath = @"\delta-files";
         const string listsUploadPath = @"\delta-lists"; // For delete files
 
+        long totalUploadedSize = 0;
+
         // Only used in delta copying:
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
         {
@@ -54,6 +56,7 @@ namespace PrecomputeBackupManager
                         {
                             if (TryCancel()) return;
 
+                            totalUploadedSize += fi.Length;
                             CopyFileWithProgress(fi.FullName, varUploadfolder + filesUploadPath + "\\" + currentFolderName + currentLine);
                         }
                         else
@@ -80,6 +83,7 @@ namespace PrecomputeBackupManager
             {
                 if (TryCancel()) return;
 
+                totalUploadedSize += fi.Length;
                 CopyFileWithProgress(fi.FullName, fi.FullName.Replace(sourceDir, targetDir));
             }
 
@@ -134,6 +138,8 @@ namespace PrecomputeBackupManager
         {
             Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
+
+            totalUploadedSize = 0;
 
             // Get folder for all lists:
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

@@ -33,7 +33,7 @@ namespace PrecomputeBackupManager
 
             // Wait until we get a response that 
             // Of course, stop if we got a cancel and try to "cancel" (url should support 3 types: unlock, lock, cancel)
-            BackupActionResult actionResult = serverlock(int.Parse(txtUsernameCode.Text),CurrentBackupUpdateID, 0); // TODO
+            BackupActionResult actionResult = serverlock(int.Parse(txtUsernameCode.Text),CurrentBackupUpdateID, totalUploadedSize); 
             if (actionResult == null || actionResult.updateid < 0)
             {
                 currentCancelled = true;

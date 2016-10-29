@@ -129,7 +129,7 @@ namespace PrecomputeBackupManager
             }
         }
 
-        private BackupActionResult serverlock(int userid, int updateId, int backupsize = 0)
+        private BackupActionResult serverlock(int userid, int updateId, long backupsize = 0)
         {
             try
             {
