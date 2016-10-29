@@ -17,10 +17,21 @@ namespace PrecomputeBackupManager
 {
     public partial class Form1 : Form
     {
+        // Folder for upload and for recent backups.
+        string varUploadfolder = null;
+        string varBackupfolder = null;
+
         #region Backup Step 1 - Hash (offline\local)
 
         private DirectoryInfo HashSetup()
         {
+            string sharename = txtServerUploadPath.Text;
+            if (sharename.EndsWith("\\"))
+                sharename = sharename.Substring(0, sharename.Length - 1);
+            varUploadfolder = sharename + "-upload";
+            varBackupfolder = sharename + "-backup";
+
+
             // SO? 16500080
 
             // Create Temp dir for db3 storage The folder for the roaming current user 
@@ -204,7 +215,7 @@ namespace PrecomputeBackupManager
             DirectoryInfo saveLastHashPath = BackupHashSetup();
 
             // Copy db3 folder from recent on the server
-            DirectoryInfo recentBackup = new DirectoryInfo(Path.Combine(txtServerUploadPath.Text, "recent" + Path.DirectorySeparatorChar + _FolderName_db3));
+            DirectoryInfo recentBackup = new DirectoryInfo(Path.Combine(varBackupfolder, "recent" + Path.DirectorySeparatorChar + _FolderName_db3));
             if (!recentBackup.Exists)
             {
                 Log("Can't find recent folder in remote server, asssuming first backup.");

@@ -20,9 +20,9 @@ namespace PrecomputeBackupManager
         #region Backup Step 3 - Upload
 
         const string addedPrefix = "[ADD]:";
-        const string db3UploadPath = @"\upload\db3";
-        const string filesUploadPath = @"\upload\delta-files";
-        const string listsUploadPath = @"\upload\delta-lists"; // For delete files
+        const string db3UploadPath = @"\db3";
+        const string filesUploadPath = @"\delta-files";
+        const string listsUploadPath = @"\delta-lists"; // For delete files
 
         // Only used in delta copying:
         private void copyAllFiles(string filelistpath, BackupDirectoryInfo current) 
@@ -35,7 +35,7 @@ namespace PrecomputeBackupManager
 
                 UpdateProgress(Desc: "Copying all added/changed files for:" + current.ServerName);
 
-                string uploadDeltaFilesLocation = txtServerUploadPath.Text;
+                
 
                 string currentLine = null;
                 while ((currentLine = file.ReadLine()) != null)
@@ -54,7 +54,7 @@ namespace PrecomputeBackupManager
                         {
                             if (TryCancel()) return;
 
-                            CopyFileWithProgress(fi.FullName, uploadDeltaFilesLocation + filesUploadPath + "\\" + currentFolderName + currentLine);
+                            CopyFileWithProgress(fi.FullName, varUploadfolder + filesUploadPath + "\\" + currentFolderName + currentLine);
                         }
                         else
                         {
@@ -99,8 +99,7 @@ namespace PrecomputeBackupManager
             if (!File.Exists(folderlistpath)) return;
             using (System.IO.StreamReader file = new System.IO.StreamReader(folderlistpath))
             {
-
-                string uploadDeltaFilesLocation = txtServerUploadPath.Text;
+            
 
                 string currentLine = null;
                 while ((currentLine = file.ReadLine()) != null)
@@ -119,7 +118,7 @@ namespace PrecomputeBackupManager
                         {
                             if (TryCancel()) return;
 
-                            copyFolderProgressRecursive(di.FullName, uploadDeltaFilesLocation + filesUploadPath + "\\" + currentFolderName + currentLine);
+                            copyFolderProgressRecursive(di.FullName, varUploadfolder + filesUploadPath + "\\" + currentFolderName + currentLine);
                         }
                         else
                         {
@@ -150,7 +149,7 @@ namespace PrecomputeBackupManager
             {
                 // Copy list of added\rem\del  to server
                 UpdateProgress(Status: "Step 3.1: Upload delta lists");
-                copyFolderProgressRecursive(listFolder.FullName, txtServerUploadPath.Text + listsUploadPath);
+                copyFolderProgressRecursive(listFolder.FullName, varUploadfolder + listsUploadPath);
             }
 
             if (TryCancel()) return;
@@ -159,7 +158,7 @@ namespace PrecomputeBackupManager
             {
                 // Copy fresh db3  to server:
                 UpdateProgress(Status: "Step 3.2: Upload db3's");
-                copyFolderProgressRecursive(db3Folder.FullName, txtServerUploadPath.Text + db3UploadPath);
+                copyFolderProgressRecursive(db3Folder.FullName, varUploadfolder + db3UploadPath);
             }
 
             // For each folder try to upload deltas.
@@ -186,7 +185,7 @@ namespace PrecomputeBackupManager
                     // Use local folder name to backup, name on list is only for easy handling!
                     DirectoryInfo di = new DirectoryInfo(currentFolder.Value.LocalPath);
                     UpdateProgress(Status: "Step 3.1 Case 2: Upload entire folder for:" + currentFolder.Key);
-                    copyFolderProgressRecursive(di.FullName, txtServerUploadPath.Text + filesUploadPath + @"\" + di.Name);
+                    copyFolderProgressRecursive(di.FullName, varUploadfolder + filesUploadPath + @"\" + di.Name);
                 }
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
             }
