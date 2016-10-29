@@ -28,7 +28,7 @@ namespace PrecomputeBackupManager
 
             [DataMember]
             public int id;
-            
+
             [DataMember]
             public int addedbytes;
 
@@ -39,13 +39,13 @@ namespace PrecomputeBackupManager
 
             [DataMember]
             public string username;
-            
+
             [DataMember]
             public string start;
-            
+
             [DataMember]
             public string end;
-            
+
             [DataMember]
             public string statusdescription;
         }
@@ -79,14 +79,22 @@ namespace PrecomputeBackupManager
 
         private BackupProcessStatus getBackupProcessUpdate(int updateId)
         {
-            string pathToDownload = txtBackupApiURL + "/status.php?id=" + updateId.ToString();
-            pathToDownload = pathToDownload.Replace(@"//", @"/");
+            try
+            {
+                string pathToDownload = txtBackupApiURL + "/status.php?id=" + updateId.ToString();
+                pathToDownload = pathToDownload.Replace(@"//", @"/");
 
-            string result = (new WebClient()).DownloadString(pathToDownload);
+                string result = (new WebClient()).DownloadString(pathToDownload);
 
-            Log("Status downloaded from server:\n" + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
+                Log("Status downloaded from server:\n " + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
 
-            return FromJson<BackupProcessStatus>(result);
+                return FromJson<BackupProcessStatus>(result);
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+                return null;
+            }
         }
 
         // Json for locking\unlocking 
@@ -95,34 +103,50 @@ namespace PrecomputeBackupManager
         {
             [DataMember]
             public int updateid;
-            
+
             [DataMember]
             public string jobstatus;
-            
+
         }
 
         private BackupActionResult serverunlock(int userid)
         {
-            string pathToDownload = txtBackupApiURL + "/unlock.php?id=" + userid.ToString();
-            pathToDownload = pathToDownload.Replace(@"//", @"/");
+            try
+            {
+                string pathToDownload = txtBackupApiURL + "/unlock.php?id=" + userid.ToString();
+                pathToDownload = pathToDownload.Replace(@"//", @"/");
 
-            string result = (new WebClient()).DownloadString(pathToDownload);
+                string result = (new WebClient()).DownloadString(pathToDownload);
 
-            Log("Unlock server result:\n" + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
+                Log("Unlock server result:\n " + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
 
-            return FromJson<BackupActionResult>(result);
+                return FromJson<BackupActionResult>(result);
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+                return null;
+            }
         }
 
-        private BackupActionResult serverlock(int userid, int updateId, int backupsize = 0) 
+        private BackupActionResult serverlock(int userid, int updateId, int backupsize = 0)
         {
-            string pathToDownload = txtBackupApiURL + "/lock.php?userid=" + userid.ToString() + "&id=" + updateId + "&bytes=" + backupsize;
-            pathToDownload = pathToDownload.Replace(@"//", @"/");
+            try
+            {
+                string pathToDownload = txtBackupApiURL + "/lock.php?userid=" + userid.ToString() + "&id=" + updateId + "&bytes=" + backupsize;
+                pathToDownload = pathToDownload.Replace(@"//", @"/");
 
-            string result = (new WebClient()).DownloadString(pathToDownload);
+                string result = (new WebClient()).DownloadString(pathToDownload);
 
-            Log("Lock server result:\n" + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
+                Log("Lock server result:\n " + JsonPrettyPrinterPlus.PrettyPrinterExtensions.PrettyPrintJson(result));
 
-            return FromJson<BackupActionResult>(result);
+                return FromJson<BackupActionResult>(result);
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+                return null;
+            }
         }
 
         #endregion
@@ -130,16 +154,61 @@ namespace PrecomputeBackupManager
         #region Backup Step 2 - Unlock
 
 
-
+        DateTime startWaiting;
+        int CurrentBackupUpdateID = -1;
 
         private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
         {
+            int tryCount = 0;
+
             //Unlock using remote url
             Log("Step 2/4: Asking server to unlock.");
-            
+            UpdateProgress(Status: "Step 2.1: Waiting for unlock", Desc: "Sending request to server",  progress: 0);
+            startWaiting = DateTime.Now;
+
+            if (TryCancel()) return;
 
             // Wait until we get a response that 
             // Of course, stop if we got a cancel and try to "cancel" (url should support 3 types: unlock, lock, cancel)
+            BackupActionResult actionResult = serverunlock(int.Parse(txtUsernameCode.Text));
+            if (actionResult == null || actionResult.updateid < 0) {
+                currentCancelled = true;
+                Log("Error while unlocking. is result Null? " + (actionResult == null).ToString());
+                return;
+            }
+
+            // Set the current id of update for the rest of the process:
+            CurrentBackupUpdateID = actionResult.updateid;
+
+            if (TryCancel()) return;
+
+            // Now check satus until ready (2)
+            // Status code 1 is still unlocking, status code 2 is unlocked and ready to go!
+
+            BackupProcessStatus status = getBackupProcessUpdate(CurrentBackupUpdateID);
+            while(status != null && status.statuscode < 2) {
+                tryCount++;
+                UpdateProgress(Desc: "Try number: " + tryCount.ToString());
+                CancableSleep(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1));
+
+                if (TryCancel()) return;
+
+                status = getBackupProcessUpdate(CurrentBackupUpdateID);
+            }
+            
+            // Now ready to upload !
+        }
+
+        private void CancableSleep(TimeSpan Total, TimeSpan Steps) {
+            // Sleep `total` time but check every `step` if cancelled
+            double total = Total.TotalMilliseconds;
+            double step = Steps.TotalMilliseconds;
+
+            while (total > step) {
+                System.Threading.Thread.Sleep((int)step);
+                if (TryCancel()) return;
+                total -= step;
+            }
 
         }
 
@@ -150,10 +219,17 @@ namespace PrecomputeBackupManager
 
         private void backworkUnlock_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // Check for cancel but for now just start uplaod:
-            Log("Step 2/4: Folder was unlocked.");
-            backworkUploadFiles.RunWorkerAsync();
-        }
+            if (currentCancelled) // From TryCancel()
+            {
+                backupRunning = false;
+                Log("Aborting unlocking to server. (in step 2)");
+                UpdateProgress(Status: "Step 2/4: Aborted unlocking", Desc: " ", progress: 100);
+            }
+            else
+            {
+                Log("Step 2/4: Folder was unlocked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startWaiting));
+                backworkUploadFiles.RunWorkerAsync();
+            }
 
         #endregion
     }

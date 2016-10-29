@@ -123,7 +123,7 @@ namespace PrecomputeBackupManager
 
             // TODO: Provide Stats about all del\add\changed size and count.
 
-            private string durText(TimeSpan duration) {
+            public static string durText(TimeSpan duration) {
                 if (duration == null) return "[Not Set]";
                 return String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.", duration.Days, duration.Hours, duration.Minutes, duration.Seconds);
             }
