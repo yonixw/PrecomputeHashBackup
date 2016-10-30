@@ -27,13 +27,13 @@ namespace PrecomputeBackupManager
             // Integers:
 
             [DataMember]
-            public int id;
+            public int? id;
 
             [DataMember]
-            public int addedbytes;
+            public int? addedbytes;
 
             [DataMember]
-            public int statuscode;
+            public int? statuscode;
 
             // Strings:
 
@@ -81,8 +81,8 @@ namespace PrecomputeBackupManager
         {
             try
             {
-                string pathToDownload = txtBackupApiURL + "/status.php?id=" + updateId.ToString();
-                pathToDownload = pathToDownload.Replace(@"//", @"/");
+                string pathToDownload = txtBackupApiURL.Text + "/status.php?id=" + updateId.ToString();
+                pathToDownload = pathToDownload.Replace(@"//status.php", @"/status.php");
 
                 string result = (new WebClient()).DownloadString(pathToDownload);
 
@@ -102,7 +102,7 @@ namespace PrecomputeBackupManager
         public class BackupActionResult
         {
             [DataMember]
-            public int updateid;
+            public int? updateid;
 
             [DataMember]
             public string jobstatus;
@@ -113,8 +113,8 @@ namespace PrecomputeBackupManager
         {
             try
             {
-                string pathToDownload = txtBackupApiURL + "/unlock.php?id=" + userid.ToString();
-                pathToDownload = pathToDownload.Replace(@"//", @"/");
+                string pathToDownload = txtBackupApiURL.Text + "/unlock.php?id=" + userid.ToString();
+                pathToDownload = pathToDownload.Replace(@"//unlock.php", @"/unlock.php");
 
                 string result = (new WebClient()).DownloadString(pathToDownload);
 
@@ -133,8 +133,8 @@ namespace PrecomputeBackupManager
         {
             try
             {
-                string pathToDownload = txtBackupApiURL + "/lock.php?userid=" + userid.ToString() + "&id=" + updateId + "&bytes=" + backupsize;
-                pathToDownload = pathToDownload.Replace(@"//", @"/");
+                string pathToDownload = txtBackupApiURL.Text + "/lock.php?userid=" + userid.ToString() + "&id=" + updateId + "&bytes=" + backupsize;
+                pathToDownload = pathToDownload.Replace(@"//lock.php", @"/lock.php");
 
                 string result = (new WebClient()).DownloadString(pathToDownload);
 
@@ -178,7 +178,7 @@ namespace PrecomputeBackupManager
             }
 
             // Set the current id of update for the rest of the process:
-            CurrentBackupUpdateID = actionResult.updateid;
+            CurrentBackupUpdateID = actionResult.updateid ?? -1;
 
             if (TryCancel()) return;
 

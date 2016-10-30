@@ -403,7 +403,7 @@ namespace PrecomputeBackupManager
         private bool checkRemote() {
             bool result = false;
 
-            result = Directory.Exists(txtServerUploadPath.Text);
+            result = Directory.Exists(txtServerUploadPath.Text + "-backup");
 
             return result;
         }
