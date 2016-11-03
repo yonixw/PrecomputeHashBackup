@@ -139,7 +139,9 @@ namespace PrecomputeBackupManager
             Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
 
+            
             totalUploadedSize = 0;
+            long lastUploadedSize = 0;
 
             // Get folder for all lists:
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -156,6 +158,9 @@ namespace PrecomputeBackupManager
                 // Copy list of added\rem\del  to server
                 UpdateProgress(Status: "Step 3.1: Upload delta lists");
                 copyFolderProgressRecursive(listFolder.FullName, varUploadfolder + listsUploadPath);
+
+                Log("Uploading delta lists for all folders. \nSize: " + Utils.byte2hum(totalUploadedSize));
+                lastUploadedSize = totalUploadedSize;
             }
 
             if (TryCancel()) return;
@@ -165,11 +170,16 @@ namespace PrecomputeBackupManager
                 // Copy fresh db3  to server:
                 UpdateProgress(Status: "Step 3.2: Upload db3's");
                 copyFolderProgressRecursive(db3Folder.FullName, varUploadfolder + db3UploadPath);
+
+                Log("Uploading db3 for all folders. \nSize: " + Utils.byte2hum(totalUploadedSize - lastUploadedSize));
+                lastUploadedSize = totalUploadedSize;
             }
 
             // For each folder try to upload deltas.
             foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
             {
+                if (!currentFolder.Value.isUploadNeeded()) continue;
+
                 if (TryCancel()) return;
 
                 string currentListFolder = Directory.CreateDirectory(Path.Combine(listFolder.FullName, currentFolder.Value.ServerName)).FullName;
@@ -194,6 +204,9 @@ namespace PrecomputeBackupManager
                     copyFolderProgressRecursive(di.FullName, varUploadfolder + filesUploadPath + @"\" + di.Name);
                 }
                 currentFolder.Value.CopyDuration = DateTime.Now - startCopy;
+
+                currentFolder.Value.UploadMeasuredSize =  totalUploadedSize - lastUploadedSize;
+                lastUploadedSize = totalUploadedSize;
             }
 
             
@@ -218,7 +231,14 @@ namespace PrecomputeBackupManager
                 // Log each dir stats:
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
-                    Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
+                    if (currentFolder.Value.isUploadNeeded())
+                    {
+                        Log("Stat for folder: " + currentFolder.Key + "\n" + currentFolder.Value.ToString());
+                    }
+                    else 
+                    {
+                        Log("Folder: " + currentFolder.Key + " not uploaded because haven't changed.");
+                    }
                 }
 
                 Log("Step 3/4: Finished uploading files.");

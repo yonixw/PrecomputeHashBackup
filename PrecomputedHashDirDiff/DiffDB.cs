@@ -55,21 +55,25 @@ namespace PrecomputedHashDirDiff
 
         }
 
-        Dictionary<int, long> lastDiffStat = new Dictionary<int, long>();
+        
         DateTime startDiff;
 
-        void calcDictyStat() {
-            lastDiffStat.Add((int)KnownDiffKeys.SecondDuration,         (long)duration.TotalSeconds);
-            lastDiffStat.Add((int)KnownDiffKeys.AddedFilesCount,        (long)AddedFilesCount);
-            lastDiffStat.Add((int)KnownDiffKeys.AddedFilesSize,         (long)AddedFilesSize);
-            lastDiffStat.Add((int)KnownDiffKeys.ChangedFilesCount,      (long)ChangedFilesCount);
-            lastDiffStat.Add((int)KnownDiffKeys.ChangedFilesSize,       (long)ChangedFilesSize);
-            lastDiffStat.Add((int)KnownDiffKeys.DeletedFilesCount,      (long)DeletedFilesCount);
-            lastDiffStat.Add((int)KnownDiffKeys.DeletedFilesSize,       (long)DeletedFilesSize);
-            lastDiffStat.Add((int)KnownDiffKeys.AddedFoldersCount,      (long)AddedFoldersCount);
-            lastDiffStat.Add((int)KnownDiffKeys.AddedFoldersSize,       (long)AddedFoldersSize);
-            lastDiffStat.Add((int)KnownDiffKeys.DeletedFoldersCount,    (long)DeletedFoldersCount);
-            lastDiffStat.Add((int)KnownDiffKeys.DeletedFoldersSize,     (long)DeletedFoldersSize);
+        public Dictionary<string, long> calcStat() {
+            Dictionary<string, long> lastDiffStat = new Dictionary<string, long>();
+
+            lastDiffStat.Add("SecondDuration",      (long)duration.TotalSeconds);
+            lastDiffStat.Add("AddedFilesCount",     (long)AddedFilesCount);
+            lastDiffStat.Add("AddedFilesSize",      (long)AddedFilesSize);
+            lastDiffStat.Add("ChangedFilesCount",   (long)ChangedFilesCount);
+            lastDiffStat.Add("ChangedFilesSize",    (long)ChangedFilesSize);
+            lastDiffStat.Add("DeletedFilesCount",   (long)DeletedFilesCount);
+            lastDiffStat.Add("DeletedFilesSize",    (long)DeletedFilesSize);
+            lastDiffStat.Add("AddedFoldersCount",   (long)AddedFoldersCount);
+            lastDiffStat.Add("AddedFoldersSize",    (long)AddedFoldersSize);
+            lastDiffStat.Add("DeletedFoldersCount", (long)DeletedFoldersCount);
+            lastDiffStat.Add("DeletedFoldersSize",  (long)DeletedFoldersSize);
+
+            return lastDiffStat;
         }
 
         void IOLog(string text,FileInfo fi) {
@@ -122,15 +126,9 @@ namespace PrecomputedHashDirDiff
 
             if (backupRootDir != null && targetRootDir != null)
             {
-                // Start recursion:
-                lastDiffStat = new Dictionary<int, long>();
-
                 startDiff = DateTime.Now;
                 compareDirs(backupRootDir, targetRootDir);
                 duration = DateTime.Now - startDiff;
-
-                calcDictyStat();
-
             }
 
             // Assume error:

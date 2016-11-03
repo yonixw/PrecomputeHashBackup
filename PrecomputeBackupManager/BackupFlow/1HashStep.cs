@@ -117,26 +117,36 @@ namespace PrecomputeBackupManager
             public TimeSpan HashDuration;
             public TimeSpan DiffDuration;
             public TimeSpan CopyDuration;
+            public Dictionary<string, long> DiffStats;
+            public long UploadCalculatedSize = 0; // From diff process between 2 db3 so folder size included!, for new folders : 0.
+            public long UploadMeasuredSize = 0; // From upload process
 
             // Algo data:
             public bool HasRecent;
+            public bool HasFileChanges;
+
+            public bool isUploadNeeded() {
+                return !HasRecent || HasFileChanges;
+            }
 
             // TODO: Provide Stats about all del\add\changed size and count.
 
-            public static string durText(TimeSpan duration) {
-                if (duration == null) return "[Not Set]";
-                return String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.", duration.Days, duration.Hours, duration.Minutes, duration.Seconds);
-            }
+           
+
+            
 
             public override string ToString()
             {
                 string Result = "";
 
-                Result += "\tFriendly name:" + ServerName + "\n";
-                Result += "\tLocal Path:" + LocalPath + "\n";
-                Result += "\tHash Duration: " + durText(HashDuration) + "\n";
-                Result += "\tDiff Duration: " + durText(DiffDuration) + "\n";
-                Result += "\tCopy Duration: " + durText(CopyDuration) + "\n";
+                Result += "\tFriendly name:" + ServerName + "\n ";
+                Result += "\tLocal Path:" + LocalPath + "\n ";
+                Result += "\tHash Duration: " + Utils.DurationToString(HashDuration) + "\n ";
+                Result += "\tDiff Duration: " + Utils.DurationToString(DiffDuration) + "\n ";
+                Result += "\tCopy Duration: " + Utils.DurationToString(CopyDuration) + "\n ";
+                Result += Utils.StatToString<long>(DiffStats);
+                Result += "\tUpload Calculated Size: " + Utils.byte2hum(UploadCalculatedSize) + "\n ";
+                Result += "\tUpload Measured Size: " + Utils.byte2hum(UploadMeasuredSize) + "\n ";
 
                 return Result;
             }
@@ -218,7 +228,7 @@ namespace PrecomputeBackupManager
             DirectoryInfo recentBackup = new DirectoryInfo(Path.Combine(varBackupfolder, "recent" + Path.DirectorySeparatorChar + _FolderName_db3));
             if (!recentBackup.Exists)
             {
-                Log("Can't find recent folder in remote server, asssuming first backup.");
+                Log("Can't find recent folder in remote server, asssuming first backup for user.");
                 // No comparison, upload all new.
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
@@ -274,6 +284,30 @@ namespace PrecomputeBackupManager
                     Log("Starting diff for server folder: " + currentFolder.Value.ServerName);
                     diffObj.Init(lastDB3, freshDB3);
                     currentFolder.Value.DiffDuration = diffObj.duration;
+                    currentFolder.Value.DiffStats = diffObj.calcStat();
+
+                    // Check for file changes:
+                    currentFolder.Value.HasFileChanges = (
+                        diffObj.AddedFilesCount > 0 ||
+                        diffObj.AddedFoldersCount > 0 ||
+                        diffObj.ChangedFilesCount > 0 ||
+                        diffObj.DeletedFilesCount > 0 ||
+                        diffObj.DeletedFoldersCount > 0
+                    );
+
+                    // Calc estimated upload size ( including db3 and list files):
+                    // Downside: for new folders stays 0.
+                    // Upside: New folders usually have no limit?
+                    currentFolder.Value.UploadCalculatedSize =
+                        diffObj.AddedFilesSize +
+                        diffObj.AddedFoldersSize +
+                        ((diffObj.logAddedFiles.Exists) ? diffObj.logAddedFiles.Length : 0) +
+                        ((diffObj.logAddedFolders.Exists) ? diffObj.logAddedFolders.Length : 0) +
+                        ((diffObj.logDeletedFiles.Exists) ? diffObj.logDeletedFiles.Length : 0) +
+                        ((diffObj.logDeletedFolders.Exists) ? diffObj.logDeletedFolders.Length : 0) +
+                        freshDB3.Length;
+                    ;
+                    
                 }
             }
 

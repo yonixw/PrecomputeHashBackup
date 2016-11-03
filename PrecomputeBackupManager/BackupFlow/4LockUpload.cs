@@ -77,7 +77,7 @@ namespace PrecomputeBackupManager
             else
             {
                 // Check for cancel but for now just start lock:
-                Log("Step 4/4: Folder was locked.\n Time to unlock: " + BackupDirectoryInfo.durText(DateTime.Now - startUnlockWaiting));
+                Log("Step 4/4: Folder was locked.\n Time to unlock: " + Utils.DurationToString(DateTime.Now - startUnlockWaiting));
                 backupRunning = false;
                 UpdateProgress(Desc: "Finished backup by locking folder", Status: "Backup finished sucessfully", progress: 100);
             }
