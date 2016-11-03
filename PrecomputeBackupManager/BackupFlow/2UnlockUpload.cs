@@ -165,6 +165,22 @@ namespace PrecomputeBackupManager
             Log("Step 2/4: Asking server to unlock.");
             UpdateProgress(Status: "Step 2.1: Waiting for unlock", Desc: "Sending request to server",  progress: 0);
 
+            // If no folder need to be uploaded just abort backup:
+            bool needUpload = false;
+            foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
+            {
+                if (currentFolder.Value.isUploadNeeded()) {
+                    needUpload = true;
+                    break;
+                }
+            }
+            if (!needUpload) {
+                currentCancelled = true;
+                Log("Backup aborted because no changes were found");
+                return;
+            }
+
+
             startUnlockWaiting = DateTime.Now;
 
             if (TryCancel()) return;
