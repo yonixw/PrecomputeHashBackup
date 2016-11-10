@@ -108,6 +108,10 @@
             this.backworkUploadFiles = new System.ComponentModel.BackgroundWorker();
             this.backworkLock = new System.ComponentModel.BackgroundWorker();
             this.logTimer = new System.Windows.Forms.Timer(this.components);
+            this.cbStep1 = new System.Windows.Forms.CheckBox();
+            this.cbStep2 = new System.Windows.Forms.CheckBox();
+            this.cbStep3 = new System.Windows.Forms.CheckBox();
+            this.cbStep4 = new System.Windows.Forms.CheckBox();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -164,6 +168,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cbStep4);
+            this.groupBox2.Controls.Add(this.cbStep3);
+            this.groupBox2.Controls.Add(this.cbStep2);
+            this.groupBox2.Controls.Add(this.cbStep1);
             this.groupBox2.Controls.Add(this.label21);
             this.groupBox2.Controls.Add(this.pbStatusProgress);
             this.groupBox2.Controls.Add(this.txtStatusDescription);
@@ -869,6 +877,54 @@
             this.logTimer.Interval = 750;
             this.logTimer.Tick += new System.EventHandler(this.logTimer_Tick);
             // 
+            // cbStep1
+            // 
+            this.cbStep1.AutoSize = true;
+            this.cbStep1.Checked = true;
+            this.cbStep1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbStep1.Location = new System.Drawing.Point(29, 209);
+            this.cbStep1.Name = "cbStep1";
+            this.cbStep1.Size = new System.Drawing.Size(103, 24);
+            this.cbStep1.TabIndex = 14;
+            this.cbStep1.Text = "Hash Files";
+            this.cbStep1.UseVisualStyleBackColor = true;
+            // 
+            // cbStep2
+            // 
+            this.cbStep2.AutoSize = true;
+            this.cbStep2.Checked = true;
+            this.cbStep2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbStep2.Location = new System.Drawing.Point(141, 209);
+            this.cbStep2.Name = "cbStep2";
+            this.cbStep2.Size = new System.Drawing.Size(77, 24);
+            this.cbStep2.TabIndex = 15;
+            this.cbStep2.Text = "Unlock";
+            this.cbStep2.UseVisualStyleBackColor = true;
+            // 
+            // cbStep3
+            // 
+            this.cbStep3.AutoSize = true;
+            this.cbStep3.Checked = true;
+            this.cbStep3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbStep3.Location = new System.Drawing.Point(224, 209);
+            this.cbStep3.Name = "cbStep3";
+            this.cbStep3.Size = new System.Drawing.Size(79, 24);
+            this.cbStep3.TabIndex = 16;
+            this.cbStep3.Text = "Upload";
+            this.cbStep3.UseVisualStyleBackColor = true;
+            // 
+            // cbStep4
+            // 
+            this.cbStep4.AutoSize = true;
+            this.cbStep4.Checked = true;
+            this.cbStep4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbStep4.Location = new System.Drawing.Point(309, 209);
+            this.cbStep4.Name = "cbStep4";
+            this.cbStep4.Size = new System.Drawing.Size(62, 24);
+            this.cbStep4.TabIndex = 17;
+            this.cbStep4.Text = "Lock";
+            this.cbStep4.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -987,6 +1043,10 @@
         private System.ComponentModel.BackgroundWorker backworkUploadFiles;
         private System.ComponentModel.BackgroundWorker backworkLock;
         private System.Windows.Forms.Timer logTimer;
+        private System.Windows.Forms.CheckBox cbStep4;
+        private System.Windows.Forms.CheckBox cbStep3;
+        private System.Windows.Forms.CheckBox cbStep2;
+        private System.Windows.Forms.CheckBox cbStep1;
     }
 }
 

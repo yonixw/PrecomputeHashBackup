@@ -136,6 +136,8 @@ namespace PrecomputeBackupManager
 
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (!cbStep3.Checked) return; // Skip step
+
             Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
 

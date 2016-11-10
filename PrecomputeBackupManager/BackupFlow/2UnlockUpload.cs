@@ -159,6 +159,8 @@ namespace PrecomputeBackupManager
 
         private void backworkUnlock_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (!cbStep2.Checked) return; // Skip step
+
             int tryCount = 0;
 
             //Unlock using remote url

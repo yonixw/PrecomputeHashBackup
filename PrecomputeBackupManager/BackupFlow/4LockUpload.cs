@@ -22,6 +22,8 @@ namespace PrecomputeBackupManager
         DateTime startLockWaiting;
         private void backworkLock_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (!cbStep4.Checked) return; // Skip step
+
             int tryCount = 0;
 
             //Lock using remote url

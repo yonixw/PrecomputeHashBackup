@@ -76,11 +76,20 @@ namespace PrecomputeBackupManager
 
         Queue<string> LogQue = new Queue<string>();
 
+        string logFile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "log_" +
+            DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
+            + ".txt");
+
         private void logTimer_Tick(object sender, EventArgs e)
         {
             // For multi thread logging.
             while (LogQue.Count > 0) {
-                lstLog.Items.Insert(0, LogQue.Dequeue());
+                string addition = LogQue.Dequeue();
+
+                lstLog.Items.Insert(0, addition);
+                File.AppendAllText(logFile, "\n" + addition);
             }
         }
 

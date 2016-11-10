@@ -21,6 +21,8 @@ namespace PrecomputeBackupManager
         string varUploadfolder = null;
         string varBackupfolder = null;
 
+
+
         #region Backup Step 1 - Hash (offline\local)
 
         private DirectoryInfo HashSetup()
@@ -155,6 +157,8 @@ namespace PrecomputeBackupManager
         List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;
         private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (!cbStep1.Checked) return; // Skip step
+
             // Start worker:
             // =================================
             currentWorker = backworkHashFiles;
