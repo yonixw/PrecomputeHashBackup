@@ -11,7 +11,7 @@
 [ ] Yes no for showing verbose  in notify icon.
 [V] Export log to text file
 
-[ ] If fail only in stage 3 maby just reupload all files? or continue?
+[V] If fail only in stage 3 maby just reupload all files? or continue?
 
 Urgent:
 [V] Cop db3 from remote to local and then compare
@@ -22,6 +22,11 @@ Future:
 [ ] Permanent file delete? from all deltas?
 [ ] Advanced viewer to navigate backups more easly?
 [ ] If fail only in stage 3 maby just reupload all files? or continue?
+
+
+[ ] Speed for upload / download
+[ ] File copy using standard IO
+[ ] Close will prompt
 
 
 

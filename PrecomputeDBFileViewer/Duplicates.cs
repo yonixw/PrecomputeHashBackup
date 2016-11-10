@@ -16,5 +16,10 @@ namespace PrecomputeDBFileViewer
         {
             InitializeComponent();
         }
+
+        private void Duplicates_Load(object sender, EventArgs e)
+        {
+            bwLoadDuplicates.RunWorkerAsync();
+        }
     }
 }
