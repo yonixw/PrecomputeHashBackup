@@ -41,6 +41,12 @@ namespace PrecomputeDBFileViewer
             }
         }
 
+        string strFrom64(string input)
+        {
+            // SO? 11743160
+            return Encoding.UTF8.GetString(System.Convert.FromBase64String(input));
+        }
+
         void addFolders(int id, TreeNode parent) {
             if (dbPath == null  || adapFolders == null) {
                 Debug.Print("Null folder var setected. returning.");
@@ -53,7 +59,7 @@ namespace PrecomputeDBFileViewer
 
             foreach (SQLiteDataset.FoldersRow row in dt)
             {
-                TreeNode tn = new TreeNode(row.FolderName + " (" + row.FolderSize.ToString() + ")");
+                TreeNode tn = new TreeNode(strFrom64(row.FolderName) + " (" + row.FolderSize.ToString() + ")");
                 tn.Tag = row.FolderId;
                 targetCollection.Add(tn);
 
@@ -62,6 +68,8 @@ namespace PrecomputeDBFileViewer
                 tn.Nodes.Add(dummy);
             }
         }
+
+      
 
         void showFiles(int folderid) {
             lsvFiles.Items.Clear();
@@ -76,7 +84,7 @@ namespace PrecomputeDBFileViewer
 
             foreach (SQLiteDataset.FilesRow row in dt)
             {
-                ListViewItem lvi = new ListViewItem(new[] { row.FileName, row.FileHash, row.FileSize.ToString()});
+                ListViewItem lvi = new ListViewItem(new[] { strFrom64(row.FileName), row.FileHash, row.FileSize.ToString()});
                 lsvFiles.Items.Add(lvi);
             }
 

@@ -27,7 +27,15 @@ namespace PrecomputedHashDirDiff
         DataSet1.FilesDataTable localFiles = new DataSet1.FilesDataTable();
         DataSet1.FoldersDataTable localFolders = new DataSet1.FoldersDataTable();
 
+
+        string strTo64(string input) {
+            // SO? 11743160
+            return System.Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+        }
+
         public void AddFileRow(DataSet1.FilesRow fileRow) {
+            fileRow.FileName = strTo64(fileRow.FileName);
+
             localFiles.AddFilesRow(fileRow);
 
             if (localFiles.Rows.Count > this._cutoff)
@@ -36,6 +44,8 @@ namespace PrecomputedHashDirDiff
 
         public void AddFileRow(string name, string hash, int folderid, int fileid, long size)
         {
+            name = strTo64(name);
+
             localFiles.AddFilesRow(fileid,name,hash,folderid,size);
 
             if (localFiles.Rows.Count > this._cutoff)
@@ -45,6 +55,8 @@ namespace PrecomputedHashDirDiff
         
 
         string FileRowToString(DataSet1.FilesRow fileRow) {
+            // No base64 encoding here, done before.
+
             return
                string.Format("\n('{0}', '{1}', {2}, {3}, {4})",
                fileRow.FileName, fileRow.FileHash, fileRow.FolderParentID, fileRow.FileId, fileRow.FileSize
@@ -98,6 +110,8 @@ namespace PrecomputedHashDirDiff
 
         public void AddFolderRow(DataSet1.FoldersRow folderRow)
         {
+            folderRow.FolderName = strTo64(folderRow.FolderName);
+
             localFolders.AddFoldersRow(folderRow);
 
             if (localFolders.Rows.Count > this._cutoff)
@@ -106,6 +120,7 @@ namespace PrecomputedHashDirDiff
 
         public void AddFolderRow(string name, int folderparent, int folderid, long foldersize)
         {
+            name = strTo64(name);
             localFolders.AddFoldersRow(folderid, name, folderparent,foldersize);
 
             if (localFolders.Rows.Count > this._cutoff)
@@ -114,6 +129,8 @@ namespace PrecomputedHashDirDiff
 
         string FolderRowToString(DataSet1.FoldersRow folderRow)
         {
+            // No base64 encoding here, done before.
+
             return
                string.Format("\n('{0}', {1}, {2}, {3})",
                folderRow.FolderName, folderRow.FolderParentID, folderRow.FolderId, folderRow.FolderSize
