@@ -113,6 +113,8 @@
             this.backworkLock = new System.ComponentModel.BackgroundWorker();
             this.logTimer = new System.Windows.Forms.Timer(this.components);
             this.tmrUploadProgress = new System.Windows.Forms.Timer(this.components);
+            this.cbSkipUpload = new System.Windows.Forms.CheckBox();
+            this.txtUploadSkip = new System.Windows.Forms.TextBox();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -139,7 +141,7 @@
             this.tabMain.Location = new System.Drawing.Point(0, 0);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(1022, 772);
+            this.tabMain.Size = new System.Drawing.Size(1022, 798);
             this.tabMain.TabIndex = 2;
             // 
             // tabPage1
@@ -152,7 +154,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1014, 739);
+            this.tabPage1.Size = new System.Drawing.Size(1014, 765);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Folders List";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -169,6 +171,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtUploadSkip);
+            this.groupBox2.Controls.Add(this.cbSkipUpload);
             this.groupBox2.Controls.Add(this.cbStep4);
             this.groupBox2.Controls.Add(this.cbStep3);
             this.groupBox2.Controls.Add(this.cbStep2);
@@ -183,7 +187,7 @@
             this.groupBox2.Controls.Add(this.btnStartBackup);
             this.groupBox2.Location = new System.Drawing.Point(21, 473);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(968, 258);
+            this.groupBox2.Size = new System.Drawing.Size(968, 289);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Current Status";
@@ -193,7 +197,7 @@
             this.cbStep4.AutoSize = true;
             this.cbStep4.Checked = true;
             this.cbStep4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbStep4.Location = new System.Drawing.Point(309, 209);
+            this.cbStep4.Location = new System.Drawing.Point(307, 192);
             this.cbStep4.Name = "cbStep4";
             this.cbStep4.Size = new System.Drawing.Size(62, 24);
             this.cbStep4.TabIndex = 17;
@@ -205,7 +209,7 @@
             this.cbStep3.AutoSize = true;
             this.cbStep3.Checked = true;
             this.cbStep3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbStep3.Location = new System.Drawing.Point(224, 209);
+            this.cbStep3.Location = new System.Drawing.Point(222, 192);
             this.cbStep3.Name = "cbStep3";
             this.cbStep3.Size = new System.Drawing.Size(79, 24);
             this.cbStep3.TabIndex = 16;
@@ -217,7 +221,7 @@
             this.cbStep2.AutoSize = true;
             this.cbStep2.Checked = true;
             this.cbStep2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbStep2.Location = new System.Drawing.Point(141, 209);
+            this.cbStep2.Location = new System.Drawing.Point(139, 192);
             this.cbStep2.Name = "cbStep2";
             this.cbStep2.Size = new System.Drawing.Size(77, 24);
             this.cbStep2.TabIndex = 15;
@@ -229,7 +233,7 @@
             this.cbStep1.AutoSize = true;
             this.cbStep1.Checked = true;
             this.cbStep1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbStep1.Location = new System.Drawing.Point(29, 209);
+            this.cbStep1.Location = new System.Drawing.Point(27, 192);
             this.cbStep1.Name = "cbStep1";
             this.cbStep1.Size = new System.Drawing.Size(103, 24);
             this.cbStep1.TabIndex = 14;
@@ -290,7 +294,7 @@
             // 
             this.btnStopBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btnStopBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.btnStopBackup.Location = new System.Drawing.Point(702, 202);
+            this.btnStopBackup.Location = new System.Drawing.Point(702, 241);
             this.btnStopBackup.Name = "btnStopBackup";
             this.btnStopBackup.Size = new System.Drawing.Size(123, 31);
             this.btnStopBackup.TabIndex = 1;
@@ -300,7 +304,7 @@
             // 
             // btnStartBackup
             // 
-            this.btnStartBackup.Location = new System.Drawing.Point(831, 202);
+            this.btnStartBackup.Location = new System.Drawing.Point(831, 241);
             this.btnStartBackup.Name = "btnStartBackup";
             this.btnStartBackup.Size = new System.Drawing.Size(123, 31);
             this.btnStartBackup.TabIndex = 0;
@@ -931,11 +935,28 @@
             this.tmrUploadProgress.Interval = 200;
             this.tmrUploadProgress.Tick += new System.EventHandler(this.tmrUploadProgress_Tick);
             // 
+            // cbSkipUpload
+            // 
+            this.cbSkipUpload.AutoSize = true;
+            this.cbSkipUpload.Location = new System.Drawing.Point(27, 222);
+            this.cbSkipUpload.Name = "cbSkipUpload";
+            this.cbSkipUpload.Size = new System.Drawing.Size(148, 24);
+            this.cbSkipUpload.TabIndex = 18;
+            this.cbSkipUpload.Text = "Skip upload until:";
+            this.cbSkipUpload.UseVisualStyleBackColor = true;
+            // 
+            // txtUploadSkip
+            // 
+            this.txtUploadSkip.Location = new System.Drawing.Point(181, 220);
+            this.txtUploadSkip.Name = "txtUploadSkip";
+            this.txtUploadSkip.Size = new System.Drawing.Size(493, 26);
+            this.txtUploadSkip.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1022, 772);
+            this.ClientSize = new System.Drawing.Size(1022, 798);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.MainMenuStrip = this.menuStrip1;
@@ -1055,6 +1076,8 @@
         private System.Windows.Forms.CheckBox cbStep2;
         private System.Windows.Forms.CheckBox cbStep1;
         private System.Windows.Forms.Timer tmrUploadProgress;
+        private System.Windows.Forms.TextBox txtUploadSkip;
+        private System.Windows.Forms.CheckBox cbSkipUpload;
     }
 }
 

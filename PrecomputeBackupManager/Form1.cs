@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -405,7 +406,24 @@ namespace PrecomputeBackupManager
         const string _Foldername_DeltaLists = "delta-lists";
 
         // Current background thread, so we can cancel it if we want.
-        bool backupRunning = false;
+        bool _backupRunning = false;
+        bool backupRunning 
+        {
+            get {
+                return _backupRunning;  
+            }
+            set {
+                _backupRunning = value;
+                if (value) {
+                    SetWorkingState();
+                }
+                else
+                {
+                    SetIdleState();
+                }
+            }
+        }
+
         bool currentCancelled = false; // Cause from code side, currentWorker.Cancel is from user side
         BackgroundWorker currentWorker = null;
 
@@ -462,6 +480,35 @@ namespace PrecomputeBackupManager
         }
 
 
-      
+        #region Thread Tools
+        uint fPreviousExecutionState = 0;
+
+        public void SetWorkingState()
+        {
+            fPreviousExecutionState = NativeMethods.SetThreadExecutionState(
+                NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED);
+            if (fPreviousExecutionState == 0)
+            {
+                Log("Cant set thread state to busy.");
+            }
+        }
+
+        public void SetIdleState() {
+            if (NativeMethods.SetThreadExecutionState(fPreviousExecutionState) == 0)
+            {
+                Log("Cant set thread state to idle.");
+            }
+        }
+
+        internal static class NativeMethods
+        {
+            // Import SetThreadExecutionState Win32 API and necessary flags
+            [DllImport("kernel32.dll")]
+            public static extern uint SetThreadExecutionState(uint esFlags);
+            public const uint ES_CONTINUOUS = 0x80000000;
+            public const uint ES_SYSTEM_REQUIRED = 0x00000001;
+        }
+
+        #endregion
     }
 }

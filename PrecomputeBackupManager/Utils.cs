@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,5 +85,7 @@ namespace PrecomputeBackupManager
             if (duration == null) return "[Not Set]";
             return String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds.", duration.Days, duration.Hours, duration.Minutes, duration.Seconds);
         }
+
+        
     }
 }

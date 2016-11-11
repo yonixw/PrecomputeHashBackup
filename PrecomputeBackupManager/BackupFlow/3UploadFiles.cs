@@ -138,6 +138,7 @@ namespace PrecomputeBackupManager
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             if (!cbStep3.Checked) return; // Skip step
+            foundSkipped = !cbSkipUpload.Checked; // If not checked, no need to find.
 
             Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
@@ -227,6 +228,9 @@ namespace PrecomputeBackupManager
         {
             // Anyway stop the timer:
             tmrUploadProgress.Enabled = false;
+            if (!foundSkipped) {
+                Log("Didn't find the file to upload: " + txtUploadSkip.Text);
+            }
 
             if (currentCancelled) // From TryCancel()
             {
@@ -262,6 +266,7 @@ namespace PrecomputeBackupManager
         // For progress check:
         string currentFile = "";
         long sentBytes = 0, sentBytesSinceLast = 0, totalSizeBytes = 1;
+        bool foundSkipped = false;
 
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
@@ -271,33 +276,49 @@ namespace PrecomputeBackupManager
             totalSizeBytes = 1;
             currentFile = SourceFilePath;
 
-            byte[] buffer = new byte[1024 * 10]; // 10 KB buffer
-            bool cancelFlag = false;
-
-            using (FileStream source = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
+            if (!foundSkipped && cbSkipUpload.Checked && txtUploadSkip.Text != SourceFilePath) {
+                return;
+            }
+            else
             {
-                totalSizeBytes = source.Length;
-                using (FileStream dest = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
+                foundSkipped = true;
+            }
+
+            try
+            {
+                byte[] buffer = new byte[1024 * 10]; // 10 KB buffer
+                bool cancelFlag = false;
+
+                using (FileStream source = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
                 {
-                    sentBytes = 0;
-                    int currentBlockSize = 0;
-
-                    while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
+                    totalSizeBytes = source.Length;
+                    using (FileStream dest = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
                     {
-                        sentBytes += currentBlockSize;
-                        sentBytesSinceLast += currentBlockSize;
+                        sentBytes = 0;
+                        int currentBlockSize = 0;
 
-                        dest.Write(buffer, 0, currentBlockSize);
-
-                        if (TryCancel()) return;
-
-                        if (cancelFlag == true)
+                        while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            // Delete dest file here
-                            break;
+                            sentBytes += currentBlockSize;
+                            sentBytesSinceLast += currentBlockSize;
+
+                            dest.Write(buffer, 0, currentBlockSize);
+
+                            if (TryCancel()) return;
+
+                            if (cancelFlag == true)
+                            {
+                                // Delete dest file here
+                                break;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log("Error with uploading file: " + currentFile);
+                Log(ex);
             }
         }
 
