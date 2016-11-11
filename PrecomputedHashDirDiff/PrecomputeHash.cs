@@ -103,6 +103,10 @@ namespace PrecomputedHashDirDiff
 
         const int progresscols = 30;
 
+      
+
+
+
         public long HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
             long myFolderSize = 0;
@@ -110,7 +114,7 @@ namespace PrecomputedHashDirDiff
 
             Console.WriteLine("[Directory] (" + myFolderId.ToString() + ") " + di.FullName);
 
-            foreach (FileInfo fi in di.GetFiles())
+            foreach (FileInfo fi in Utils.safeGet_Files(di))
             {
                 Console.Write("\t[File] (" + FileIdCounter + ") " + fi.Name + "... [");
                 bwCalcHash.ReportProgress(0, fi.Name);
@@ -158,7 +162,7 @@ namespace PrecomputedHashDirDiff
 
             }
 
-            foreach (DirectoryInfo childdi in di.GetDirectories())
+            foreach (DirectoryInfo childdi in Utils.safeGet_Directories(di))
             {
                myFolderSize += HashFiles(childdi, myFolderId, aFiles, aFolders,bwCalcHash);
                 if (bwCalcHash.CancellationPending) return 0;

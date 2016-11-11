@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,5 +65,34 @@ namespace PrecomputedHashDirDiff
 
 
         }
+
+        public static FileInfo[] safeGet_Files(DirectoryInfo di)
+        {
+            FileInfo[] result = new FileInfo[] { };
+            try
+            {
+                result = di.GetFiles();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return result;
+        }
+
+        public static DirectoryInfo[] safeGet_Directories(DirectoryInfo di)
+        {
+            DirectoryInfo[] result = new DirectoryInfo[] { };
+            try
+            {
+                result = di.GetDirectories();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return result;
+        }
+
     }
 }

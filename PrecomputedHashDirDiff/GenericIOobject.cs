@@ -242,7 +242,7 @@ namespace PrecomputedHashDirDiff
         {
             List<GenericFile> result = new List<GenericFile>();
 
-            var files = _folder.GetFiles().OrderBy(f => f.Name);
+            var files = Utils.safeGet_Files(_folder).OrderBy(f => f.Name);
             foreach(FileInfo fi in files) {
                 result.Add(GenericTools.FileObject(fi));
             }
@@ -254,7 +254,7 @@ namespace PrecomputedHashDirDiff
         {
             List<GenericFolder> result = new List<GenericFolder>();
 
-            var folders = _folder.GetDirectories().OrderBy(f => f.Name);
+            var folders = Utils.safeGet_Directories(_folder).OrderBy(f => f.Name);
             foreach (DirectoryInfo di in folders)
             {
                 result.Add(GenericTools.FolderObject(di));
