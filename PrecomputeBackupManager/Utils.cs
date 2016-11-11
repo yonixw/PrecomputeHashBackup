@@ -67,9 +67,15 @@ namespace PrecomputeBackupManager
 
         public static string StatToString<T>(Dictionary<string, T> array) {
             string result = "";
-            foreach (string key in array.Keys) {
-                result += "\t" +  key + ": " + array[key].ToString() + "\n ";
+
+            if (array != null) // null if no diff (no recent of folder)
+            {
+                foreach (string key in array.Keys)
+                {
+                    result += "\t" + key + ": " + array[key].ToString() + "\n ";
+                }
             }
+
             return result;
         }
 
