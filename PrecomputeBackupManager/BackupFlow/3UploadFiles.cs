@@ -365,7 +365,7 @@ namespace PrecomputeBackupManager
                 }
                 else
                 {
-                    trimSource = currentFile.Substring(currentFile.Length - 20, 20);
+                    trimSource = "..." + currentFile.Substring(currentFile.Length - 20, 20);
                 }
             }
             else

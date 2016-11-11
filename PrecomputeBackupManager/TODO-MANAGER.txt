@@ -16,6 +16,8 @@
 Urgent:
 [V] Cop db3 from remote to local and then compare
 [V] Complete other 3 stpes with cancel support.
+[ ] Handle erros in di.GetFiles \ di.GetDirectories and log them.
+		You can find one in SEM 10
 
 Future:
 [ ] Backup file manager that looks in the past. (compare debug and production files like in tapar?)
