@@ -49,7 +49,7 @@ namespace PrecomputeBackupManager
             }
 
             // Remove db3 files from last manager backup time if exists
-            foreach (FileInfo fi in saveHashPath.GetFiles())
+            foreach (FileInfo fi in safeGet_Files(saveHashPath))
             {
                 if (fi.Extension == ".db3")
                 {
@@ -76,7 +76,7 @@ namespace PrecomputeBackupManager
             }
 
             // Remove db3 files from last manager backup time if exists
-            foreach (FileInfo fi in saveHashPath.GetFiles())
+            foreach (FileInfo fi in safeGet_Files(saveHashPath))
             {
                 if (fi.Extension == ".db3")
                 {
@@ -103,7 +103,7 @@ namespace PrecomputeBackupManager
             }
 
             // Remove list files in each sub directory
-            foreach (DirectoryInfo di in saveListPath.GetDirectories())
+            foreach (DirectoryInfo di in safeGet_Directories(saveListPath))
             {
                 di.Delete(true);
             }

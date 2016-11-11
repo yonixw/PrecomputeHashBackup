@@ -80,7 +80,7 @@ namespace PrecomputeBackupManager
             if (!targetDi.Exists) targetDi.Create(); // In case of empty folder
 
             // Copy Files:
-            foreach (FileInfo fi in sourceDi.GetFiles())
+            foreach (FileInfo fi in safeGet_Files(sourceDi))
             {
                 if (TryCancel()) return;
 
@@ -89,7 +89,7 @@ namespace PrecomputeBackupManager
             }
 
             // Recursive copy sub Folders:
-            foreach (DirectoryInfo subdi in sourceDi.GetDirectories())
+            foreach (DirectoryInfo subdi in safeGet_Directories(sourceDi))
             {
                 if (TryCancel()) return;
 
@@ -195,6 +195,8 @@ namespace PrecomputeBackupManager
                 DateTime startCopy = DateTime.Now;
                 if (currentFolder.Value.HasRecent)
                 {
+                    Log("Upload delta files and folders for folder: " + currentFolder.Key);
+
                     // Copy only delta
                     UpdateProgress(Status: "Step 3.3.1 Case 1: Upload delta files for:" + currentFolder.Key);
                     copyAllFiles(logAddedFiles.FullName, currentFolder.Value);
@@ -203,6 +205,8 @@ namespace PrecomputeBackupManager
                 }
                 else 
                 {
+                    Log("Upload entire folder: " + currentFolder.Key);
+
                     // Copy the entire folder but with progress!
                     // Use local folder name to backup, name on list is only for easy handling!
                     DirectoryInfo di = new DirectoryInfo(currentFolder.Value.LocalPath);
@@ -350,10 +354,11 @@ namespace PrecomputeBackupManager
 
         private void tmrUploadProgress_Tick(object sender, EventArgs e)
         {
-            long speed = (sentBytesSinceLast * 1000) / tmrUploadProgress.Interval;
+            long speed = (sentBytesSinceLast * 1000) / (tmrUploadProgress.Interval+1);
             sentBytesSinceLast = 0;
 
-            int percent = (int)((100 * sentBytes) / totalSizeBytes);
+        
+            int percent = (int)((100 * sentBytes) / (totalSizeBytes+ 1));
             string onlyfile = currentFile.Split('\\').Last();
             string trimSource = "";
 

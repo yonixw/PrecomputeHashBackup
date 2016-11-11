@@ -480,7 +480,7 @@ namespace PrecomputeBackupManager
         }
 
 
-        #region Thread Tools
+        #region Tools
         uint fPreviousExecutionState = 0;
 
         public void SetWorkingState()
@@ -509,6 +509,35 @@ namespace PrecomputeBackupManager
             public const uint ES_SYSTEM_REQUIRED = 0x00000001;
         }
 
+        // Need safe function for cases like junctions and symlinks.
+
+        public  FileInfo[] safeGet_Files(DirectoryInfo di)
+        {
+            FileInfo[] result = new FileInfo[] { };
+            try
+            {
+                result = di.GetFiles();
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
+            return result;
+        }
+
+        public  DirectoryInfo[] safeGet_Directories(DirectoryInfo di)
+        {
+            DirectoryInfo[] result = new DirectoryInfo[] { };
+            try
+            {
+                result = di.GetDirectories();
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
+            return result;
+        }
         #endregion
     }
 }
