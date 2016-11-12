@@ -27,10 +27,10 @@ namespace PrecomputeBackupManager
             // Integers:
 
             [DataMember]
-            public int? id;
+            public long? id;
 
             [DataMember]
-            public int? addedbytes;
+            public long? addedbytes;
 
             [DataMember]
             public int? statuscode;

@@ -157,7 +157,7 @@ namespace PrecomputeBackupManager
         List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;
         private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (!cbStep1.Checked) return; // Skip step
+           
 
             // Start worker:
             // =================================
@@ -185,6 +185,8 @@ namespace PrecomputeBackupManager
                     _FoldersToBackup.Add(new KeyValuePair<string, BackupDirectoryInfo>(bdi.ServerName, bdi));
                 }
             }));
+
+            if (!cbStep1.Checked) return; // Skip step but only after init of folder lists
 
             string currentExePath = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location).DirectoryName;
             FileInfo templateDB3 = new FileInfo(Path.Combine(currentExePath, "template.db3"));
