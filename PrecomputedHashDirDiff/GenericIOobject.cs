@@ -190,7 +190,7 @@ namespace PrecomputedHashDirDiff
 
         public string Name()
         {
-            return _file.FileName;
+            return Utils.strFrom64(_file.FileName);
         }
 
         public long Size()
@@ -289,7 +289,7 @@ namespace PrecomputedHashDirDiff
 
         public string Name()
         {
-            return _folder.FolderName;
+            return Utils.strFrom64(_folder.FolderName);
         }
 
         public GenericFolder Parent()

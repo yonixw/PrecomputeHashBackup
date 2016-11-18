@@ -94,5 +94,17 @@ namespace PrecomputedHashDirDiff
             return result;
         }
 
+        public static string strTo64(string input)
+        {
+            // SO? 11743160
+            return System.Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+        }
+
+        public static string strFrom64(string input)
+        {
+            // SO? 11743160
+            return Encoding.UTF8.GetString(System.Convert.FromBase64String(input));
+        }
+
     }
 }
