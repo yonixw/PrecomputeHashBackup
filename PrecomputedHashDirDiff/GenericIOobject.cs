@@ -315,11 +315,11 @@ namespace PrecomputedHashDirDiff
             FilesTableAdapter adap = new FilesTableAdapter();
             adap.Connection.ConnectionString = _conn;
 
-            var Rows = adap.GetFilesByFolderID(_folder.FolderId).AsEnumerable().OrderBy(f => f.FileName);
+            var Rows = adap.GetFilesByFolderID(_folder.FolderId).AsEnumerable().OrderBy(f => Utils.strFrom64(f.FileName));
 
             foreach (DataSet1.FilesRow fr in Rows) 
             {
-                result.Add(GenericTools.FileObject(fr, _conn, _ParentDirectoryName + "\\" + _folder.FolderName ));
+                result.Add(GenericTools.FileObject(fr, _conn, _ParentDirectoryName + "\\" + Utils.strFrom64(_folder.FolderName) ));
             }
 
             return result;
@@ -331,11 +331,11 @@ namespace PrecomputedHashDirDiff
             FoldersTableAdapter adap = new FoldersTableAdapter();
             adap.Connection.ConnectionString = _conn;
 
-            var Rows = adap.GetFoldersByParentFolderId(_folder.FolderId).AsEnumerable().OrderBy(f => f.FolderName);
+            var Rows = adap.GetFoldersByParentFolderId(_folder.FolderId).AsEnumerable().OrderBy(f => Utils.strFrom64(f.FolderName));
 
             foreach (DataSet1.FoldersRow fr in Rows)
             {
-                result.Add(GenericTools.FolderObject(fr, _conn, _ParentDirectoryName + "\\" + _folder.FolderName));
+                result.Add(GenericTools.FolderObject(fr, _conn, _ParentDirectoryName + "\\" + Utils.strFrom64(_folder.FolderName) ));
             }
 
             return result;
