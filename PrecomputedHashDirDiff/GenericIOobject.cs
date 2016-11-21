@@ -47,11 +47,16 @@ namespace PrecomputedHashDirDiff
             return new SQLite3Folder(fr, ConnectionString, ParentDirectoryName);
         }
 
-        public static GenericFolder FolderObject(int FolderID, string ConnectionString) {
-            FoldersTableAdapter adapt = new FoldersTableAdapter();
-            adapt.Connection.ConnectionString = ConnectionString;
+        public static GenericFolder FolderObject(int FolderID, string ConnectionString, out long FilesCount, out long FoldersCount) {
+            FoldersTableAdapter adaptFolders = new FoldersTableAdapter();
+            adaptFolders.Connection.ConnectionString = ConnectionString;
+            FoldersCount = System.Convert.ToInt64(adaptFolders.GetFoldersCount());
 
-            DataSet1.FoldersDataTable dt = adapt.GetFolderById(FolderID);
+            FilesTableAdapter adaptFiles = new FilesTableAdapter();
+            adaptFiles.Connection.ConnectionString = ConnectionString;
+            FilesCount = System.Convert.ToInt64(adaptFiles.GetFilesCount());
+
+            DataSet1.FoldersDataTable dt = adaptFolders.GetFolderById(FolderID);
             if (dt.Count > 0 ) {
                 return GenericTools.FolderObject(dt[0], ConnectionString); // No parent for specific id
             }
@@ -200,7 +205,7 @@ namespace PrecomputedHashDirDiff
 
         public string FullRelativeName()
         {
-            return _DirectoryName + '\\' +  _file.FileName;
+            return _DirectoryName + '\\' +  Name();
         }
     }
 
@@ -348,7 +353,7 @@ namespace PrecomputedHashDirDiff
 
         public string FullRelativeName()
         {
-            return _ParentDirectoryName + '\\' + _folder.FolderName;
+            return _ParentDirectoryName + '\\' + Name();
         }
     }
 }
