@@ -52,6 +52,14 @@ WHERE        (FolderParentID = @ParentId)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFilesCount" Modifier="Public" Name="GetFilesCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="GetFilesCount">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT COUNT(*) FROM Files</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
               <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFile" Modifier="Public" Name="NewFile" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="NewFile">
                 <InsertCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
@@ -146,6 +154,14 @@ FROM            Folders</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFoldersCount" Modifier="Public" Name="GetFoldersCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="GetFoldersCount">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT COUNT(*) FROM Folders</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
               <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFolder" Modifier="Public" Name="NewFolder" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="NewFolder">
                 <InsertCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
@@ -221,7 +237,7 @@ WHERE        ([Key] = @Key)</CommandText>
   <xs:element name="DataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet1" msprop:Generator_UserDSName="DataSet1">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Files" msprop:Generator_TableClassName="FilesDataTable" msprop:Generator_TableVarName="tableFiles" msprop:Generator_RowChangedName="FilesRowChanged" msprop:Generator_TablePropName="Files" msprop:Generator_RowDeletingName="FilesRowDeleting" msprop:Generator_RowChangingName="FilesRowChanging" msprop:Generator_RowEvHandlerName="FilesRowChangeEventHandler" msprop:Generator_RowDeletedName="FilesRowDeleted" msprop:Generator_RowClassName="FilesRow" msprop:Generator_UserTableName="Files" msprop:Generator_RowEvArgName="FilesRowChangeEvent">
+        <xs:element name="Files" msprop:Generator_TableClassName="FilesDataTable" msprop:Generator_TableVarName="tableFiles" msprop:Generator_TablePropName="Files" msprop:Generator_RowDeletingName="FilesRowDeleting" msprop:Generator_RowChangingName="FilesRowChanging" msprop:Generator_RowEvHandlerName="FilesRowChangeEventHandler" msprop:Generator_RowDeletedName="FilesRowDeleted" msprop:Generator_UserTableName="Files" msprop:Generator_RowChangedName="FilesRowChanged" msprop:Generator_RowEvArgName="FilesRowChangeEvent" msprop:Generator_RowClassName="FilesRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FileId" msprop:Generator_ColumnVarNameInTable="columnFileId" msprop:Generator_ColumnPropNameInRow="FileId" msprop:Generator_ColumnPropNameInTable="FileIdColumn" msprop:Generator_UserColumnName="FileId" type="xs:int" />
@@ -244,7 +260,7 @@ WHERE        ([Key] = @Key)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Folders" msprop:Generator_TableClassName="FoldersDataTable" msprop:Generator_TableVarName="tableFolders" msprop:Generator_RowChangedName="FoldersRowChanged" msprop:Generator_TablePropName="Folders" msprop:Generator_RowDeletingName="FoldersRowDeleting" msprop:Generator_RowChangingName="FoldersRowChanging" msprop:Generator_RowEvHandlerName="FoldersRowChangeEventHandler" msprop:Generator_RowDeletedName="FoldersRowDeleted" msprop:Generator_RowClassName="FoldersRow" msprop:Generator_UserTableName="Folders" msprop:Generator_RowEvArgName="FoldersRowChangeEvent">
+        <xs:element name="Folders" msprop:Generator_TableClassName="FoldersDataTable" msprop:Generator_TableVarName="tableFolders" msprop:Generator_TablePropName="Folders" msprop:Generator_RowDeletingName="FoldersRowDeleting" msprop:Generator_RowChangingName="FoldersRowChanging" msprop:Generator_RowEvHandlerName="FoldersRowChangeEventHandler" msprop:Generator_RowDeletedName="FoldersRowDeleted" msprop:Generator_UserTableName="Folders" msprop:Generator_RowChangedName="FoldersRowChanged" msprop:Generator_RowEvArgName="FoldersRowChangeEvent" msprop:Generator_RowClassName="FoldersRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FolderId" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnFolderId" msprop:Generator_ColumnPropNameInRow="FolderId" msprop:Generator_ColumnPropNameInTable="FolderIdColumn" msprop:Generator_UserColumnName="FolderId" type="xs:int" />
@@ -260,7 +276,7 @@ WHERE        ([Key] = @Key)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Metadata" msprop:Generator_TableClassName="MetadataDataTable" msprop:Generator_TableVarName="tableMetadata" msprop:Generator_TablePropName="Metadata" msprop:Generator_RowDeletingName="MetadataRowDeleting" msprop:Generator_RowChangingName="MetadataRowChanging" msprop:Generator_RowEvHandlerName="MetadataRowChangeEventHandler" msprop:Generator_RowDeletedName="MetadataRowDeleted" msprop:Generator_UserTableName="Metadata" msprop:Generator_RowChangedName="MetadataRowChanged" msprop:Generator_RowEvArgName="MetadataRowChangeEvent" msprop:Generator_RowClassName="MetadataRow">
+        <xs:element name="Metadata" msprop:Generator_TableClassName="MetadataDataTable" msprop:Generator_TableVarName="tableMetadata" msprop:Generator_RowChangedName="MetadataRowChanged" msprop:Generator_TablePropName="Metadata" msprop:Generator_RowDeletingName="MetadataRowDeleting" msprop:Generator_RowChangingName="MetadataRowChanging" msprop:Generator_RowEvHandlerName="MetadataRowChangeEventHandler" msprop:Generator_RowDeletedName="MetadataRowDeleted" msprop:Generator_RowClassName="MetadataRow" msprop:Generator_UserTableName="Metadata" msprop:Generator_RowEvArgName="MetadataRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Key" msprop:Generator_ColumnVarNameInTable="columnKey" msprop:Generator_ColumnPropNameInRow="Key" msprop:Generator_ColumnPropNameInTable="KeyColumn" msprop:Generator_UserColumnName="Key">

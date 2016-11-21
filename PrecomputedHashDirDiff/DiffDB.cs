@@ -90,6 +90,19 @@ namespace PrecomputedHashDirDiff
             }
         }
 
+
+        // Status stat might be off! depends on folder structure, this is an *estemation*
+        long backupFilesCount;
+        long targetFilesCount;
+        long backupFoldersCount;
+        long targetFoldersCount;
+
+        long totalFoldersCount = 0;
+        long totalFilesCount = 0;
+        long currentFoldersCount = 0;
+        long currentFilesCount = 0;
+
+
         public bool Init(string backupDB, string targetDB) {
             // Make generic objects based on path
 
@@ -98,21 +111,25 @@ namespace PrecomputedHashDirDiff
 
             if (backupDB.EndsWith(".db3") && File.Exists(backupDB))
             {
-                backupRootDir = GenericTools.FolderObject(0, "data source=\"" + backupDB + "\"");
+                backupRootDir = GenericTools.FolderObject(0, "data source=\"" + backupDB + "\"", out backupFilesCount, out backupFoldersCount);
             }
 
             if (targetDB.EndsWith(".db3") && File.Exists(targetDB))
             {
-                targetRootDir = GenericTools.FolderObject(0, "data source=\"" + targetDB + "\"");
+                targetRootDir = GenericTools.FolderObject(0, "data source=\"" + targetDB + "\"", out targetFilesCount, out targetFoldersCount);
             }
             
             if (backupRootDir == null && Directory.Exists(backupDB)) {
                 backupRootDir = GenericTools.FolderObject(new DirectoryInfo(backupDB));
+                backupFoldersCount = 0;
+                backupFilesCount = 0;
             }
 
             if (targetRootDir == null && Directory.Exists(targetDB))
             {
                 targetRootDir = GenericTools.FolderObject(new DirectoryInfo(targetDB));
+                targetFoldersCount = 0;
+                targetFilesCount = 0;
             }
 
             if (backupRootDir == null) {
@@ -126,12 +143,17 @@ namespace PrecomputedHashDirDiff
 
             if (backupRootDir != null && targetRootDir != null)
             {
+                totalFoldersCount = Math.Max(backupFoldersCount, targetFoldersCount);
+                totalFilesCount = Math.Max(backupFilesCount, targetFilesCount);
+                currentFoldersCount = 0;
+                currentFilesCount = 0;
+
                 startDiff = DateTime.Now;
                 compareDirs(backupRootDir, targetRootDir);
                 duration = DateTime.Now - startDiff;
             }
 
-            // Assume error:
+            
             return false;
         }
 
@@ -141,11 +163,22 @@ namespace PrecomputedHashDirDiff
             public GenericFolder target;
         }
 
+        void printFilesInfo() {
+            currentFilesCount++;
+            Console.WriteLine("File " + currentFilesCount + " out of " + totalFilesCount);
+        }
+
+        void printFoldersinfo() {
+            currentFoldersCount++;
+            Console.WriteLine("Folders " + currentFoldersCount + " out of " + totalFoldersCount);
+        }
+
         void compareDirs(GenericFolder backupDir, GenericFolder targetDir) {
             // Note: bahind the scene, list is ordered by name, this is important and we can 
             //      compare them in a linear time as explained here: "Merging two lists" https://en.wikipedia.org/wiki/Merge_algorithm
 
             // Print to screen what folders are being compared:
+            currentFoldersCount++;
             Console.WriteLine("Comparing [" + backupDir.Name() + "] And [" + targetDir.Name() + "] :");
 
             // Comaparing Files:
@@ -161,6 +194,7 @@ namespace PrecomputedHashDirDiff
             int targetIndx = 0;
 
             while (backupIndx < backupFiles.Count && targetIndx < targetFiles.Count ) {
+                printFilesInfo();
                 int comp = backupFiles[backupIndx].Name().CompareTo(targetFiles[targetIndx].Name());
 
                 if (comp < 0 ) {
@@ -222,6 +256,7 @@ namespace PrecomputedHashDirDiff
                 // Files that only in backup is deleted:
                 while(backupIndx < backupFiles.Count)
                 {
+                    printFilesInfo();
                     Console.WriteLine("\t4. Deleted file: [" + backupFiles[backupIndx].Name() + "]");
 
                     // Stats:
@@ -238,7 +273,8 @@ namespace PrecomputedHashDirDiff
             if (backupIndx == backupFiles.Count  && targetIndx < targetFiles.Count ) {
                 // Files that only in target is added:
                 while (targetIndx < targetFiles.Count) 
-                { 
+                {
+                    printFilesInfo();
                     Console.WriteLine("\t5. Added file: [" + targetFiles[targetIndx].Name() + "]");
 
                     // Stats:
@@ -273,6 +309,7 @@ namespace PrecomputedHashDirDiff
 
             while (backupIndx < backupFolders.Count && targetIndx < targetFolders.Count)
             {
+                printFoldersinfo();
                 int comp = backupFolders[backupIndx].Name().CompareTo(targetFolders[targetIndx].Name());
 
                 if (comp < 0)
@@ -322,6 +359,7 @@ namespace PrecomputedHashDirDiff
                 // Folders that only in backup is deleted:
                 while (backupIndx < backupFolders.Count)
                 {
+                    printFoldersinfo();
                     Console.WriteLine("\t3. Deleted Folder: [" + backupFolders[backupIndx].Name() + "]");
 
                     // Stats:
@@ -340,6 +378,7 @@ namespace PrecomputedHashDirDiff
                 // Folders that only in target is added:
                 while (targetIndx < targetFolders.Count)
                 {
+                    printFoldersinfo();
                     Console.WriteLine("\t4. Added Folder: [" + targetFolders[targetIndx].Name() + "]");
 
                     // Stats:
