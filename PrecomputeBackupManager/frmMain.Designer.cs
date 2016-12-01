@@ -34,6 +34,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnAddBackupFolder = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtUploadSkip = new System.Windows.Forms.TextBox();
+            this.cbSkipUpload = new System.Windows.Forms.CheckBox();
             this.cbStep4 = new System.Windows.Forms.CheckBox();
             this.cbStep3 = new System.Windows.Forms.CheckBox();
             this.cbStep2 = new System.Windows.Forms.CheckBox();
@@ -113,8 +115,6 @@
             this.backworkLock = new System.ComponentModel.BackgroundWorker();
             this.logTimer = new System.Windows.Forms.Timer(this.components);
             this.tmrUploadProgress = new System.Windows.Forms.Timer(this.components);
-            this.cbSkipUpload = new System.Windows.Forms.CheckBox();
-            this.txtUploadSkip = new System.Windows.Forms.TextBox();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -191,6 +191,23 @@
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Current Status";
+            // 
+            // txtUploadSkip
+            // 
+            this.txtUploadSkip.Location = new System.Drawing.Point(251, 220);
+            this.txtUploadSkip.Name = "txtUploadSkip";
+            this.txtUploadSkip.Size = new System.Drawing.Size(423, 26);
+            this.txtUploadSkip.TabIndex = 9;
+            // 
+            // cbSkipUpload
+            // 
+            this.cbSkipUpload.AutoSize = true;
+            this.cbSkipUpload.Location = new System.Drawing.Point(27, 222);
+            this.cbSkipUpload.Name = "cbSkipUpload";
+            this.cbSkipUpload.Size = new System.Drawing.Size(218, 24);
+            this.cbSkipUpload.TabIndex = 18;
+            this.cbSkipUpload.Text = "Skip upload until (full path):";
+            this.cbSkipUpload.UseVisualStyleBackColor = true;
             // 
             // cbStep4
             // 
@@ -451,7 +468,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1014, 739);
+            this.tabPage2.Size = new System.Drawing.Size(1014, 765);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Backup Setting";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -721,7 +738,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 29);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1014, 739);
+            this.tabPage4.Size = new System.Drawing.Size(1014, 765);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Backup History";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -739,7 +756,7 @@
             this.lstvBackupHistory.FullRowSelect = true;
             this.lstvBackupHistory.Location = new System.Drawing.Point(3, 36);
             this.lstvBackupHistory.Name = "lstvBackupHistory";
-            this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 700);
+            this.lstvBackupHistory.Size = new System.Drawing.Size(1008, 726);
             this.lstvBackupHistory.TabIndex = 4;
             this.lstvBackupHistory.UseCompatibleStateImageBehavior = false;
             this.lstvBackupHistory.View = System.Windows.Forms.View.Details;
@@ -813,7 +830,7 @@
             this.tabPage3.Controls.Add(this.lstLog);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1014, 739);
+            this.tabPage3.Size = new System.Drawing.Size(1014, 765);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Log";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -935,24 +952,7 @@
             this.tmrUploadProgress.Interval = 200;
             this.tmrUploadProgress.Tick += new System.EventHandler(this.tmrUploadProgress_Tick);
             // 
-            // cbSkipUpload
-            // 
-            this.cbSkipUpload.AutoSize = true;
-            this.cbSkipUpload.Location = new System.Drawing.Point(27, 222);
-            this.cbSkipUpload.Name = "cbSkipUpload";
-            this.cbSkipUpload.Size = new System.Drawing.Size(148, 24);
-            this.cbSkipUpload.TabIndex = 18;
-            this.cbSkipUpload.Text = "Skip upload until:";
-            this.cbSkipUpload.UseVisualStyleBackColor = true;
-            // 
-            // txtUploadSkip
-            // 
-            this.txtUploadSkip.Location = new System.Drawing.Point(181, 220);
-            this.txtUploadSkip.Name = "txtUploadSkip";
-            this.txtUploadSkip.Size = new System.Drawing.Size(493, 26);
-            this.txtUploadSkip.TabIndex = 9;
-            // 
-            // Form1
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -961,7 +961,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Form1";
+            this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Backup Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);

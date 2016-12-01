@@ -29,6 +29,8 @@ Future:
 [ ] Speed for upload / download
 [ ] File copy using standard IO
 [ ] Close will prompt
+[ ] Save state between steps to file so we can continue any time and not in same session
+
 
 
 
