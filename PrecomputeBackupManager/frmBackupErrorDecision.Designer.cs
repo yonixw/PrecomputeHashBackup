@@ -76,6 +76,13 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // backgroundWorkerPushBulletDecision
+            // 
+            this.backgroundWorkerPushBulletDecision.WorkerReportsProgress = true;
+            this.backgroundWorkerPushBulletDecision.WorkerSupportsCancellation = true;
+            this.backgroundWorkerPushBulletDecision.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerPushBulletDecision_DoWork);
+            this.backgroundWorkerPushBulletDecision.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerPushBulletDecision_ProgressChanged);
+            // 
             // frmBackupErrorDecision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);

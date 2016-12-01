@@ -22,6 +22,7 @@ namespace PrecomputeBackupManager
             _ex = ex;
         }
 
+        PushBulletAPI.PushNoteObject question;
         private void frmBackupErrorDecision_Load(object sender, EventArgs e)
         {
             this.rtbDetails.Text =
@@ -32,20 +33,39 @@ namespace PrecomputeBackupManager
                 _ex.StackTrace
                 ;
 
-            PushBulletAPI.PushId asked = PushBulletAPI.Pushes.createPushNote("Hello", "Hello");
-            
+            question = PushBulletAPI.Pushes.createPushNote("Hello", "Hello");
+            backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
+        }
+
+        void decideAction(DialogResult result) {
+            this.DialogResult = result;
+            backgroundWorkerPushBulletDecision.CancelAsync();
+            this.Close();
         }
 
         private void btnTryAgain_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            decideAction(DialogResult.OK);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            decideAction(DialogResult.Cancel);
+        }
+
+        private void backgroundWorkerPushBulletDecision_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (!e.Cancel) {
+                PushBulletAPI.PushNoteObject[] lastPushes = PushBulletAPI.Pushes.getLastMessages(10, question.created);
+
+                // Sleep 1 minute
+                System.Threading.Thread.Sleep((int)TimeSpan.FromMinutes(1).TotalMilliseconds); 
+            }
+        }
+
+        private void backgroundWorkerPushBulletDecision_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
         }
     }
 }
