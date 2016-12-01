@@ -43,7 +43,7 @@ namespace PrecomputeBackupManager
             + "===================\n"
             + "Please respond with text:\n"
             + "\t* 1 or try to retry uploading\n" 
-            + "\t* 2 or skip to skip the file (but saved in log)"
+            + "\t* 2 or skip to skip the file (but saved in log)\n"
             + "\t* add `save` to your response to save this action for all future errors" 
             ;
 
@@ -62,17 +62,18 @@ namespace PrecomputeBackupManager
         void decideAction(DialogResult result) {
             this.DialogResult = result;
             backgroundWorkerPushBulletDecision.CancelAsync();
-            this.Close();
         }
 
         private void btnTryAgain_Click(object sender, EventArgs e)
         {
             decideAction(DialogResult.OK);
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             decideAction(DialogResult.Cancel);
+            this.Close();
         }
 
         private void backgroundWorkerPushBulletDecision_DoWork(object sender, DoWorkEventArgs e)
@@ -96,7 +97,7 @@ namespace PrecomputeBackupManager
                             + "===================\n"
                             + "Please respond with text:\n"
                             + "\t* 1 or try to retry uploading\n"
-                            + "\t* 2 or skip to skip the file (but saved in log)"
+                            + "\t* 2 or skip to skip the file (but saved in log)\n"
                             + "\t* add `save` to your response to save this action for all future errors"
                             ;
 
@@ -110,6 +111,15 @@ namespace PrecomputeBackupManager
                             }
                         }
                         else {
+                            // Send response
+                            string finalResponse = saveFound ? " and I will remember it." : ".";
+                            finalResponse =
+                                "Thank you!\n"
+                                + ((tryFound) ? "You chose to try again" : "You chose to skip the file")
+                                + finalResponse;
+                            PushBulletAPI.Pushes.createPushNote("Backup BOT", finalResponse);
+
+                            // Finish this dialog
                             cbSave.Invoke(new Action(() => { cbSave.Checked = saveFound; }));
                             if (tryFound) {
                                 _parent.Log("User chose to try again. Save? " + saveFound);
@@ -120,12 +130,6 @@ namespace PrecomputeBackupManager
                                 decideAction(DialogResult.Cancel);
                                 return;
                             }
-                            string finalResponse = saveFound ? " and I will remember it." : ".";
-                            finalResponse = 
-                                "Thank you!\n" 
-                                + ((tryFound) ? "You chose to try again" : "You chose to skip the file") 
-                                + finalResponse;
-                            PushBulletAPI.Pushes.createPushNote("Backup BOT", finalResponse);
                         }
 
                         break; // first response should be for us :)
@@ -134,13 +138,13 @@ namespace PrecomputeBackupManager
 
 
                 // Sleep 1 minute
-                System.Threading.Thread.Sleep((int)TimeSpan.FromMinutes(1).TotalMilliseconds); 
+                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(30).TotalMilliseconds); 
             }
         }
 
-        private void backgroundWorkerPushBulletDecision_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void backgroundWorkerPushBulletDecision_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
+            this.Close();
         }
     }
 }

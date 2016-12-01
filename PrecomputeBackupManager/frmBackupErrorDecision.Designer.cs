@@ -82,7 +82,7 @@
             this.backgroundWorkerPushBulletDecision.WorkerReportsProgress = true;
             this.backgroundWorkerPushBulletDecision.WorkerSupportsCancellation = true;
             this.backgroundWorkerPushBulletDecision.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerPushBulletDecision_DoWork);
-            this.backgroundWorkerPushBulletDecision.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerPushBulletDecision_ProgressChanged);
+            this.backgroundWorkerPushBulletDecision.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerPushBulletDecision_RunWorkerCompleted);
             // 
             // cbSave
             // 
