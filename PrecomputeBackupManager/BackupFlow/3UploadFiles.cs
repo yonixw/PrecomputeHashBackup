@@ -272,57 +272,92 @@ namespace PrecomputeBackupManager
         long sentBytes = 0, sentBytesSinceLast = 0, totalSizeBytes = 1;
         bool foundSkipped = false;
 
+        // What to do in an error situation
+        DialogResult errorCopyAction = DialogResult.None;
+        bool saveCopyAction = false;
+
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
-            // Reset
-            sentBytes = 0;
-            sentBytesSinceLast = 0;
-            totalSizeBytes = 1;
-            currentFile = SourceFilePath;
+            bool failed = true;
 
-            if (!foundSkipped && cbSkipUpload.Checked && txtUploadSkip.Text != SourceFilePath) {
-                return;
-            }
-            else
+            while (failed)
             {
-                foundSkipped = true;
-            }
+                // Reset
+                sentBytes = 0;
+                sentBytesSinceLast = 0;
+                totalSizeBytes = 1;
+                currentFile = SourceFilePath;
 
-            try
-            {
-                byte[] buffer = new byte[1024 * 10]; // 10 KB buffer
-                bool cancelFlag = false;
-
-                using (FileStream source = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
+                if (!foundSkipped && cbSkipUpload.Checked && txtUploadSkip.Text != SourceFilePath)
                 {
-                    totalSizeBytes = source.Length;
-                    using (FileStream dest = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
+                    return;
+                }
+                else
+                {
+                    foundSkipped = true;
+                }
+
+                try
+                {
+                    byte[] buffer = new byte[1024 * 10]; // 10 KB buffer
+                    bool cancelFlag = false;
+
+                    using (FileStream source = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
                     {
-                        sentBytes = 0;
-                        int currentBlockSize = 0;
-
-                        while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
+                        totalSizeBytes = source.Length;
+                        using (FileStream dest = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
                         {
-                            sentBytes += currentBlockSize;
-                            sentBytesSinceLast += currentBlockSize;
+                            sentBytes = 0;
+                            int currentBlockSize = 0;
 
-                            dest.Write(buffer, 0, currentBlockSize);
-
-                            if (TryCancel()) return;
-
-                            if (cancelFlag == true)
+                            while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
                             {
-                                // Delete dest file here
-                                break;
+                                sentBytes += currentBlockSize;
+                                sentBytesSinceLast += currentBlockSize;
+
+                                dest.Write(buffer, 0, currentBlockSize);
+
+                                if (TryCancel()) return;
+
+                                if (cancelFlag == true)
+                                {
+                                    // Delete dest file here
+                                    break;
+                                }
                             }
                         }
                     }
+
+                    // Only now we can annouce sucess:
+                    failed = false;
                 }
-            }
-            catch (Exception ex)
-            {
-                Log("Error with uploading file: " + currentFile);
-                Log(ex);
+                catch (Exception ex)
+                {
+                    Log("Error with uploading file: " + currentFile);
+                    Log(ex);
+
+                    if (!saveCopyAction)
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            frmBackupErrorDecision diag = new frmBackupErrorDecision(currentFile, ex, this);
+                            errorCopyAction = diag.ShowDialog();
+                            saveCopyAction = diag.SaveDecision;
+                        }));
+                    }
+
+                    if (errorCopyAction == DialogResult.OK) {
+                        // Try Again
+                        Log("Trying again to upload. Rememer this? " + saveCopyAction);
+                        failed = true; // lie to get out of this function
+                    }
+                    else
+                    {
+                        // Skip
+                        Log("Skipping upload. Rememer this? " + saveCopyAction);
+                        failed = false;
+                    }
+                } 
             }
         }
 
