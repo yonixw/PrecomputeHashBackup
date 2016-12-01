@@ -276,6 +276,12 @@ namespace PrecomputeBackupManager
         DialogResult errorCopyAction = DialogResult.None;
         bool saveCopyAction = false;
 
+        /*
+        Note:
+        If a constant error (like IO Exception) repeat itself 
+            we will explode. so chosing "save my decision + try again" is not advised
+        */
+
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
             bool failed = true;
