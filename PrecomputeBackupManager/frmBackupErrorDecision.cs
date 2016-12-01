@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PrivateData = PrecomputeBackupManager.Properties.Settings;
 
 namespace PrecomputeBackupManager
 {
@@ -56,7 +57,11 @@ namespace PrecomputeBackupManager
                 _parent.Log(ex);
             }
 
-            backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
+            if (PrivateData.Default.PBAuthCode != "")
+            {
+                // Only if PB auth is provided
+                backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
+            }
         }
 
         void decideAction(DialogResult result) {
