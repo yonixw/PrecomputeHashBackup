@@ -29,7 +29,8 @@ namespace PrecomputeBackupManager
             reloadBackupFolders();
             LoadAllSettings();
             LoadBackupHistory();
-            
+
+            DialogResult dg =  (new frmBackupErrorDecision("Hellloooooooo", new Exception("Hello"))).ShowDialog();
         }
 
         public object safeDBNull(string column,DataRow dr, object fallback) {

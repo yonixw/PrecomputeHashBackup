@@ -29,9 +29,10 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbDetails = new System.Windows.Forms.RichTextBox();
             this.btnTryAgain = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.backgroundWorkerPushBulletDecision = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // label1
@@ -44,14 +45,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "An error occured while trying to upload a file:";
             // 
-            // richTextBox1
+            // rtbDetails
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(17, 32);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(516, 142);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = "";
+            this.rtbDetails.Location = new System.Drawing.Point(17, 32);
+            this.rtbDetails.Name = "rtbDetails";
+            this.rtbDetails.ReadOnly = true;
+            this.rtbDetails.Size = new System.Drawing.Size(516, 142);
+            this.rtbDetails.TabIndex = 1;
+            this.rtbDetails.Text = "";
             // 
             // btnTryAgain
             // 
@@ -83,12 +84,13 @@
             this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnTryAgain);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.rtbDetails);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmBackupErrorDecision";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Please Decide";
             this.Load += new System.EventHandler(this.frmBackupErrorDecision_Load);
             this.ResumeLayout(false);
@@ -99,8 +101,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbDetails;
         private System.Windows.Forms.Button btnTryAgain;
         private System.Windows.Forms.Button btnCancel;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerPushBulletDecision;
     }
 }

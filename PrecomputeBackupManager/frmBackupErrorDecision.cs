@@ -24,6 +24,15 @@ namespace PrecomputeBackupManager
 
         private void frmBackupErrorDecision_Load(object sender, EventArgs e)
         {
+            this.rtbDetails.Text =
+                "File path:\n" +
+                _filename + "\n\n" +
+                "Error details:\n" +
+                _ex.Message + "\n\n" +
+                _ex.StackTrace
+                ;
+
+            PushBulletAPI.PushId asked = PushBulletAPI.Pushes.createPushNote("Hello", "Hello");
             
         }
 
