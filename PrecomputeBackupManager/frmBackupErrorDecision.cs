@@ -63,21 +63,23 @@ namespace PrecomputeBackupManager
                 backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
             }
         }
-
-        void decideAction(DialogResult result) {
+        
+        public bool SaveDecision = false;
+        void decideAction(DialogResult result, bool SaveDecision) {
             this.DialogResult = result;
+            this.SaveDecision = SaveDecision;
             backgroundWorkerPushBulletDecision.CancelAsync();
         }
 
         private void btnTryAgain_Click(object sender, EventArgs e)
         {
-            decideAction(DialogResult.OK);
+            decideAction(DialogResult.OK, cbSave.Checked);
             this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            decideAction(DialogResult.Cancel);
+            decideAction(DialogResult.Cancel, cbSave.Checked);
             this.Close();
         }
 
@@ -125,14 +127,13 @@ namespace PrecomputeBackupManager
                             PushBulletAPI.Pushes.createPushNote("Backup BOT", finalResponse);
 
                             // Finish this dialog
-                            cbSave.Invoke(new Action(() => { cbSave.Checked = saveFound; }));
                             if (tryFound) {
                                 _parent.Log("User chose to try again. Save? " + saveFound);
-                                decideAction(DialogResult.OK);
+                                decideAction(DialogResult.OK, saveFound);
                                 return;
                             }else if (skipFound) {
                                 _parent.Log("User chose to skip file. Save? " + saveFound);
-                                decideAction(DialogResult.Cancel);
+                                decideAction(DialogResult.Cancel, saveFound);
                                 return;
                             }
                         }
