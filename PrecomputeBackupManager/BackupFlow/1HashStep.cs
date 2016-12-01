@@ -15,7 +15,7 @@ using PrecomputeBackupManager.HashFileDatasetTableAdapters;
 
 namespace PrecomputeBackupManager
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         // Folder for upload and for recent backups.
         string varUploadfolder = null;

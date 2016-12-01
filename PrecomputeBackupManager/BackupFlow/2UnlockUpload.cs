@@ -17,7 +17,7 @@ using PrecomputeBackupManager.HashFileDatasetTableAdapters;
 
 namespace PrecomputeBackupManager
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         #region ServerStatus
 
