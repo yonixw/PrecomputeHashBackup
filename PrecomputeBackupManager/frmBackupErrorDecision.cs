@@ -82,7 +82,8 @@ namespace PrecomputeBackupManager
 
                 foreach (PushBulletAPI.PushNoteObject note in lastPushes) {
                     // original note can exist too (search is >= lastTime)
-                    if (note.iden != question.iden ) {
+                    if (note.iden != question.iden ) 
+                    {
                         string lower = note.body.ToLower();
                         bool tryFound = (lower.Contains("1") || lower.Contains("try"));
                         bool skipFound = (lower.Contains("2") || lower.Contains("skip"));
@@ -119,7 +120,15 @@ namespace PrecomputeBackupManager
                                 decideAction(DialogResult.Cancel);
                                 return;
                             }
+                            string finalResponse = saveFound ? " and I will remember it." : ".";
+                            finalResponse = 
+                                "Thank you!\n" 
+                                + ((tryFound) ? "You chose to try again" : "You chose to skip the file") 
+                                + finalResponse;
+                            PushBulletAPI.Pushes.createPushNote("Backup BOT", finalResponse);
                         }
+
+                        break; // first response should be for us :)
                     }
                 }
 
