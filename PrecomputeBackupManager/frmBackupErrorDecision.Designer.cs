@@ -33,6 +33,7 @@
             this.btnTryAgain = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.backgroundWorkerPushBulletDecision = new System.ComponentModel.BackgroundWorker();
+            this.cbSave = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -57,7 +58,7 @@
             // btnTryAgain
             // 
             this.btnTryAgain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.btnTryAgain.Location = new System.Drawing.Point(17, 180);
+            this.btnTryAgain.Location = new System.Drawing.Point(12, 212);
             this.btnTryAgain.Name = "btnTryAgain";
             this.btnTryAgain.Size = new System.Drawing.Size(99, 34);
             this.btnTryAgain.TabIndex = 2;
@@ -68,11 +69,11 @@
             // btnCancel
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.btnCancel.Location = new System.Drawing.Point(403, 180);
+            this.btnCancel.Location = new System.Drawing.Point(403, 212);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(130, 34);
             this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel Backup";
+            this.btnCancel.Text = "Skip file";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -83,12 +84,23 @@
             this.backgroundWorkerPushBulletDecision.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerPushBulletDecision_DoWork);
             this.backgroundWorkerPushBulletDecision.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerPushBulletDecision_ProgressChanged);
             // 
+            // cbSave
+            // 
+            this.cbSave.AutoSize = true;
+            this.cbSave.Location = new System.Drawing.Point(17, 182);
+            this.cbSave.Name = "cbSave";
+            this.cbSave.Size = new System.Drawing.Size(349, 24);
+            this.cbSave.TabIndex = 4;
+            this.cbSave.Text = "Remember my choise for this backup process";
+            this.cbSave.UseVisualStyleBackColor = true;
+            // 
             // frmBackupErrorDecision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 222);
+            this.ClientSize = new System.Drawing.Size(545, 258);
             this.ControlBox = false;
+            this.Controls.Add(this.cbSave);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnTryAgain);
             this.Controls.Add(this.rtbDetails);
@@ -112,5 +124,6 @@
         private System.Windows.Forms.Button btnTryAgain;
         private System.Windows.Forms.Button btnCancel;
         private System.ComponentModel.BackgroundWorker backgroundWorkerPushBulletDecision;
+        private System.Windows.Forms.CheckBox cbSave;
     }
 }

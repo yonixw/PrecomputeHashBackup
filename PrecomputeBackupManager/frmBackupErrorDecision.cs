@@ -14,12 +14,14 @@ namespace PrecomputeBackupManager
     {
         string _filename;
         Exception _ex;
+        frmMain _parent;
 
-        public frmBackupErrorDecision(string fileName, Exception ex)
+        public frmBackupErrorDecision(string fileName, Exception ex, frmMain parent)
         {
             InitializeComponent();
             _filename = fileName;
             _ex = ex;
+            _parent = parent;
         }
 
         PushBulletAPI.PushNoteObject question;
@@ -33,7 +35,27 @@ namespace PrecomputeBackupManager
                 _ex.StackTrace
                 ;
 
-            question = PushBulletAPI.Pushes.createPushNote("Hello", "Hello");
+            string questionText =
+            "Error uploading file:\n"
+            + _filename + "\n\n"
+            + "Error message:\n"
+            + _ex.Message + "\n\n"
+            + "===================\n"
+            + "Please respond with text:\n"
+            + "\t* 1 or try to retry uploading\n" 
+            + "\t* 2 or skip to skip the file (but saved in log)"
+            + "\t* add `save` to your response to save this action for all future errors" 
+            ;
+
+            try
+            {
+                question = PushBulletAPI.Pushes.createPushNote("Backup BOT", questionText);
+            }
+            catch (Exception ex)
+            {
+                _parent.Log(ex);
+            }
+
             backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
         }
 
@@ -57,6 +79,50 @@ namespace PrecomputeBackupManager
         {
             while (!e.Cancel) {
                 PushBulletAPI.PushNoteObject[] lastPushes = PushBulletAPI.Pushes.getLastMessages(10, question.created);
+
+                foreach (PushBulletAPI.PushNoteObject note in lastPushes) {
+                    // original note can exist too (search is >= lastTime)
+                    if (note.iden != question.iden ) {
+                        string lower = note.body.ToLower();
+                        bool tryFound = (lower.Contains("1") || lower.Contains("try"));
+                        bool skipFound = (lower.Contains("2") || lower.Contains("skip"));
+                        bool saveFound = lower.Contains("save");
+
+                        if (tryFound && saveFound || (!tryFound && !saveFound) ) {
+                            // Ask again:
+                            string questionText =
+                            "Can't understand your response. Please try again.\n\n"
+                            + "===================\n"
+                            + "Please respond with text:\n"
+                            + "\t* 1 or try to retry uploading\n"
+                            + "\t* 2 or skip to skip the file (but saved in log)"
+                            + "\t* add `save` to your response to save this action for all future errors"
+                            ;
+
+                            try
+                            {
+                                question = PushBulletAPI.Pushes.createPushNote("Backup BOT", questionText);
+                            }
+                            catch (Exception ex)
+                            {
+                                _parent.Log(ex);
+                            }
+                        }
+                        else {
+                            cbSave.Invoke(new Action(() => { cbSave.Checked = saveFound; }));
+                            if (tryFound) {
+                                _parent.Log("User chose to try again. Save? " + saveFound);
+                                decideAction(DialogResult.OK);
+                                return;
+                            }else if (skipFound) {
+                                _parent.Log("User chose to skip file. Save? " + saveFound);
+                                decideAction(DialogResult.Cancel);
+                                return;
+                            }
+                        }
+                    }
+                }
+
 
                 // Sleep 1 minute
                 System.Threading.Thread.Sleep((int)TimeSpan.FromMinutes(1).TotalMilliseconds); 
