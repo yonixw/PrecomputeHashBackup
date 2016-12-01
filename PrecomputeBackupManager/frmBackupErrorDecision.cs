@@ -89,7 +89,7 @@ namespace PrecomputeBackupManager
                         bool skipFound = (lower.Contains("2") || lower.Contains("skip"));
                         bool saveFound = lower.Contains("save");
 
-                        if (tryFound && saveFound || (!tryFound && !saveFound) ) {
+                        if (tryFound && skipFound || (!tryFound && !skipFound) ) {
                             // Ask again:
                             string questionText =
                             "Can't understand your response. Please try again.\n\n"
