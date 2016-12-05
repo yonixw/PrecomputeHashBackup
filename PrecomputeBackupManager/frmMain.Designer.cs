@@ -115,6 +115,7 @@
             this.backworkLock = new System.ComponentModel.BackgroundWorker();
             this.logTimer = new System.Windows.Forms.Timer(this.components);
             this.tmrUploadProgress = new System.Windows.Forms.Timer(this.components);
+            this.tmrBackupPushUpdates = new System.Windows.Forms.Timer(this.components);
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -952,6 +953,12 @@
             this.tmrUploadProgress.Interval = 200;
             this.tmrUploadProgress.Tick += new System.EventHandler(this.tmrUploadProgress_Tick);
             // 
+            // tmrBackupPushUpdates
+            // 
+            this.tmrBackupPushUpdates.Enabled = true;
+            this.tmrBackupPushUpdates.Interval = 5000;
+            this.tmrBackupPushUpdates.Tick += new System.EventHandler(this.tmrBackupPushUpdates_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1078,6 +1085,7 @@
         private System.Windows.Forms.Timer tmrUploadProgress;
         private System.Windows.Forms.TextBox txtUploadSkip;
         private System.Windows.Forms.CheckBox cbSkipUpload;
+        private System.Windows.Forms.Timer tmrBackupPushUpdates;
     }
 }
 

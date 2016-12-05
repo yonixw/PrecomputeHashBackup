@@ -539,5 +539,37 @@ namespace PrecomputeBackupManager
             return result;
         }
         #endregion
+
+
+        DateTime lastUpdate = DateTime.Now.AddHours(-2);
+        private void tmrBackupPushUpdates_Tick(object sender, EventArgs e)
+        {
+            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "") return;
+
+            if (backupRunning) {
+                if (DateTime.Now - lastUpdate > TimeSpan.FromHours(1)) {
+                    lastUpdate = DateTime.Now;
+
+                    try
+                    {
+                        string message = "Backup process is still running."
+                            + "\n\n Current update message:\n" 
+                            + txtCurrentStatus.Text
+                        ;
+
+                        PushBulletAPI.Pushes.createPushNote("Backup BOT Update", message);
+
+                        if (lstLog.Items.Count > 0) {
+                            message += "\n\nLast log message:\n" + lstLog.Items[0];
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ex);
+                    }
+                }
+            }
+        }
     }
 }
