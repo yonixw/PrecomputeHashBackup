@@ -96,7 +96,7 @@ namespace PrecomputeBackupManager
                     if (lastPushes != null && lastPushes.Length > 0)
                     {
                         // First is last. and should be for us.
-                        PushBulletAPI.PushNoteObject note = lastPushes[0];
+                        PushBulletAPI.PushNoteObject note = lastPushes[1]; // 0 - Question, 1 - Answer
 
                         // original note can exist too (search is >= lastTime)
                         if (note.iden != question.iden)
