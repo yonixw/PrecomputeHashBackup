@@ -63,7 +63,7 @@ namespace PrecomputeBackupManager
             this.Close();
         }
 
-        const string myFormPushNoteTitle = "Backup Update";
+        const string myFormPushNoteTitle = "Backup BOT Update";
 
         private PushBulletAPI.PushNoteObject myCustomNote(string questionText) {
             // Add general response information.
@@ -107,12 +107,14 @@ namespace PrecomputeBackupManager
                         if (!(
                              // When to ignore:
                              note.iden == questionPushNoteID.iden ||
-                             (note.title != null && note.title == myFormPushNoteTitle)
+                             note.title == null ||
+                             note.title != ""
                         ))
                         {
                             /* Dont add to list if:
-                                    1) Iden of question because original Question is included in (time >= created)
-                                    2) Has title that i am using
+                                    1) Iden == questionID because original Question is included 
+                                            in (time >= created)
+                                    2) Has title, because user notes has no title.
                             */
                             userResponseNotes.Add(note);
                         }

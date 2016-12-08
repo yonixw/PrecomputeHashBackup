@@ -32,8 +32,10 @@ namespace PrecomputeBackupManager
 
         }
 
-        public object safeDBNull(string column,DataRow dr, object fallback) {
-            try {
+        public object safeDBNull(string column, DataRow dr, object fallback)
+        {
+            try
+            {
                 object result = null;
                 if (!(dr[column] is DBNull))
                 {
@@ -45,13 +47,15 @@ namespace PrecomputeBackupManager
                 }
                 return result;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Log(ex);
                 return fallback;
             }
         }
 
-        public string safeDateDBnull(string column, DataRow dr) {
+        public string safeDateDBnull(string column, DataRow dr)
+        {
             return ((DateTime)safeDBNull(column, dr, DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         }
 
@@ -63,7 +67,7 @@ namespace PrecomputeBackupManager
         /**************************
            STATIC ADAPTERS
        ***************************/
-       // Tables:
+        // Tables:
         static BackupFoldersTableAdapter adapFolders = new BackupFoldersTableAdapter();
         static BackupStatusTableAdapter adapStatus = new BackupStatusTableAdapter();
         static ConfigTableAdapter adapConfig = new ConfigTableAdapter();
@@ -86,7 +90,8 @@ namespace PrecomputeBackupManager
         private void logTimer_Tick(object sender, EventArgs e)
         {
             // For multi thread logging.
-            while (LogQue.Count > 0) {
+            while (LogQue.Count > 0)
+            {
                 string addition = LogQue.Dequeue();
 
                 lstLog.Items.Insert(0, addition);
@@ -102,13 +107,14 @@ namespace PrecomputeBackupManager
 
         public void Log(Exception ex)
         {
-            LogQue.Enqueue( "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+            LogQue.Enqueue("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
                                 CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstLog.SelectedItems.Count > 0 ) {
+            if (lstLog.SelectedItems.Count > 0)
+            {
                 rtbCurrentLog.Text = (string)lstLog.SelectedItems[0];
             }
         }
@@ -126,7 +132,8 @@ namespace PrecomputeBackupManager
             return (currentCancelled || (currentWorker != null && currentWorker.CancellationPending));
         }
 
-        private Boolean TryCancel() {
+        private Boolean TryCancel()
+        {
             if (!isBackupCancelled()) return false;
 
             Log("Backup was cancelled.");
@@ -135,23 +142,29 @@ namespace PrecomputeBackupManager
             return true;
         }
 
-        private void UpdateProgress(string Status = null, string Desc = null, int progress = -1) {
-            if (Status != null) {
-                txtCurrentStatus.Invoke(new Action(() => {
+        private void UpdateProgress(string Status = null, string Desc = null, int progress = -1)
+        {
+            if (Status != null)
+            {
+                txtCurrentStatus.Invoke(new Action(() =>
+                {
                     txtCurrentStatus.Text = Status;
                 }));
+                AddPushBulletNoteToQueue("Backup BOT Update", Status);
             }
 
             if (Desc != null)
             {
-                txtStatusDescription.Invoke(new Action(() => {
+                txtStatusDescription.Invoke(new Action(() =>
+                {
                     txtStatusDescription.Text = Desc;
                 }));
             }
 
             if (progress > -1)
             {
-                pbStatusProgress.Invoke(new Action(() => {
+                pbStatusProgress.Invoke(new Action(() =>
+                {
                     pbStatusProgress.Value = Math.Min(100, progress);
                 }));
             }
@@ -176,7 +189,7 @@ namespace PrecomputeBackupManager
             foreach (DataSet1.BackupFolderExRow row in adapFoldersEx.GetData())
             {
                 ListViewItem item = new ListViewItem(new[] { row.FolderPath, row.FolderName,
-                    ((DateTime)safeDBNull("endtime",row,DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss",CultureInfo.InvariantCulture) 
+                    ((DateTime)safeDBNull("endtime",row,DateTime.MinValue)).ToString("dd/MM/yyyy HH:mm:ss",CultureInfo.InvariantCulture)
                 });
                 item.Tag = row.id;
                 lstvFoldersToBackup.Items.Add(item);
@@ -274,7 +287,8 @@ namespace PrecomputeBackupManager
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Setting Tab [2]
 
-        internal class KnownConfigKeys {
+        internal class KnownConfigKeys
+        {
             public static string Usercode = "USER_CODE";
             public static string BackupAPIurl = "BACKUP_API_URL";
             public static string MaxBackupSize = "MAX_BACKUP_SIZE";
@@ -285,12 +299,14 @@ namespace PrecomputeBackupManager
             public static string ServerUploadPath = "SERVER_UPLOAD_PATH";
         }
 
-        Dictionary<string, string> LoadSettingsFromDB() {
+        Dictionary<string, string> LoadSettingsFromDB()
+        {
             DataSet1.ConfigDataTable dt = adapConfig.GetAllEntries();
             Dictionary<string, string> settings = new Dictionary<string, string>();
 
-            foreach (DataSet1.ConfigRow row in dt) {
-                settings.Add(row.Key, DBNull.Value.Equals(row.Value) ?   "0" : row.Value);
+            foreach (DataSet1.ConfigRow row in dt)
+            {
+                settings.Add(row.Key, DBNull.Value.Equals(row.Value) ? "0" : row.Value);
             }
 
             return settings;
@@ -320,15 +336,16 @@ namespace PrecomputeBackupManager
             allSettings[KnownConfigKeys.ServerUploadPath] = txtServerUploadPath.Text ?? "\\pi\\";
             allSettings[KnownConfigKeys.Usercode] = txtUsernameCode.Text ?? "0000";
             allSettings[KnownConfigKeys.BackupAPIurl] = txtBackupApiURL.Text ?? "HTTP";
-            allSettings[KnownConfigKeys.MaxBackupSize] = numBackupMaxSize.Value.ToString() ;
+            allSettings[KnownConfigKeys.MaxBackupSize] = numBackupMaxSize.Value.ToString();
             allSettings[KnownConfigKeys.LogFolderServerName] = txtLogFolderName.Text ?? "SERVER NAME";
             allSettings[KnownConfigKeys.ScheduleDays] = numEveryDays.Value.ToString();
             allSettings[KnownConfigKeys.ScheduleHours] = numEveryHours.Value.ToString();
-            allSettings[KnownConfigKeys.ScheduleMinutes]= numEveryMinutes.Value.ToString();
+            allSettings[KnownConfigKeys.ScheduleMinutes] = numEveryMinutes.Value.ToString();
 
             foreach (string key in allSettings.Keys)
             {
-                if ((long)adapConfig.KeyExist(key) > 0) {
+                if ((long)adapConfig.KeyExist(key) > 0)
+                {
                     // Update
                     adapConfig.UpdateKey(allSettings[key], key);
                 }
@@ -353,19 +370,21 @@ namespace PrecomputeBackupManager
         #region >>>>>>>>>>>>>>>>>>>>>>>>> History Tab [3]
 
         int currentPage = 1;
-        void LoadBackupHistory(int limit = 28) { // 28 came from brute trying.
+        void LoadBackupHistory(int limit = 28)
+        { // 28 came from brute trying.
 
             long historyCount = (long)adapStatus.GetCount();
             int pages = (int)Math.Ceiling(historyCount * 1.0f / limit);
-            currentPage = Math.Max(Math.Min(currentPage, pages),1); // 1 <= page <= pages
+            currentPage = Math.Max(Math.Min(currentPage, pages), 1); // 1 <= page <= pages
 
-            DataSet1.BackupLogsExDataTable dt = adapLogsEx.GetDataByPageOffset(limit, limit* (currentPage - 1));
+            DataSet1.BackupLogsExDataTable dt = adapLogsEx.GetDataByPageOffset(limit, limit * (currentPage - 1));
 
             // Clear items from prev pages.
             lstvBackupHistory.Items.Clear();
 
             // Add history:
-            foreach (DataSet1.BackupLogsExRow row in dt) {
+            foreach (DataSet1.BackupLogsExRow row in dt)
+            {
                 ListViewItem item = new ListViewItem(new[] {
                     (string)safeDBNull("FolderName",row,"???"),
                     safeDateDBnull("starttime", row),
@@ -407,14 +426,17 @@ namespace PrecomputeBackupManager
 
         // Current background thread, so we can cancel it if we want.
         bool _backupRunning = false;
-        bool backupRunning 
+        bool backupRunning
         {
-            get {
-                return _backupRunning;  
+            get
+            {
+                return _backupRunning;
             }
-            set {
+            set
+            {
                 _backupRunning = value;
-                if (value) {
+                if (value)
+                {
                     SetWorkingState();
                 }
                 else
@@ -427,7 +449,8 @@ namespace PrecomputeBackupManager
         bool currentCancelled = false; // Cause from code side, currentWorker.Cancel is from user side
         BackgroundWorker currentWorker = null;
 
-        private bool checkRemote() {
+        private bool checkRemote()
+        {
             bool result = false;
 
             result = Directory.Exists(txtServerUploadPath.Text + "-backup");
@@ -437,7 +460,8 @@ namespace PrecomputeBackupManager
 
         private void btnStartBackup_Click(object sender, EventArgs e)
         {
-            if (backupRunning) {
+            if (backupRunning)
+            {
                 MessageBox.Show("A backup is already active. cancel it first.");
             }
             else
@@ -453,7 +477,8 @@ namespace PrecomputeBackupManager
                     // Start background work:
                     backworkHashFiles.RunWorkerAsync();
                 }
-                else {
+                else
+                {
                     MessageBox.Show("Cant find remote folder at: " + txtServerUploadPath.Text);
                 }
             }
@@ -461,7 +486,8 @@ namespace PrecomputeBackupManager
 
         private void btnStopBackup_Click(object sender, EventArgs e)
         {
-            if (currentWorker != null) {
+            if (currentWorker != null)
+            {
                 currentWorker.CancelAsync();
                 // Dont say backupRunning = false, let the runner do that.
             }
@@ -471,11 +497,12 @@ namespace PrecomputeBackupManager
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing) {
-                if (MessageBox.Show("Really close the program?","Alert",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.No) 
-                  {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (MessageBox.Show("Really close the program?", "Alert", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
                     e.Cancel = true;
-                  }
+                }
             }
         }
 
@@ -493,7 +520,8 @@ namespace PrecomputeBackupManager
             }
         }
 
-        public void SetIdleState() {
+        public void SetIdleState()
+        {
             if (NativeMethods.SetThreadExecutionState(fPreviousExecutionState) == 0)
             {
                 Log("Cant set thread state to idle.");
@@ -511,7 +539,7 @@ namespace PrecomputeBackupManager
 
         // Need safe function for cases like junctions and symlinks.
 
-        public  FileInfo[] safeGet_Files(DirectoryInfo di)
+        public FileInfo[] safeGet_Files(DirectoryInfo di)
         {
             FileInfo[] result = new FileInfo[] { };
             try
@@ -525,7 +553,7 @@ namespace PrecomputeBackupManager
             return result;
         }
 
-        public  DirectoryInfo[] safeGet_Directories(DirectoryInfo di)
+        public DirectoryInfo[] safeGet_Directories(DirectoryInfo di)
         {
             DirectoryInfo[] result = new DirectoryInfo[] { };
             try
@@ -544,21 +572,28 @@ namespace PrecomputeBackupManager
         DateTime lastUpdate = DateTime.Now.AddHours(-2);
 
         private List<string[]> _lowPriorityNotes = new List<string[]>(); // list of {title,body}
-        public void AddPushBulletNoteToQueue(string title, string body) {
+        public void AddPushBulletNoteToQueue(string title, string body)
+        {
+            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
+                return;
+
             _lowPriorityNotes.Add(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
         }
 
         private void tmrBackupPushUpdates_Tick(object sender, EventArgs e)
         {
             // Stop if no PushBullet code
-            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "") {
+            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
+            {
                 tmrBackupPushUpdates.Enabled = false;
                 return;
             }
 
             // Add updates about the bakup process every hour.
-            if (backupRunning) {
-                if (DateTime.Now - lastUpdate > TimeSpan.FromHours(1)) {
+            if (backupRunning)
+            {
+                if (DateTime.Now - lastUpdate > TimeSpan.FromHours(1))
+                {
                     lastUpdate = DateTime.Now;
                     string message = "Backup process is still running."
                                                + "\n\n Current update message:\n"
@@ -570,9 +605,11 @@ namespace PrecomputeBackupManager
             }
 
             // Every interval (5 seconds) try and push some value from the list:
-            if (_lowPriorityNotes.Count > 1) {
+            if (_lowPriorityNotes.Count > 1)
+            {
                 string[] noteInfo = _lowPriorityNotes[0];
-                if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1])) {
+                if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1]))
+                {
                     // Sucess on sending. So remove from list
                     _lowPriorityNotes.RemoveAt(0);
                 }
