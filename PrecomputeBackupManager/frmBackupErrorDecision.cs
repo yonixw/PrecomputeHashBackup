@@ -25,7 +25,7 @@ namespace PrecomputeBackupManager
             _parent = parent;
         }
 
-        PushBulletAPI.PushNoteObject question;
+        PushBulletAPI.PushNoteObject questionPushNoteID;
         private void frmBackupErrorDecision_Load(object sender, EventArgs e)
         {
             this.rtbDetails.Text =
@@ -42,9 +42,10 @@ namespace PrecomputeBackupManager
                 backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses
             }
         }
-        
+
         public bool SaveDecision = false;
-        void decideAction(DialogResult result, bool SaveDecision) {
+        void decideAction(DialogResult result, bool SaveDecision)
+        {
             this.DialogResult = result;
             this.SaveDecision = SaveDecision;
             backgroundWorkerPushBulletDecision.CancelAsync();
@@ -62,105 +63,121 @@ namespace PrecomputeBackupManager
             this.Close();
         }
 
+        const string myFormPushNoteTitle = "Backup Update";
+
+        private PushBulletAPI.PushNoteObject myCustomNote(string questionText) {
+            // Add general response information.
+            questionText += questionText
+                + "\n\n"
+                + "===================\n"
+                + "Please respond with text:\n"
+                + "\t* 1 or try to retry uploading\n"
+                + "\t* 2 or skip to skip the file (but saved in log)\n"
+                + "\t* add `save` to your response to save this action for all future errors"
+            ;
+            return PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, questionText);
+        }
+
         private void backgroundWorkerPushBulletDecision_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (!e.Cancel) {
-                if (question == null)
-                {
-                    string questionText =
+            string currentQuestion =
                     "Error uploading file:\n"
                     + _filename + "\n\n"
                     + "Error message:\n"
-                    + _ex.Message + "\n\n"
-                    + "===================\n"
-                    + "Please respond with text:\n"
-                    + "\t* 1 or try to retry uploading\n"
-                    + "\t* 2 or skip to skip the file (but saved in log)\n"
-                    + "\t* add `save` to your response to save this action for all future errors"
-                    ;
+                    + _ex.Message;
 
-                    try
-                    {
-                        question = PushBulletAPI.Pushes.createPushNote("Backup BOT", questionText);
-                    }
-                    catch (Exception ex)
-                    {
-                        _parent.Log(ex);
-                    }
+            while (!e.Cancel)
+            {
+                if (questionPushNoteID == null) // Error or Calrification message could not sent.
+                {
+                    questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
                 }
                 else
                 {
 
-                    PushBulletAPI.PushNoteObject[] lastPushes = PushBulletAPI.Pushes.getLastMessages(10, question.created);
+                    PushBulletAPI.PushNoteObject[] lastPushes = PushBulletAPI.Pushes.getLastMessages(10, questionPushNoteID.created);
 
-                    if (lastPushes != null && lastPushes.Length > 0)
+                    List<PushBulletAPI.PushNoteObject> userResponseNotes = new List<PushBulletAPI.PushNoteObject>();
+
+                    // Ignore and filter bots updates:
+                    foreach (PushBulletAPI.PushNoteObject note in lastPushes)
                     {
-                        // First is last. and should be for us.
-                        PushBulletAPI.PushNoteObject note = lastPushes[1]; // 0 - Question, 1 - Answer
-
-                        // original note can exist too (search is >= lastTime)
-                        if (note.iden != question.iden)
+                        if (!(
+                             // When to ignore:
+                             note.iden == questionPushNoteID.iden ||
+                             (note.title != null && note.title == myFormPushNoteTitle)
+                        ))
                         {
-                            string lower = note.body.ToLower();
-                            bool tryFound = (lower.Contains("1") || lower.Contains("try"));
-                            bool skipFound = (lower.Contains("2") || lower.Contains("skip"));
-                            bool saveFound = lower.Contains("save");
+                            /* Dont add to list if:
+                                    1) Iden of question because original Question is included in (time >= created)
+                                    2) Has title that i am using
+                            */
+                            userResponseNotes.Add(note);
+                        }
+                    }
 
-                            if (tryFound && skipFound || (!tryFound && !skipFound))
+
+                    if (userResponseNotes.Count > 1)
+                    {
+                        // Cant know. Ask again.
+                        currentQuestion =
+                            "Found multiple responses, Please send a single response again.";
+
+                        // if null than will be asked again on next while iteration.
+                        questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
+                    }
+                    else if (userResponseNotes.Count == 1)
+                    {
+                        string lowerNoteBody = userResponseNotes[0].body.ToLower();
+                        bool tryFound = (lowerNoteBody.Contains("1") || lowerNoteBody.Contains("try"));
+                        bool skipFound = (lowerNoteBody.Contains("2") || lowerNoteBody.Contains("skip"));
+                        bool saveFound = lowerNoteBody.Contains("save");
+
+                        if (tryFound && skipFound || (!tryFound && !skipFound))
+                        {
+                            // Ask again:
+                            currentQuestion =
+                                "Can't understand your response. Please try again.";
+
+                            // if null than will be asked again on next while iteration.
+                            questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
+                        }
+                        else
+                        {
+                            // Log the decisive note for bug inspecting.
+                            _parent.Log("Deciding dialog found answer! \n\n" + userResponseNotes[0].ToString());
+
+                            // Send response
+                            string finalResponse = saveFound ? " and I will remember it." : ".";
+                            finalResponse =
+                                "Thank you!\n"
+                                + ((tryFound) ? "You chose to try again" : "You chose to skip the file")
+                                + finalResponse;
+                            PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, finalResponse);
+
+                            // Finish this dialog
+                            if (tryFound)
                             {
-                                // Ask again:
-                                string questionText =
-                                "Can't understand your response. Please try again.\n\n"
-                                + "===================\n"
-                                + "Please respond with text:\n"
-                                + "\t* 1 or try to retry uploading\n"
-                                + "\t* 2 or skip to skip the file (but saved in log)\n"
-                                + "\t* add `save` to your response to save this action for all future errors"
-                                ;
-
-                                try
-                                {
-                                    question = PushBulletAPI.Pushes.createPushNote("Backup BOT", questionText);
-                                }
-                                catch (Exception ex)
-                                {
-                                    _parent.Log(ex);
-                                }
+                                _parent.Log("User chose to try again. Save? " + saveFound);
+                                decideAction(DialogResult.OK, saveFound);
+                                return;
+                            }
+                            else if (skipFound)
+                            {
+                                _parent.Log("User chose to skip file. Save? " + saveFound);
+                                decideAction(DialogResult.Cancel, saveFound);
+                                return;
                             }
                             else
                             {
-                                // Send response
-                                string finalResponse = saveFound ? " and I will remember it." : ".";
-                                finalResponse =
-                                    "Thank you!\n"
-                                    + ((tryFound) ? "You chose to try again" : "You chose to skip the file")
-                                    + finalResponse;
-                                PushBulletAPI.Pushes.createPushNote("Backup BOT", finalResponse);
-
-                                // Finish this dialog
-                                if (tryFound)
-                                {
-                                    _parent.Log("User chose to try again. Save? " + saveFound);
-                                    decideAction(DialogResult.OK, saveFound);
-                                    return;
-                                }
-                                else if (skipFound)
-                                {
-                                    _parent.Log("User chose to skip file. Save? " + saveFound);
-                                    decideAction(DialogResult.Cancel, saveFound);
-                                    return;
-                                }
+                                _parent.Log("Error, skip not found and try not found! ");
                             }
-
-                            
                         }
-
                     }
-
                 }
 
                 // Sleep 1 minute
-                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(30).TotalMilliseconds); 
+                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(30).TotalMilliseconds);
             }
         }
 

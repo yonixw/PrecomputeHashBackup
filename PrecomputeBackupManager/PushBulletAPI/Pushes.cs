@@ -15,9 +15,22 @@ namespace PrecomputeBackupManager.PushBulletAPI
         public string iden;
         public double created;
         public string body;
+        public string title;
         public string type;
         public string sender_email;
         public string receiver_email;
+
+        public override string ToString()
+        {
+            string allInfo =
+                   "iden    :"  + iden      + "\n"
+                   +"created:" + created   + "\n"
+                   +"type   :" + type      + "\n"
+                   +"active :" + active    + "\n"
+                   +"title  :" + title     + "\n"
+                   +"body   :" + body      + "\n\n";
+            return allInfo;
+        }
     }
 
     class Pushes
@@ -157,5 +170,7 @@ namespace PrecomputeBackupManager.PushBulletAPI
                 return null;
             }
         }
+    
+            
     }
 }
