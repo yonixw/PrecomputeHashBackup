@@ -16,6 +16,8 @@ namespace PrecomputeBackupManager.PushBulletAPI
         public double created;
         public string body;
         public string type;
+        public string sender_email;
+        public string receiver_email;
     }
 
     class Pushes
@@ -32,6 +34,12 @@ namespace PrecomputeBackupManager.PushBulletAPI
             public PushNoteObject[] pushes;
         }
 
+        /// <summary>
+        /// Get certain pushes after certain time. return null if error.
+        /// </summary>
+        /// <param name="count">How much notes to retrieve</param>
+        /// <param name="afterTime">Get messages with creation time >= afterTime</param>
+        /// <returns></returns>
         public static PushNoteObject[] getLastMessages(int count, double afterTime) {
 
             /*
@@ -67,21 +75,34 @@ namespace PrecomputeBackupManager.PushBulletAPI
             }
             */
 
-            WebClient wb = new WebClient();
-            wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
-            string response = wb.DownloadString(
-                "https://api.pushbullet.com/v2/pushes"
-                + "?active=true"
-                + "&modified_after=" + afterTime.ToString()
-            );
+            try
+            {
+                WebClient wb = new WebClient();
+                wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
+                string response = wb.DownloadString(
+                    "https://api.pushbullet.com/v2/pushes"
+                    + "?active=true"
+                    + "&modified_after=" + afterTime.ToString()
+                );
 
 
-            PushNoteListObject list = json.Deserialize<PushNoteListObject>(response);
+                PushNoteListObject list = json.Deserialize<PushNoteListObject>(response);
 
-            return list.pushes;
+                return list.pushes;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[Error getting last pushes]\n" + ex.Message + "\n\n" + ex.StackTrace);
+                return null;
+            }
         }
 
-
+        /// <summary>
+        /// Try create push using config auth. null if fails.
+        /// </summary>
+        /// <param name="title">title of note</param>
+        /// <param name="body">bosy of note</param>
+        /// <returns></returns>
         public static PushNoteObject createPushNote(string title , string body) {
             // SO? 13642873/1997873
 
@@ -94,7 +115,7 @@ namespace PrecomputeBackupManager.PushBulletAPI
 
             */
 
-            /*
+            /* EXAMPLE
             {
               "active": true,
               "body": "Space Elevator, Mars Hyperloop, Space Model S (Model Space?)",
@@ -115,18 +136,26 @@ namespace PrecomputeBackupManager.PushBulletAPI
             }
             */
 
-            CreatePushNoteJson pushJson = new CreatePushNoteJson();
-            pushJson.body = body;
-            pushJson.title = title;
-            pushJson.type = "note";
+            try
+            {
+                CreatePushNoteJson pushJson = new CreatePushNoteJson();
+                pushJson.body = body;
+                pushJson.title = title;
+                pushJson.type = "note";
 
-            WebClient wb = new WebClient();
-            wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
-            wb.Headers.Add("Content-Type", "application/json");
-            string response = wb.UploadString("https://api.pushbullet.com/v2/pushes", "POST", json.Serialize(pushJson));
+                WebClient wb = new WebClient();
+                wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
+                wb.Headers.Add("Content-Type", "application/json");
+                string response = wb.UploadString("https://api.pushbullet.com/v2/pushes", "POST", json.Serialize(pushJson));
 
-            PushNoteObject respObject = json.Deserialize<PushNoteObject>(response);
-            return respObject;
+                PushNoteObject respObject = json.Deserialize<PushNoteObject>(response);
+                return respObject;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[Error creating push]\n" + ex.Message + "\n\n" + ex.StackTrace);
+                return null;
+            }
         }
     }
 }
