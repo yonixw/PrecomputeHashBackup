@@ -558,11 +558,6 @@ namespace PrecomputeBackupManager
                         ;
 
                         PushBulletAPI.Pushes.createPushNote("Backup BOT Update", message);
-
-                        if (lstLog.Items.Count > 0) {
-                            message += "\n\nLast log message:\n" + lstLog.Items[0];
-                        }
-                        
                     }
                     catch (Exception ex)
                     {
