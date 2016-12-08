@@ -90,12 +90,14 @@ namespace PrecomputeBackupManager
             {
                 if (questionPushNoteID == null) // Error or Calrification message could not sent.
                 {
-                    questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
+                    questionPushNoteID = myCustomNote( currentQuestion);
                 }
                 else
                 {
 
                     PushBulletAPI.PushNoteObject[] lastPushes = PushBulletAPI.Pushes.getLastMessages(10, questionPushNoteID.created);
+
+                    if (lastPushes == null) continue; // Wait 1 second before trying again.
 
                     List<PushBulletAPI.PushNoteObject> userResponseNotes = new List<PushBulletAPI.PushNoteObject>();
 
@@ -124,7 +126,7 @@ namespace PrecomputeBackupManager
                             "Found multiple responses, Please send a single response again.";
 
                         // if null than will be asked again on next while iteration.
-                        questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
+                        questionPushNoteID = myCustomNote( currentQuestion);
                     }
                     else if (userResponseNotes.Count == 1)
                     {
@@ -140,7 +142,7 @@ namespace PrecomputeBackupManager
                                 "Can't understand your response. Please try again.";
 
                             // if null than will be asked again on next while iteration.
-                            questionPushNoteID = PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, currentQuestion);
+                            questionPushNoteID = myCustomNote( currentQuestion);
                         }
                         else
                         {
@@ -153,7 +155,10 @@ namespace PrecomputeBackupManager
                                 "Thank you!\n"
                                 + ((tryFound) ? "You chose to try again" : "You chose to skip the file")
                                 + finalResponse;
-                            PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, finalResponse);
+
+                            // We use the main form auto-retry for final note because
+                            //      we already got our answer.
+                            _parent.AddPushBulletNoteToQueue(myFormPushNoteTitle, finalResponse);
 
                             // Finish this dialog
                             if (tryFound)

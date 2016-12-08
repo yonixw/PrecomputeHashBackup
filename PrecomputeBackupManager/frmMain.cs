@@ -542,27 +542,39 @@ namespace PrecomputeBackupManager
 
 
         DateTime lastUpdate = DateTime.Now.AddHours(-2);
+
+        private List<string[]> _lowPriorityNotes = new List<string[]>(); // list of {title,body}
+        public void AddPushBulletNoteToQueue(string title, string body) {
+            _lowPriorityNotes.Add(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
+        }
+
         private void tmrBackupPushUpdates_Tick(object sender, EventArgs e)
         {
-            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "") return;
+            // Stop if no PushBullet code
+            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "") {
+                tmrBackupPushUpdates.Enabled = false;
+                return;
+            }
 
+            // Add updates about the bakup process every hour.
             if (backupRunning) {
                 if (DateTime.Now - lastUpdate > TimeSpan.FromHours(1)) {
                     lastUpdate = DateTime.Now;
+                    string message = "Backup process is still running."
+                                               + "\n\n Current update message:\n"
+                                               + txtCurrentStatus.Text
+                                           ;
 
-                    try
-                    {
-                        string message = "Backup process is still running."
-                            + "\n\n Current update message:\n" 
-                            + txtCurrentStatus.Text
-                        ;
+                    AddPushBulletNoteToQueue("Backup BOT Update", message);
+                }
+            }
 
-                        PushBulletAPI.Pushes.createPushNote("Backup BOT Update", message);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log(ex);
-                    }
+            // Every interval (5 seconds) try and push some value from the list:
+            if (_lowPriorityNotes.Count > 1) {
+                string[] noteInfo = _lowPriorityNotes[0];
+                if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1])) {
+                    // Sucess on sending. So remove from list
+                    _lowPriorityNotes.RemoveAt(0);
                 }
             }
         }
