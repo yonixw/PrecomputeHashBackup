@@ -104,18 +104,16 @@ namespace PrecomputeBackupManager
                     // Ignore and filter bots updates:
                     foreach (PushBulletAPI.PushNoteObject note in lastPushes)
                     {
-                        if (!(
-                             // When to ignore:
-                             note.iden == questionPushNoteID.iden ||
-                             note.title == null ||
-                             note.title != ""
-                        ))
+                        if (
+                        // When to Ignore:
+                        /* 1) If iden is of the question*/ note.iden == questionPushNoteID.iden ||
+                        /* 2) Has title (not null or empty) */ 
+                            (note.title != null && note.title != "")
+                        )
                         {
-                            /* Dont add to list if:
-                                    1) Iden == questionID because original Question is included 
-                                            in (time >= created)
-                                    2) Has title, because user notes has no title.
-                            */
+                            // Ignore
+                        }
+                        else {
                             userResponseNotes.Add(note);
                         }
                     }
