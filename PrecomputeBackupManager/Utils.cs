@@ -9,6 +9,35 @@ namespace PrecomputeBackupManager
 {
     public class Utils
     {
+
+        const long _1kb = 1024;
+        const long _1mb = 1048576;
+        const long _1gb = 1073741824;
+        const long _1tb = 1099511627776;
+
+        public static string speedString(long speed)
+        {
+            if (speed < _1kb)
+            {
+                return (speed + " B");
+            }
+            if (speed < _1mb)
+            {
+                return (speed / _1kb + " KB");
+            }
+            if (speed < _1gb)
+            {
+                return (speed / _1mb + " MB");
+            }
+            if (speed < _1tb)
+            {
+                return (speed / _1gb + " GB");
+            }
+
+            // Else just say in TB (unlikly)
+            return (speed / _1tb + " TB");
+        }
+
         public static string byte2hum(long bytes)
         {
             string result = bytes  > -1 ? "(+) " : "(-) "; // Negative can happen in changed after only deletion
