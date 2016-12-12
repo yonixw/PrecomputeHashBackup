@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
 using PrecomputeBackupManager.HashFileDatasetTableAdapters;
+using System.Collections.Concurrent;
 
 namespace PrecomputeBackupManager
 {
@@ -525,16 +526,21 @@ namespace PrecomputeBackupManager
         #endregion
 
 
-        DateTime lastUpdate = DateTime.Now.AddHours(-2);
+        DateTime lastSentPushUpdate = DateTime.Now.AddHours(-2);
 
-        private List<string[]> _lowPriorityNotes = new List<string[]>(); // list of {title,body}
+        // list of {title,body}
+        // read about this thread-safe Queue here: https://msdn.microsoft.com/en-us/library/dd267265.aspx
+        private ConcurrentQueue<string[]> _lowPriorityNotes = new ConcurrentQueue<string[]>();
 
         public void AddPushBulletNoteToQueue(string title, string body)
         {
             if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
                 return;
 
-            _lowPriorityNotes.Add(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
+            _lowPriorityNotes.Enqueue(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
+
+            // Debug write it:
+            Console.WriteLine("Sending pushbullet. Body:" + body);
         }
 
         private void tmrBackupPushUpdates_Tick(object sender, EventArgs e)
@@ -549,9 +555,9 @@ namespace PrecomputeBackupManager
             // Add updates about the bakup process every hour.
             if (backupRunning)
             {
-                if (DateTime.Now - lastUpdate > TimeSpan.FromHours(1))
+                if (DateTime.Now - lastSentPushUpdate > TimeSpan.FromHours(1))
                 {
-                    lastUpdate = DateTime.Now;
+                    lastSentPushUpdate = DateTime.Now;
                     string message = "Backup process is still running."
                                                + "\n\n Current update message:\n"
                                                + txtCurrentStatus.Text
@@ -561,14 +567,22 @@ namespace PrecomputeBackupManager
                 }
             }
 
-            // Every interval (5 seconds) try and push some value from the list:
+            // Every interval (5 seconds) try and push to user some value from the list:
             if (_lowPriorityNotes.Count > 0)
             {
-                string[] noteInfo = _lowPriorityNotes[0];
-                if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1]))
+                string[] noteInfo;
+
+                if (_lowPriorityNotes.TryDequeue(out noteInfo))
                 {
-                    // Sucess on sending. So remove from list
-                    _lowPriorityNotes.RemoveAt(0);
+                    if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1]))
+                    {
+                        // Sucess on sending. Do nothing
+                    }
+                    else
+                    {
+                        // failed so add it back to queue
+                        _lowPriorityNotes.Enqueue(noteInfo);
+                    } 
                 }
             }
         }
