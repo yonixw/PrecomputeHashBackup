@@ -76,7 +76,7 @@ namespace PrecomputeBackupManager
         static BackupLogsExTableAdapter adapLogsEx = new BackupLogsExTableAdapter();
 
 
-        #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [4]
+        #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [3]
 
         Queue<string> LogQue = new Queue<string>();
 
@@ -284,6 +284,11 @@ namespace PrecomputeBackupManager
                 reloadBackupFolders();
                 clearCurrentBackupFolder();
             }
+        }
+
+        private void cbSkipUpload_CheckedChanged(object sender, EventArgs e)
+        {
+            txtUploadSkip.Enabled = cbSkipUpload.Checked;
         }
 
         #endregion
@@ -568,6 +573,6 @@ namespace PrecomputeBackupManager
             }
         }
 
-       
+        
     }
 }

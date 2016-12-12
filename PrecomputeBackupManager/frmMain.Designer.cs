@@ -181,7 +181,8 @@
             // 
             // txtUploadSkip
             // 
-            this.txtUploadSkip.Location = new System.Drawing.Point(251, 220);
+            this.txtUploadSkip.Enabled = false;
+            this.txtUploadSkip.Location = new System.Drawing.Point(251, 233);
             this.txtUploadSkip.Name = "txtUploadSkip";
             this.txtUploadSkip.Size = new System.Drawing.Size(423, 26);
             this.txtUploadSkip.TabIndex = 9;
@@ -189,12 +190,13 @@
             // cbSkipUpload
             // 
             this.cbSkipUpload.AutoSize = true;
-            this.cbSkipUpload.Location = new System.Drawing.Point(27, 222);
+            this.cbSkipUpload.Location = new System.Drawing.Point(27, 235);
             this.cbSkipUpload.Name = "cbSkipUpload";
             this.cbSkipUpload.Size = new System.Drawing.Size(218, 24);
             this.cbSkipUpload.TabIndex = 18;
             this.cbSkipUpload.Text = "Skip upload until (full path):";
             this.cbSkipUpload.UseVisualStyleBackColor = true;
+            this.cbSkipUpload.CheckedChanged += new System.EventHandler(this.cbSkipUpload_CheckedChanged);
             // 
             // cbStep4
             // 
