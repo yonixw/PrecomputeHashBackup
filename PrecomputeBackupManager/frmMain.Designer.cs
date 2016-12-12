@@ -62,7 +62,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label5 = new System.Windows.Forms.Label();
             this.tabBackupSettings = new System.Windows.Forms.TabPage();
-            this.numMaxRetryUpload = new System.Windows.Forms.NumericUpDown();
+            this.numRetryMaxCount = new System.Windows.Forms.NumericUpDown();
             this.cbRetryMaxCount = new System.Windows.Forms.CheckBox();
             this.cbRetryUploadInterval = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -116,7 +116,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabBackupSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxRetryUpload)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRetryMaxCount)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryHours)).BeginInit();
@@ -444,7 +444,7 @@
             // 
             // tabBackupSettings
             // 
-            this.tabBackupSettings.Controls.Add(this.numMaxRetryUpload);
+            this.tabBackupSettings.Controls.Add(this.numRetryMaxCount);
             this.tabBackupSettings.Controls.Add(this.cbRetryMaxCount);
             this.tabBackupSettings.Controls.Add(this.cbRetryUploadInterval);
             this.tabBackupSettings.Controls.Add(this.label6);
@@ -472,18 +472,18 @@
             this.tabBackupSettings.Text = "Backup Setting";
             this.tabBackupSettings.UseVisualStyleBackColor = true;
             // 
-            // numMaxRetryUpload
+            // numRetryMaxCount
             // 
-            this.numMaxRetryUpload.Location = new System.Drawing.Point(309, 296);
-            this.numMaxRetryUpload.Maximum = new decimal(new int[] {
+            this.numRetryMaxCount.Location = new System.Drawing.Point(309, 296);
+            this.numRetryMaxCount.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
-            this.numMaxRetryUpload.Name = "numMaxRetryUpload";
-            this.numMaxRetryUpload.Size = new System.Drawing.Size(122, 26);
-            this.numMaxRetryUpload.TabIndex = 24;
-            this.numMaxRetryUpload.Tag = "setting_maxUploadRetry";
+            this.numRetryMaxCount.Name = "numRetryMaxCount";
+            this.numRetryMaxCount.Size = new System.Drawing.Size(122, 26);
+            this.numRetryMaxCount.TabIndex = 24;
+            this.numRetryMaxCount.Tag = "setting_maxUploadRetry";
             // 
             // cbRetryMaxCount
             // 
@@ -976,7 +976,7 @@
             this.groupBox1.PerformLayout();
             this.tabBackupSettings.ResumeLayout(false);
             this.tabBackupSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numMaxRetryUpload)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRetryMaxCount)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).EndInit();
@@ -1068,7 +1068,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox cbRetryMaxCount;
         private System.Windows.Forms.CheckBox cbRetryUploadInterval;
-        private System.Windows.Forms.NumericUpDown numMaxRetryUpload;
+        private System.Windows.Forms.NumericUpDown numRetryMaxCount;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.ListBox lstSkippedFiles;

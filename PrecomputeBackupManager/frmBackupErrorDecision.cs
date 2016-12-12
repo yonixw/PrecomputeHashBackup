@@ -16,13 +16,17 @@ namespace PrecomputeBackupManager
         string _filename;
         Exception _ex;
         frmMain _parent;
+        
 
-        public frmBackupErrorDecision(string fileName, Exception ex, frmMain parent)
+        public frmBackupErrorDecision(string fileName, Exception ex, frmMain parent, bool AutoRetryUpload)
         {
             InitializeComponent();
             _filename = fileName;
             _ex = ex;
             _parent = parent;
+            
+            // Decide to retry if no response for 10 minutes.
+            tmrAutoReply.Enabled = AutoRetryUpload;
         }
 
         PushBulletAPI.PushNoteObject questionPushNoteID;
@@ -63,7 +67,7 @@ namespace PrecomputeBackupManager
             this.Close();
         }
 
-        const string myFormPushNoteTitle = "Backup BOT Update";
+        public const string myFormPushNoteTitle = "Backup BOT Update";
 
         private PushBulletAPI.PushNoteObject myCustomNote(string questionText) {
             // Add general response information.
@@ -189,6 +193,28 @@ namespace PrecomputeBackupManager
         private void backgroundWorkerPushBulletDecision_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.Close();
+        }
+
+        DateTime startTime = DateTime.Now;
+        TimeSpan ts10min = TimeSpan.FromMinutes(10);
+        private void tmrAutoReply_Tick(object sender, EventArgs e)
+        {
+            TimeSpan delta = DateTime.Now - startTime;
+            if (delta > ts10min) {
+                // Send response
+                string finalResponse =
+                    "Trying again to upload after 10 minutes passed with no response.";
+
+                _parent.AddPushBulletNoteToQueue(myFormPushNoteTitle, finalResponse);
+                
+                // Try again:
+                decideAction(DialogResult.OK, cbSave.Checked);
+                this.Close();
+            }
+            else 
+            {
+                pbWaitForResponse.Value = Math.Min(100,(int)(delta.TotalSeconds * 100 / ts10min.TotalSeconds));
+            }
         }
     }
 }

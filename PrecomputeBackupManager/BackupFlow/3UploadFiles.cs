@@ -285,6 +285,7 @@ namespace PrecomputeBackupManager
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
             bool failed = true;
+            int failedCount = 0;
 
             while (failed)
             {
@@ -339,30 +340,51 @@ namespace PrecomputeBackupManager
                 }
                 catch (Exception ex)
                 {
+                    failedCount++;
+
                     Log("Error with uploading file: " + currentFile);
                     Log(ex);
 
-                    if (!saveCopyAction)
+                    bool skipBecauseCountMax 
+                        = cbRetryMaxCount.Checked && (numMaxRetryUpload.Value < failedCount);
+
+                    if (!saveCopyAction && !skipBecauseCountMax)
                     {
                         this.Invoke(new Action(() =>
                         {
-                            frmBackupErrorDecision diag = new frmBackupErrorDecision(currentFile, ex, this);
+                            frmBackupErrorDecision diag = new frmBackupErrorDecision(currentFile, ex, this, cbRetryUploadInterval.Checked);
                             errorCopyAction = diag.ShowDialog();
                             saveCopyAction = diag.SaveDecision;
                         }));
                     }
 
-                    if (errorCopyAction == DialogResult.OK) {
+                    if (saveCopyAction) {
+                        // No need. `errorCopyAction` stay the same all the time.
+                    }
+
+
+                    if (!skipBecauseCountMax && errorCopyAction == DialogResult.OK) {
                         // Try Again
                         Log("Trying again to upload. Rememer this? " + saveCopyAction);
                         failed = true; // lie to get out of this function
                     }
                     else
                     {
+                        if (skipBecauseCountMax)
+                        {
+                            Log("Skipping upload becuase max retries." );
+                            AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
+                                 "Skiping file \"" + currentFile + "\" after " 
+                                 + numMaxRetryUpload.Value + " failed retries.");
+                        }
+                        else
+                        {
+                            Log("Skipping upload because user choise. Rememer this? " + saveCopyAction);
+                        }
+
                         // Skip
-                        Log("Skipping upload. Rememer this? " + saveCopyAction);
                         LogSkipped(currentFile, ex);
-                        failed = false;
+                        failed = false; // To skip
                     }
                 } 
             }
