@@ -352,9 +352,12 @@ namespace PrecomputeBackupManager
 
                     // If succeed after fail, tell the user!
                     if (failedCount > 0)
+                    {
                         AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
                                  "Successfully Uploaded file \"" + currentFile + "\" after "
                                  + numRetryMaxCount.Value + " failed retries.");
+                        LogSkipped(currentFile, null, false);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -393,7 +396,7 @@ namespace PrecomputeBackupManager
                             Log("Skipping upload becuase max retries." );
                             AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
                                  "Skiping file \"" + currentFile + "\" after " 
-                                 + numRetryMaxCount.Value + " failed retries.");
+                                 + numRetryMaxCount.Value + " failed retries."); // TODO failed uploads is the correct term
                         }
                         else
                         {
@@ -406,6 +409,9 @@ namespace PrecomputeBackupManager
                     }
                 } 
             }
+
+            // TODO Dump file skip info here
+
         }
 
       

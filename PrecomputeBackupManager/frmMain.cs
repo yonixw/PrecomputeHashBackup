@@ -121,6 +121,7 @@ namespace PrecomputeBackupManager
                                 CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
+        
         public void LogSkipped(string filename, Exception ex, bool skipped = true)
         {
             string lastError =  
