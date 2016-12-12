@@ -525,6 +525,7 @@ namespace PrecomputeBackupManager
         }
         #endregion
 
+        #region Pushbullet queue
 
         DateTime lastSentPushUpdate = DateTime.Now.AddHours(-2);
 
@@ -559,8 +560,14 @@ namespace PrecomputeBackupManager
                 {
                     lastSentPushUpdate = DateTime.Now;
                     string message = "Backup process is still running."
-                                               + "\n\n Current update message:\n"
+                                               + "\n\n Current update status:\n"
                                                + txtCurrentStatus.Text
+
+                                                + "\n\n Current update description:\n"
+                                               + txtStatusDescription.Text
+
+                                                + "\n\n Current update percentage: "
+                                               + pbStatusProgress.Value + "%"
                                            ;
 
                     AddPushBulletNoteToQueue("Backup BOT Update", message);
@@ -586,7 +593,9 @@ namespace PrecomputeBackupManager
                 }
             }
         }
+       
 
-        
+        #endregion
+
     }
 }
