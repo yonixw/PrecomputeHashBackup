@@ -103,6 +103,8 @@ namespace PrecomputeBackupManager
 
                     if (lastPushes == null) continue; // Wait 1 second before trying again.
 
+                    
+
                     List<PushBulletAPI.PushNoteObject> userResponseNotes = new List<PushBulletAPI.PushNoteObject>();
 
                     // Ignore and filter bots updates:
@@ -134,6 +136,8 @@ namespace PrecomputeBackupManager
                     }
                     else if (userResponseNotes.Count == 1)
                     {
+                        Console.WriteLine("Got response and asnwer pushe to iden: " + questionPushNoteID.iden);
+
                         string lowerNoteBody = userResponseNotes[0].body.ToLower();
                         bool tryFound = (lowerNoteBody.Contains("1") || lowerNoteBody.Contains("try"));
                         bool skipFound = (lowerNoteBody.Contains("2") || lowerNoteBody.Contains("skip"));
@@ -165,6 +169,8 @@ namespace PrecomputeBackupManager
                             _parent.AddPushBulletNoteToQueue(myFormPushNoteTitle, finalResponse);
 
                             // Finish this dialog
+                            e.Cancel = true;
+
                             if (tryFound)
                             {
                                 _parent.Log("User chose to try again. Save? " + saveFound);
@@ -201,6 +207,8 @@ namespace PrecomputeBackupManager
         {
             TimeSpan delta = DateTime.Now - startTime;
             if (delta > ts10min) {
+                tmrAutoReply.Enabled = false;    
+                
                 // Send response
                 string finalResponse =
                     "Trying again to upload after 10 minutes passed with no response.";
