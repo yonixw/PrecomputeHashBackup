@@ -80,8 +80,15 @@ namespace PrecomputeBackupManager
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [3]
 
         Queue<string> LogQue = new Queue<string>();
+        Queue<string> SkippedLogQue = new Queue<string>();
 
         string logFile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "log_" +
+            DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
+            + ".txt");
+
+        string skippedLogFile = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "log_" +
             DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
@@ -97,6 +104,15 @@ namespace PrecomputeBackupManager
                 lstLog.Items.Insert(0, addition);
                 File.AppendAllText(logFile, "\n" + addition);
             }
+
+            // For multi thread logging.
+            while (SkippedLogQue.Count > 0)
+            {
+                string addition = SkippedLogQue.Dequeue();
+
+                lstSkippedFiles.Items.Insert(0, addition);
+                File.AppendAllText(skippedLogFile, "\n" + addition);
+            }
         }
 
         public void Log(string text)
@@ -111,11 +127,27 @@ namespace PrecomputeBackupManager
                                 CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
+        public void LogSkipped(string filename, Exception ex)
+        {
+            SkippedLogQue.Enqueue("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                                CultureInfo.InvariantCulture) + "]\n " 
+                                + "Filename: " + filename + "\n "
+                                + ex.Message + "\n " + ex.StackTrace);
+        }
+
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstLog.SelectedItems.Count > 0)
             {
                 rtbCurrentLog.Text = (string)lstLog.SelectedItems[0];
+            }
+        }
+
+        private void lstSkippedFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstSkippedFiles.SelectedItems.Count > 0)
+            {
+                rtbCurrentLog.Text = (string)lstSkippedFiles.SelectedItems[0];
             }
         }
 
@@ -593,9 +625,10 @@ namespace PrecomputeBackupManager
                 }
             }
         }
-       
+
 
         #endregion
 
+       
     }
 }

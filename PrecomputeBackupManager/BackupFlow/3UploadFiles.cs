@@ -361,6 +361,7 @@ namespace PrecomputeBackupManager
                     {
                         // Skip
                         Log("Skipping upload. Rememer this? " + saveCopyAction);
+                        LogSkipped(currentFile, ex);
                         failed = false;
                     }
                 } 
