@@ -236,6 +236,18 @@ namespace PrecomputeBackupManager
                 Log("Didn't find the file to upload: " + txtUploadSkip.Text);
             }
 
+            // Dump skipped file:
+            // We do it now to pervernt duplicates and files that uploaded after fail (changed state)
+            lstSkippedFiles.Items.Clear();
+            foreach (string filenameKey in SkippedLogList.Keys)
+            {
+                string addition = "[" + filenameKey + "]: \n" + SkippedLogList[filenameKey];
+
+                lstSkippedFiles.Items.Insert(0, addition);
+                File.AppendAllText(skippedLogFile, "\n" + addition);
+            }
+
+            // Move Forward to step 4
             if (currentCancelled) // From TryCancel()
             {
                 backupRunning = false;
@@ -337,6 +349,12 @@ namespace PrecomputeBackupManager
 
                     // Only now we can annouce sucess:
                     failed = false;
+
+                    // If succeed after fail, tell the user!
+                    if (failedCount > 0)
+                        AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
+                                 "Successfully Uploaded file \"" + currentFile + "\" after "
+                                 + numRetryMaxCount.Value + " failed retries.");
                 }
                 catch (Exception ex)
                 {
@@ -346,7 +364,7 @@ namespace PrecomputeBackupManager
                     Log(ex);
 
                     bool skipBecauseCountMax 
-                        = cbRetryMaxCount.Checked && (numMaxRetryUpload.Value < failedCount);
+                        = cbRetryMaxCount.Checked && (numRetryMaxCount.Value < failedCount);
 
                     if (!saveCopyAction && !skipBecauseCountMax)
                     {
@@ -375,7 +393,7 @@ namespace PrecomputeBackupManager
                             Log("Skipping upload becuase max retries." );
                             AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
                                  "Skiping file \"" + currentFile + "\" after " 
-                                 + numMaxRetryUpload.Value + " failed retries.");
+                                 + numRetryMaxCount.Value + " failed retries.");
                         }
                         else
                         {

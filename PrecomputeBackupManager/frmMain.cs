@@ -81,7 +81,7 @@ namespace PrecomputeBackupManager
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [3]
 
         Queue<string> LogQue = new Queue<string>();
-        Queue<string> SkippedLogQue = new Queue<string>();
+        Dictionary<string, string> SkippedLogList = new Dictionary<string, string>();
 
         string logFile = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -106,14 +106,7 @@ namespace PrecomputeBackupManager
                 File.AppendAllText(logFile, "\n" + addition);
             }
 
-            // For multi thread logging.
-            while (SkippedLogQue.Count > 0)
-            {
-                string addition = SkippedLogQue.Dequeue();
-
-                lstSkippedFiles.Items.Insert(0, addition);
-                File.AppendAllText(skippedLogFile, "\n" + addition);
-            }
+            
         }
 
         public void Log(string text)
@@ -128,12 +121,31 @@ namespace PrecomputeBackupManager
                                 CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
-        public void LogSkipped(string filename, Exception ex)
+        public void LogSkipped(string filename, Exception ex, bool skipped = true)
         {
-            SkippedLogQue.Enqueue("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
-                                CultureInfo.InvariantCulture) + "]\n " 
-                                + "Filename: " + filename + "\n "
-                                + ex.Message + "\n " + ex.StackTrace);
+            string lastError =  
+                "* " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                CultureInfo.InvariantCulture) + "\n "
+                + ex.Message + "\n " + ex.StackTrace + "\n";
+
+            if (SkippedLogList.ContainsKey(filename)) {
+                if (skipped) {
+                    // Update info
+                    SkippedLogList[filename] += lastError;
+                }
+                else
+                {
+                    // Remove entry. If oyu want to find the errors, look in the regualt log.
+                    SkippedLogList.Remove(filename);
+                }
+            }
+            else
+            {
+                // Only relvant if needed to add:
+                if (skipped) {
+                    SkippedLogList.Add(filename, lastError);
+                }
+            }
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)
