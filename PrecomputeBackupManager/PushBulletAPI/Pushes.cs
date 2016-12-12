@@ -162,6 +162,9 @@ namespace PrecomputeBackupManager.PushBulletAPI
                 string response = wb.UploadString("https://api.pushbullet.com/v2/pushes", "POST", json.Serialize(pushJson));
 
                 PushNoteObject respObject = json.Deserialize<PushNoteObject>(response);
+
+                Console.WriteLine("Sent pushbullet. Response: \n" + response);
+
                 return respObject;
             }
             catch (Exception ex)

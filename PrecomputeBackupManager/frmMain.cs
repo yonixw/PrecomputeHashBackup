@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -122,6 +123,11 @@ namespace PrecomputeBackupManager
         private void button1_Click(object sender, EventArgs e)
         {
             lstLog.Items.Clear();
+        }
+
+        private void btnLocalLogFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Precompute Backup Manager");
         }
 
         #endregion
@@ -572,6 +578,7 @@ namespace PrecomputeBackupManager
         DateTime lastUpdate = DateTime.Now.AddHours(-2);
 
         private List<string[]> _lowPriorityNotes = new List<string[]>(); // list of {title,body}
+
         public void AddPushBulletNoteToQueue(string title, string body)
         {
             if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
@@ -605,7 +612,7 @@ namespace PrecomputeBackupManager
             }
 
             // Every interval (5 seconds) try and push some value from the list:
-            if (_lowPriorityNotes.Count > 1)
+            if (_lowPriorityNotes.Count > 0)
             {
                 string[] noteInfo = _lowPriorityNotes[0];
                 if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1]))
@@ -615,5 +622,7 @@ namespace PrecomputeBackupManager
                 }
             }
         }
+
+       
     }
 }

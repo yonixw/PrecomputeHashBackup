@@ -101,6 +101,7 @@
             this.txtHistoryCurrentBackup = new System.Windows.Forms.ToolStripTextBox();
             this.nextPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnLocalLogFolder = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -824,6 +825,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnLocalLogFolder);
             this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.label16);
             this.tabPage3.Controls.Add(this.groupBox3);
@@ -836,9 +838,19 @@
             this.tabPage3.Text = "Log";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // btnLocalLogFolder
+            // 
+            this.btnLocalLogFolder.Location = new System.Drawing.Point(836, 10);
+            this.btnLocalLogFolder.Name = "btnLocalLogFolder";
+            this.btnLocalLogFolder.Size = new System.Drawing.Size(167, 34);
+            this.btnLocalLogFolder.TabIndex = 18;
+            this.btnLocalLogFolder.Text = "Open log folder";
+            this.btnLocalLogFolder.UseVisualStyleBackColor = true;
+            this.btnLocalLogFolder.Click += new System.EventHandler(this.btnLocalLogFolder_Click);
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(905, 10);
+            this.button1.Location = new System.Drawing.Point(732, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(98, 34);
             this.button1.TabIndex = 17;
@@ -1086,6 +1098,7 @@
         private System.Windows.Forms.TextBox txtUploadSkip;
         private System.Windows.Forms.CheckBox cbSkipUpload;
         private System.Windows.Forms.Timer tmrBackupPushUpdates;
+        private System.Windows.Forms.Button btnLocalLogFolder;
     }
 }
 
