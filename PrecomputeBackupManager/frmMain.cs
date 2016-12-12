@@ -455,7 +455,7 @@ namespace PrecomputeBackupManager
                 }
                 else
                 {
-                    MessageBox.Show("Cant find remote folder at: " + txtServerUploadPath.Text);
+                    MessageBox.Show("Cant find remote folder at: " + txtServerUploadPath.Text + "-backup");
                 }
             }
         }
