@@ -61,7 +61,13 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label5 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabBackupSettings = new System.Windows.Forms.TabPage();
+            this.numMaxRetryUpload = new System.Windows.Forms.NumericUpDown();
+            this.cbRetryMaxCount = new System.Windows.Forms.CheckBox();
+            this.cbRetryUploadInterval = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtPushBulletAuthCode = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.txtServerUploadPath = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
@@ -75,11 +81,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.numEveryDays = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.txtLogFolderName = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.numBackupMaxSize = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -89,6 +92,9 @@
             this.txtUsernameCode = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.lstSkippedFiles = new System.Windows.Forms.ListBox();
             this.btnLocalLogFolder = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
@@ -109,7 +115,8 @@
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabBackupSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxRetryUpload)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryHours)).BeginInit();
@@ -122,7 +129,7 @@
             // tabMain
             // 
             this.tabMain.Controls.Add(this.tabPage1);
-            this.tabMain.Controls.Add(this.tabPage2);
+            this.tabMain.Controls.Add(this.tabBackupSettings);
             this.tabMain.Controls.Add(this.tabPage3);
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Location = new System.Drawing.Point(0, 0);
@@ -435,32 +442,98 @@
             this.label5.TabIndex = 2;
             this.label5.Text = "Folders to backup:";
             // 
-            // tabPage2
+            // tabBackupSettings
             // 
-            this.tabPage2.Controls.Add(this.label22);
-            this.tabPage2.Controls.Add(this.txtServerUploadPath);
-            this.tabPage2.Controls.Add(this.label23);
-            this.tabPage2.Controls.Add(this.groupBox4);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.txtLogFolderName);
-            this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.numBackupMaxSize);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.txtBackupApiURL);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.btnSaveSettings);
-            this.tabPage2.Controls.Add(this.txtUsernameCode);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1014, 765);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Backup Setting";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabBackupSettings.Controls.Add(this.numMaxRetryUpload);
+            this.tabBackupSettings.Controls.Add(this.cbRetryMaxCount);
+            this.tabBackupSettings.Controls.Add(this.cbRetryUploadInterval);
+            this.tabBackupSettings.Controls.Add(this.label6);
+            this.tabBackupSettings.Controls.Add(this.txtPushBulletAuthCode);
+            this.tabBackupSettings.Controls.Add(this.label9);
+            this.tabBackupSettings.Controls.Add(this.label22);
+            this.tabBackupSettings.Controls.Add(this.txtServerUploadPath);
+            this.tabBackupSettings.Controls.Add(this.label23);
+            this.tabBackupSettings.Controls.Add(this.groupBox4);
+            this.tabBackupSettings.Controls.Add(this.label8);
+            this.tabBackupSettings.Controls.Add(this.label7);
+            this.tabBackupSettings.Controls.Add(this.label4);
+            this.tabBackupSettings.Controls.Add(this.numBackupMaxSize);
+            this.tabBackupSettings.Controls.Add(this.label3);
+            this.tabBackupSettings.Controls.Add(this.txtBackupApiURL);
+            this.tabBackupSettings.Controls.Add(this.label2);
+            this.tabBackupSettings.Controls.Add(this.btnSaveSettings);
+            this.tabBackupSettings.Controls.Add(this.txtUsernameCode);
+            this.tabBackupSettings.Controls.Add(this.label1);
+            this.tabBackupSettings.Location = new System.Drawing.Point(4, 29);
+            this.tabBackupSettings.Name = "tabBackupSettings";
+            this.tabBackupSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabBackupSettings.Size = new System.Drawing.Size(1014, 765);
+            this.tabBackupSettings.TabIndex = 1;
+            this.tabBackupSettings.Text = "Backup Setting";
+            this.tabBackupSettings.UseVisualStyleBackColor = true;
+            // 
+            // numMaxRetryUpload
+            // 
+            this.numMaxRetryUpload.Location = new System.Drawing.Point(309, 296);
+            this.numMaxRetryUpload.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numMaxRetryUpload.Name = "numMaxRetryUpload";
+            this.numMaxRetryUpload.Size = new System.Drawing.Size(122, 26);
+            this.numMaxRetryUpload.TabIndex = 24;
+            this.numMaxRetryUpload.Tag = "setting_maxUploadRetry";
+            // 
+            // cbRetryMaxCount
+            // 
+            this.cbRetryMaxCount.AutoSize = true;
+            this.cbRetryMaxCount.Location = new System.Drawing.Point(19, 297);
+            this.cbRetryMaxCount.Name = "cbRetryMaxCount";
+            this.cbRetryMaxCount.Size = new System.Drawing.Size(284, 24);
+            this.cbRetryMaxCount.TabIndex = 23;
+            this.cbRetryMaxCount.Tag = "setting_uploaxMaxRetries";
+            this.cbRetryMaxCount.Text = "Skip file upload after this retry count:";
+            this.cbRetryMaxCount.UseVisualStyleBackColor = true;
+            // 
+            // cbRetryUploadInterval
+            // 
+            this.cbRetryUploadInterval.AutoSize = true;
+            this.cbRetryUploadInterval.Location = new System.Drawing.Point(19, 250);
+            this.cbRetryUploadInterval.Name = "cbRetryUploadInterval";
+            this.cbRetryUploadInterval.Size = new System.Drawing.Size(380, 24);
+            this.cbRetryUploadInterval.TabIndex = 22;
+            this.cbRetryUploadInterval.Tag = "setting_uploadRetryInterval";
+            this.cbRetryUploadInterval.Text = "Retry upload every 10 minutes if no user response";
+            this.cbRetryUploadInterval.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.Red;
+            this.label6.Location = new System.Drawing.Point(527, 202);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(280, 20);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Secret code, for pushbullet notification";
+            // 
+            // txtPushBulletAuthCode
+            // 
+            this.txtPushBulletAuthCode.Location = new System.Drawing.Point(147, 200);
+            this.txtPushBulletAuthCode.Name = "txtPushBulletAuthCode";
+            this.txtPushBulletAuthCode.PasswordChar = ' ';
+            this.txtPushBulletAuthCode.Size = new System.Drawing.Size(364, 26);
+            this.txtPushBulletAuthCode.TabIndex = 20;
+            this.txtPushBulletAuthCode.Tag = "setting_pushbulletAuth";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(15, 202);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(121, 20);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Pushbullet Auth";
             // 
             // label22
             // 
@@ -478,6 +551,7 @@
             this.txtServerUploadPath.Name = "txtServerUploadPath";
             this.txtServerUploadPath.Size = new System.Drawing.Size(364, 26);
             this.txtServerUploadPath.TabIndex = 17;
+            this.txtServerUploadPath.Tag = "setting_uploadPath";
             // 
             // label23
             // 
@@ -499,7 +573,7 @@
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.numEveryDays);
-            this.groupBox4.Location = new System.Drawing.Point(19, 246);
+            this.groupBox4.Location = new System.Drawing.Point(35, 544);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(854, 125);
             this.groupBox4.TabIndex = 15;
@@ -546,6 +620,7 @@
             this.numEveryMinutes.Name = "numEveryMinutes";
             this.numEveryMinutes.Size = new System.Drawing.Size(122, 26);
             this.numEveryMinutes.TabIndex = 20;
+            this.numEveryMinutes.Tag = "setting_schedule_minutes";
             // 
             // label13
             // 
@@ -568,6 +643,7 @@
             this.numEveryHours.Name = "numEveryHours";
             this.numEveryHours.Size = new System.Drawing.Size(122, 26);
             this.numEveryHours.TabIndex = 18;
+            this.numEveryHours.Tag = "setting_schedule_hours";
             // 
             // label12
             // 
@@ -599,16 +675,7 @@
             this.numEveryDays.Name = "numEveryDays";
             this.numEveryDays.Size = new System.Drawing.Size(122, 26);
             this.numEveryDays.TabIndex = 16;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.Color.Red;
-            this.label9.Location = new System.Drawing.Point(527, 197);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(346, 20);
-            this.label9.TabIndex = 14;
-            this.label9.Text = "Where to save logs of the manager in the server";
+            this.numEveryDays.Tag = "setting_schedule_days";
             // 
             // label8
             // 
@@ -629,22 +696,6 @@
             this.label7.Size = new System.Drawing.Size(175, 20);
             this.label7.TabIndex = 12;
             this.label7.Text = "Secret code, ask admin";
-            // 
-            // txtLogFolderName
-            // 
-            this.txtLogFolderName.Location = new System.Drawing.Point(147, 193);
-            this.txtLogFolderName.Name = "txtLogFolderName";
-            this.txtLogFolderName.Size = new System.Drawing.Size(364, 26);
-            this.txtLogFolderName.TabIndex = 11;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 197);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(128, 20);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Log folder name:";
             // 
             // label4
             // 
@@ -667,6 +718,7 @@
             this.numBackupMaxSize.Name = "numBackupMaxSize";
             this.numBackupMaxSize.Size = new System.Drawing.Size(364, 26);
             this.numBackupMaxSize.TabIndex = 8;
+            this.numBackupMaxSize.Tag = "setting_maxBackupSize";
             // 
             // label3
             // 
@@ -683,6 +735,7 @@
             this.txtBackupApiURL.Name = "txtBackupApiURL";
             this.txtBackupApiURL.Size = new System.Drawing.Size(364, 26);
             this.txtBackupApiURL.TabIndex = 6;
+            this.txtBackupApiURL.Tag = "setting_backupApiUrl";
             // 
             // label2
             // 
@@ -695,7 +748,7 @@
             // 
             // btnSaveSettings
             // 
-            this.btnSaveSettings.Location = new System.Drawing.Point(457, 400);
+            this.btnSaveSettings.Location = new System.Drawing.Point(854, 703);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(134, 36);
             this.btnSaveSettings.TabIndex = 4;
@@ -710,6 +763,7 @@
             this.txtUsernameCode.PasswordChar = ' ';
             this.txtUsernameCode.Size = new System.Drawing.Size(364, 26);
             this.txtUsernameCode.TabIndex = 3;
+            this.txtUsernameCode.Tag = "setting_userName";
             // 
             // label1
             // 
@@ -722,6 +776,9 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label24);
+            this.tabPage3.Controls.Add(this.label25);
+            this.tabPage3.Controls.Add(this.lstSkippedFiles);
             this.tabPage3.Controls.Add(this.btnLocalLogFolder);
             this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.label16);
@@ -735,23 +792,52 @@
             this.tabPage3.Text = "Log";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(11, 318);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(243, 20);
+            this.label24.TabIndex = 21;
+            this.label24.Text = "Skipped files since program start:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.ForeColor = System.Drawing.Color.Red;
+            this.label25.Location = new System.Drawing.Point(295, 318);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(205, 20);
+            this.label25.TabIndex = 20;
+            this.label25.Text = "Click on item to show bellow";
+            // 
+            // lstSkippedFiles
+            // 
+            this.lstSkippedFiles.FormattingEnabled = true;
+            this.lstSkippedFiles.ItemHeight = 20;
+            this.lstSkippedFiles.Location = new System.Drawing.Point(12, 350);
+            this.lstSkippedFiles.Name = "lstSkippedFiles";
+            this.lstSkippedFiles.Size = new System.Drawing.Size(994, 204);
+            this.lstSkippedFiles.TabIndex = 19;
+            this.lstSkippedFiles.SelectedIndexChanged += new System.EventHandler(this.lstSkippedFiles_SelectedIndexChanged);
+            // 
             // btnLocalLogFolder
             // 
             this.btnLocalLogFolder.Location = new System.Drawing.Point(836, 10);
             this.btnLocalLogFolder.Name = "btnLocalLogFolder";
             this.btnLocalLogFolder.Size = new System.Drawing.Size(167, 34);
             this.btnLocalLogFolder.TabIndex = 18;
-            this.btnLocalLogFolder.Text = "Open log folder";
+            this.btnLocalLogFolder.Text = "Open logs folder";
             this.btnLocalLogFolder.UseVisualStyleBackColor = true;
             this.btnLocalLogFolder.Click += new System.EventHandler(this.btnLocalLogFolder_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(732, 10);
+            this.button1.Location = new System.Drawing.Point(687, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(98, 34);
+            this.button1.Size = new System.Drawing.Size(143, 34);
             this.button1.TabIndex = 17;
-            this.button1.Text = "Clear log";
+            this.button1.Text = "Clear all lists";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -800,7 +886,7 @@
             this.lstLog.ItemHeight = 20;
             this.lstLog.Location = new System.Drawing.Point(12, 60);
             this.lstLog.Name = "lstLog";
-            this.lstLog.Size = new System.Drawing.Size(994, 504);
+            this.lstLog.Size = new System.Drawing.Size(994, 244);
             this.lstLog.TabIndex = 0;
             this.lstLog.SelectedIndexChanged += new System.EventHandler(this.lstLog_SelectedIndexChanged);
             // 
@@ -888,8 +974,9 @@
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabBackupSettings.ResumeLayout(false);
+            this.tabBackupSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMaxRetryUpload)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numEveryMinutes)).EndInit();
@@ -906,18 +993,15 @@
         #endregion
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabBackupSettings;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnStopBackup;
         private System.Windows.Forms.Button btnStartBackup;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListView lstvFoldersToBackup;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtLogFolderName;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numBackupMaxSize;
         private System.Windows.Forms.Label label3;
@@ -979,6 +1063,15 @@
         private System.Windows.Forms.CheckBox cbSkipUpload;
         private System.Windows.Forms.Timer tmrBackupPushUpdates;
         private System.Windows.Forms.Button btnLocalLogFolder;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtPushBulletAuthCode;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox cbRetryMaxCount;
+        private System.Windows.Forms.CheckBox cbRetryUploadInterval;
+        private System.Windows.Forms.NumericUpDown numMaxRetryUpload;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.ListBox lstSkippedFiles;
     }
 }
 

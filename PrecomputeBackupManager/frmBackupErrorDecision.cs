@@ -36,7 +36,7 @@ namespace PrecomputeBackupManager
                 _ex.StackTrace
                 ;
 
-            if (PrivateData.Default.PBAuthCode != "")
+            if (frmMain.pbAuth != "")
             {
                 // Only if PB auth is provided
                 backgroundWorkerPushBulletDecision.RunWorkerAsync(); // Start listening for responses

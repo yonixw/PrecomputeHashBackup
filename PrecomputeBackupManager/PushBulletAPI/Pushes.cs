@@ -91,7 +91,7 @@ namespace PrecomputeBackupManager.PushBulletAPI
             try
             {
                 WebClient wb = new WebClient();
-                wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
+                wb.Headers.Add("Access-Token", frmMain.pbAuth);
                 string response = wb.DownloadString(
                     "https://api.pushbullet.com/v2/pushes"
                     + "?active=true"
@@ -157,7 +157,7 @@ namespace PrecomputeBackupManager.PushBulletAPI
                 pushJson.type = "note";
 
                 WebClient wb = new WebClient();
-                wb.Headers.Add("Access-Token", PrivateData.Default.PBAuthCode);
+                wb.Headers.Add("Access-Token", frmMain.pbAuth);
                 wb.Headers.Add("Content-Type", "application/json");
                 string response = wb.UploadString("https://api.pushbullet.com/v2/pushes", "POST", json.Serialize(pushJson));
 

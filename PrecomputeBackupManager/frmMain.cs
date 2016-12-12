@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
 using PrecomputeBackupManager.HashFileDatasetTableAdapters;
 using System.Collections.Concurrent;
+using System.Security;
 
 namespace PrecomputeBackupManager
 {
@@ -329,43 +330,25 @@ namespace PrecomputeBackupManager
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Setting Tab [2]
 
-        internal class KnownConfigKeys
-        {
-            public static string Usercode = "USER_CODE";
-            public static string BackupAPIurl = "BACKUP_API_URL";
-            public static string MaxBackupSize = "MAX_BACKUP_SIZE";
-            public static string LogFolderServerName = "LOG_FOLDER_NAME";
-            public static string ScheduleDays = "SCHEDULE_DAYS";
-            public static string ScheduleHours = "SCHEDULE_HOURS";
-            public static string ScheduleMinutes = "SCHEDULE_MINUTES";
-            public static string ServerUploadPath = "SERVER_UPLOAD_PATH";
-        }
-
-        Dictionary<string, string> LoadSettingsFromDB()
-        {
-            DataSet1.ConfigDataTable dt = adapConfig.GetAllEntries();
-            Dictionary<string, string> settings = new Dictionary<string, string>();
-
-            foreach (DataSet1.ConfigRow row in dt)
-            {
-                settings.Add(row.Key, DBNull.Value.Equals(row.Value) ? "0" : row.Value);
-            }
-
-            return settings;
-        }
+        public static string pbAuth = "";
 
         void LoadAllSettings()
         {
-            Dictionary<string, string> allSettings = LoadSettingsFromDB();
+            AutoSettings _st = new AutoSettings();
 
-            txtServerUploadPath.Text = allSettings[KnownConfigKeys.ServerUploadPath];
-            txtUsernameCode.Text = allSettings[KnownConfigKeys.Usercode];
-            txtBackupApiURL.Text = allSettings[KnownConfigKeys.BackupAPIurl];
-            numBackupMaxSize.Value = Int64.Parse(allSettings[KnownConfigKeys.MaxBackupSize]);
-            txtLogFolderName.Text = allSettings[KnownConfigKeys.LogFolderServerName];
-            numEveryDays.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleDays]);
-            numEveryHours.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleHours]);
-            numEveryMinutes.Value = Int64.Parse(allSettings[KnownConfigKeys.ScheduleMinutes]);
+            DataSet1.ConfigDataTable dt = adapConfig.GetAllEntries();
+
+            foreach (DataSet1.ConfigRow row in dt)
+            {
+                _st.allSettings.Add(row.Key, DBNull.Value.Equals(row.Value) ? "0" : row.Value);
+            }
+
+            _st.WriteDataFromDictionary(tabBackupSettings); 
+
+            // Pushbullet need to be all across
+            if (txtPushBulletAuthCode.Text.Length > 0 ) {
+                pbAuth = txtPushBulletAuthCode.Text;
+            }
 
             Log("All settings were loaded from DB.");
         }
@@ -373,28 +356,20 @@ namespace PrecomputeBackupManager
 
         void SaveAllSettings()
         {
-            Dictionary<string, string> allSettings = LoadSettingsFromDB();
+            AutoSettings _st = new AutoSettings();
+            _st.ReadDataFromControl(tabBackupSettings);
 
-            allSettings[KnownConfigKeys.ServerUploadPath] = txtServerUploadPath.Text ?? "\\pi\\";
-            allSettings[KnownConfigKeys.Usercode] = txtUsernameCode.Text ?? "0000";
-            allSettings[KnownConfigKeys.BackupAPIurl] = txtBackupApiURL.Text ?? "HTTP";
-            allSettings[KnownConfigKeys.MaxBackupSize] = numBackupMaxSize.Value.ToString();
-            allSettings[KnownConfigKeys.LogFolderServerName] = txtLogFolderName.Text ?? "SERVER NAME";
-            allSettings[KnownConfigKeys.ScheduleDays] = numEveryDays.Value.ToString();
-            allSettings[KnownConfigKeys.ScheduleHours] = numEveryHours.Value.ToString();
-            allSettings[KnownConfigKeys.ScheduleMinutes] = numEveryMinutes.Value.ToString();
-
-            foreach (string key in allSettings.Keys)
+            foreach (string key in _st.allSettings.Keys)
             {
                 if ((long)adapConfig.KeyExist(key) > 0)
                 {
                     // Update
-                    adapConfig.UpdateKey(allSettings[key], key);
+                    adapConfig.UpdateKey(_st.allSettings[key], key);
                 }
                 else
                 {
                     // Insert
-                    adapConfig.NewKey(key, allSettings[key]);
+                    adapConfig.NewKey(key, _st.allSettings[key]);
                 }
             }
 
@@ -567,7 +542,7 @@ namespace PrecomputeBackupManager
 
         public void AddPushBulletNoteToQueue(string title, string body)
         {
-            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
+            if (frmMain.pbAuth == "")
                 return;
 
             _lowPriorityNotes.Enqueue(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
@@ -579,7 +554,7 @@ namespace PrecomputeBackupManager
         private void tmrBackupPushUpdates_Tick(object sender, EventArgs e)
         {
             // Stop if no PushBullet code
-            if (PrecomputeBackupManager.Properties.Settings.Default.PBAuthCode == "")
+            if (frmMain.pbAuth == "")
             {
                 tmrBackupPushUpdates.Enabled = false;
                 return;
