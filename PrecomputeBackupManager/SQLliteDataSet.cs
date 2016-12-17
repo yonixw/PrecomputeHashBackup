@@ -1,4 +1,4 @@
-﻿namespace PrecomputedHashDirDiff
+﻿namespace PrecomputeBackupManager
 {
 
 
@@ -7,7 +7,7 @@
     }
 }
 
-namespace PrecomputedHashDirDiff.DataSetHashDBTableAdapters
+namespace PrecomputeBackupManager.DataSetHashDBTableAdapters
 {
 
 

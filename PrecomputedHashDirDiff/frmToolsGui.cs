@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SQLite;
-using PrecomputedHashDirDiff.DataSet1TableAdapters;
+using PrecomputedHashDirDiff.DataSetHashDBTableAdapters;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Security.Cryptography;

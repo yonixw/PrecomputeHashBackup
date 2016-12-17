@@ -20,9 +20,9 @@ namespace PrecomputedHashDirDiff {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("DataSet1")]
+    [global::System.Xml.Serialization.XmlRootAttribute("DataSetHashDB")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class DataSet1 : global::System.Data.DataSet {
+    public partial class DataSetHashDB : global::System.Data.DataSet {
         
         private FilesDataTable tableFiles;
         
@@ -34,7 +34,7 @@ namespace PrecomputedHashDirDiff {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public DataSet1() {
+        public DataSetHashDB() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -45,7 +45,7 @@ namespace PrecomputedHashDirDiff {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected DataSet1(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected DataSetHashDB(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -157,7 +157,7 @@ namespace PrecomputedHashDirDiff {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            DataSet1 cln = ((DataSet1)(base.Clone()));
+            DataSetHashDB cln = ((DataSetHashDB)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -247,9 +247,9 @@ namespace PrecomputedHashDirDiff {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "DataSet1";
+            this.DataSetName = "DataSetHashDB";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/DataSet1.xsd";
+            this.Namespace = "http://tempuri.org/DataSetHashDB.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableFiles = new FilesDataTable();
@@ -289,7 +289,7 @@ namespace PrecomputedHashDirDiff {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            DataSet1 ds = new DataSet1();
+            DataSetHashDB ds = new DataSetHashDB();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -634,7 +634,7 @@ namespace PrecomputedHashDirDiff {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DataSet1 ds = new DataSet1();
+                DataSetHashDB ds = new DataSetHashDB();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -940,7 +940,7 @@ namespace PrecomputedHashDirDiff {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DataSet1 ds = new DataSet1();
+                DataSetHashDB ds = new DataSetHashDB();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1205,7 +1205,7 @@ namespace PrecomputedHashDirDiff {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DataSet1 ds = new DataSet1();
+                DataSetHashDB ds = new DataSetHashDB();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -1555,7 +1555,7 @@ namespace PrecomputedHashDirDiff {
         }
     }
 }
-namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
+namespace PrecomputedHashDirDiff.DataSetHashDBTableAdapters {
     
     
     /// <summary>
@@ -1784,7 +1784,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(DataSet1.FilesDataTable dataTable) {
+        public virtual int Fill(DataSetHashDB.FilesDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -1797,9 +1797,9 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual DataSet1.FilesDataTable GetData() {
+        public virtual DataSetHashDB.FilesDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            DataSet1.FilesDataTable dataTable = new DataSet1.FilesDataTable();
+            DataSetHashDB.FilesDataTable dataTable = new DataSetHashDB.FilesDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -1808,10 +1808,10 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FilesDataTable GetFileByID(int Param1) {
+        public virtual DataSetHashDB.FilesDataTable GetFileByID(int Param1) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
-            DataSet1.FilesDataTable dataTable = new DataSet1.FilesDataTable();
+            DataSetHashDB.FilesDataTable dataTable = new DataSetHashDB.FilesDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -1820,10 +1820,10 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FilesDataTable GetFilesByFolderID(int ParentId) {
+        public virtual DataSetHashDB.FilesDataTable GetFilesByFolderID(int ParentId) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(ParentId));
-            DataSet1.FilesDataTable dataTable = new DataSet1.FilesDataTable();
+            DataSetHashDB.FilesDataTable dataTable = new DataSetHashDB.FilesDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2228,7 +2228,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(DataSet1.FoldersDataTable dataTable) {
+        public virtual int Fill(DataSetHashDB.FoldersDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -2241,9 +2241,9 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual DataSet1.FoldersDataTable GetData() {
+        public virtual DataSetHashDB.FoldersDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            DataSet1.FoldersDataTable dataTable = new DataSet1.FoldersDataTable();
+            DataSetHashDB.FoldersDataTable dataTable = new DataSetHashDB.FoldersDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2252,10 +2252,10 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FoldersDataTable GetFolderById(int Param1) {
+        public virtual DataSetHashDB.FoldersDataTable GetFolderById(int Param1) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
-            DataSet1.FoldersDataTable dataTable = new DataSet1.FoldersDataTable();
+            DataSetHashDB.FoldersDataTable dataTable = new DataSetHashDB.FoldersDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2264,10 +2264,10 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.FoldersDataTable GetFoldersByParentFolderId(int Param1) {
+        public virtual DataSetHashDB.FoldersDataTable GetFoldersByParentFolderId(int Param1) {
             this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(Param1));
-            DataSet1.FoldersDataTable dataTable = new DataSet1.FoldersDataTable();
+            DataSetHashDB.FoldersDataTable dataTable = new DataSetHashDB.FoldersDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2275,14 +2275,14 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(DataSet1.FoldersDataTable dataTable) {
+        public virtual int Update(DataSetHashDB.FoldersDataTable dataTable) {
             return this.Adapter.Update(dataTable);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(DataSet1 dataSet) {
+        public virtual int Update(DataSetHashDB dataSet) {
             return this.Adapter.Update(dataSet, "Folders");
         }
         
@@ -2658,7 +2658,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(DataSet1.MetadataDataTable dataTable) {
+        public virtual int Fill(DataSetHashDB.MetadataDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -2671,9 +2671,9 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual DataSet1.MetadataDataTable GetData() {
+        public virtual DataSetHashDB.MetadataDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            DataSet1.MetadataDataTable dataTable = new DataSet1.MetadataDataTable();
+            DataSetHashDB.MetadataDataTable dataTable = new DataSetHashDB.MetadataDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2682,7 +2682,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual DataSet1.MetadataDataTable GetValuesByKey(string Key) {
+        public virtual DataSetHashDB.MetadataDataTable GetValuesByKey(string Key) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
             if ((Key == null)) {
                 throw new global::System.ArgumentNullException("Key");
@@ -2690,7 +2690,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = ((string)(Key));
             }
-            DataSet1.MetadataDataTable dataTable = new DataSet1.MetadataDataTable();
+            DataSetHashDB.MetadataDataTable dataTable = new DataSetHashDB.MetadataDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -2698,14 +2698,14 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(DataSet1.MetadataDataTable dataTable) {
+        public virtual int Update(DataSetHashDB.MetadataDataTable dataTable) {
             return this.Adapter.Update(dataTable);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(DataSet1 dataSet) {
+        public virtual int Update(DataSetHashDB dataSet) {
             return this.Adapter.Update(dataSet, "Metadata");
         }
         
@@ -2907,7 +2907,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateUpdatedRows(DataSet1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateUpdatedRows(DataSetHashDB dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._foldersTableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.Folders.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
@@ -2935,7 +2935,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateInsertedRows(DataSet1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateInsertedRows(DataSetHashDB dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._foldersTableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.Folders.Select(null, null, global::System.Data.DataViewRowState.Added);
@@ -2961,7 +2961,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateDeletedRows(DataSet1 dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
+        private int UpdateDeletedRows(DataSetHashDB dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
             if ((this._metadataTableAdapter != null)) {
                 global::System.Data.DataRow[] deletedRows = dataSet.Metadata.Select(null, null, global::System.Data.DataViewRowState.Deleted);
@@ -3011,7 +3011,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public virtual int UpdateAll(DataSet1 dataSet) {
+        public virtual int UpdateAll(DataSetHashDB dataSet) {
             if ((dataSet == null)) {
                 throw new global::System.ArgumentNullException("dataSet");
             }

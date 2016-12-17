@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using PrecomputedHashDirDiff.DataSet1TableAdapters;
+using PrecomputedHashDirDiff.DataSetHashDBTableAdapters;
 
 namespace PrecomputedHashDirDiff
 {
@@ -28,7 +28,7 @@ namespace PrecomputedHashDirDiff
             return new IOFile(fi);
         }
 
-        public static GenericFile FileObject(DataSet1.FilesRow fr, string ConnectionString, string DirectoryName = "")
+        public static GenericFile FileObject(DataSetHashDB.FilesRow fr, string ConnectionString, string DirectoryName = "")
         {
             // In addition to the row describing the file,
             //      to be aware of other files\folders "in the filesystem" 
@@ -40,7 +40,7 @@ namespace PrecomputedHashDirDiff
             return new IOFolder(di);
         }
 
-        public static GenericFolder FolderObject(DataSet1.FoldersRow fr, string ConnectionString, string ParentDirectoryName = "") {
+        public static GenericFolder FolderObject(DataSetHashDB.FoldersRow fr, string ConnectionString, string ParentDirectoryName = "") {
             // In addition to the row describing the folder,
             //      to be aware of other files\folders "in the filesystem" 
             //      we need to know the database this file came from.
@@ -56,7 +56,7 @@ namespace PrecomputedHashDirDiff
             adaptFiles.Connection.ConnectionString = ConnectionString;
             FilesCount = System.Convert.ToInt64(adaptFiles.GetFilesCount());
 
-            DataSet1.FoldersDataTable dt = adaptFolders.GetFolderById(FolderID);
+            DataSetHashDB.FoldersDataTable dt = adaptFolders.GetFolderById(FolderID);
             if (dt.Count > 0 ) {
                 return GenericTools.FolderObject(dt[0], ConnectionString); // No parent for specific id
             }
@@ -162,11 +162,11 @@ namespace PrecomputedHashDirDiff
     [DebuggerDisplay("{_file.FileName}")]
     public class SQLite3File : GenericFile
     {
-        DataSet1.FilesRow _file;
+        DataSetHashDB.FilesRow _file;
         string _conn;
         string _DirectoryName;
 
-        public SQLite3File(DataSet1.FilesRow fr, string ConnectionString, string DirectoryName) {
+        public SQLite3File(DataSetHashDB.FilesRow fr, string ConnectionString, string DirectoryName) {
             _file = fr;
             _conn = ConnectionString;
             _DirectoryName = DirectoryName;
@@ -177,7 +177,7 @@ namespace PrecomputedHashDirDiff
             FoldersTableAdapter folders = new FoldersTableAdapter();
             folders.Connection.ConnectionString = _conn;
 
-            DataSet1.FoldersDataTable dt = folders.GetFolderById(_file.FolderParentID);
+            DataSetHashDB.FoldersDataTable dt = folders.GetFolderById(_file.FolderParentID);
             if (dt.Count > 0) {
                 return GenericTools.FolderObject(dt[0],_conn);
             }
@@ -282,10 +282,10 @@ namespace PrecomputedHashDirDiff
     [DebuggerDisplay("{_folder.FolderName}")]
     public class SQLite3Folder : GenericFolder
     {
-        DataSet1.FoldersRow _folder;
+        DataSetHashDB.FoldersRow _folder;
         string _conn;
         string _ParentDirectoryName;
-        public SQLite3Folder(DataSet1.FoldersRow fr, string ConnectionString,string ParentDirectoryName = "")
+        public SQLite3Folder(DataSetHashDB.FoldersRow fr, string ConnectionString,string ParentDirectoryName = "")
         {
             _folder = fr;
             _conn = ConnectionString;
@@ -302,7 +302,7 @@ namespace PrecomputedHashDirDiff
             FoldersTableAdapter folders = new FoldersTableAdapter();
             folders.Connection.ConnectionString = _conn;
 
-            DataSet1.FoldersDataTable dt = folders.GetFolderById(_folder.FolderParentID);
+            DataSetHashDB.FoldersDataTable dt = folders.GetFolderById(_folder.FolderParentID);
             if (dt.Count > 0)
             {
                 return GenericTools.FolderObject(dt[0], _conn);
@@ -322,7 +322,7 @@ namespace PrecomputedHashDirDiff
 
             var Rows = adap.GetFilesByFolderID(_folder.FolderId).AsEnumerable().OrderBy(f => Utils.strFrom64(f.FileName));
 
-            foreach (DataSet1.FilesRow fr in Rows) 
+            foreach (DataSetHashDB.FilesRow fr in Rows) 
             {
                 result.Add(GenericTools.FileObject(fr, _conn, _ParentDirectoryName + "\\" + Utils.strFrom64(_folder.FolderName) ));
             }
@@ -338,7 +338,7 @@ namespace PrecomputedHashDirDiff
 
             var Rows = adap.GetFoldersByParentFolderId(_folder.FolderId).AsEnumerable().OrderBy(f => Utils.strFrom64(f.FolderName));
 
-            foreach (DataSet1.FoldersRow fr in Rows)
+            foreach (DataSetHashDB.FoldersRow fr in Rows)
             {
                 result.Add(GenericTools.FolderObject(fr, _conn, _ParentDirectoryName + "\\" + Utils.strFrom64(_folder.FolderName) ));
             }

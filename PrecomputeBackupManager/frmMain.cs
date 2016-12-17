@@ -14,7 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
-using PrecomputeBackupManager.HashFileDatasetTableAdapters;
+using PrecomputeBackupManager.DataSetHashDBTableAdapters;
 using System.Collections.Concurrent;
 using System.Security;
 

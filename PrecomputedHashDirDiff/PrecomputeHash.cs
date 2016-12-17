@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using PrecomputedHashDirDiff.DataSet1TableAdapters;
+using PrecomputedHashDirDiff.DataSetHashDBTableAdapters;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Web.Script.Serialization;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrecomputedHashDirDiff.DataSet1TableAdapters;
+using PrecomputedHashDirDiff.DataSetHashDBTableAdapters;
 
 namespace PrecomputedHashDirDiff
 {
@@ -24,8 +24,8 @@ namespace PrecomputedHashDirDiff
             adapFolders = FolderAdapter;
         }
 
-        DataSet1.FilesDataTable localFiles = new DataSet1.FilesDataTable();
-        DataSet1.FoldersDataTable localFolders = new DataSet1.FoldersDataTable();
+        DataSetHashDB.FilesDataTable localFiles = new DataSetHashDB.FilesDataTable();
+        DataSetHashDB.FoldersDataTable localFolders = new DataSetHashDB.FoldersDataTable();
 
 
         string strTo64(string input) {
@@ -33,7 +33,7 @@ namespace PrecomputedHashDirDiff
             return System.Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
         }
 
-        public void AddFileRow(DataSet1.FilesRow fileRow) {
+        public void AddFileRow(DataSetHashDB.FilesRow fileRow) {
             fileRow.FileName = strTo64(fileRow.FileName);
             fileRow.FileAttributes = strTo64(fileRow.FileAttributes);
 
@@ -56,7 +56,7 @@ namespace PrecomputedHashDirDiff
 
         
 
-        string FileRowToString(DataSet1.FilesRow fileRow) {
+        string FileRowToString(DataSetHashDB.FilesRow fileRow) {
             // No base64 encoding here, done before.
 
             return
@@ -112,7 +112,7 @@ namespace PrecomputedHashDirDiff
             localFiles.Rows.Clear();
         }
 
-        public void AddFolderRow(DataSet1.FoldersRow folderRow)
+        public void AddFolderRow(DataSetHashDB.FoldersRow folderRow)
         {
             folderRow.FolderName = strTo64(folderRow.FolderName);
 
@@ -131,7 +131,7 @@ namespace PrecomputedHashDirDiff
                 FlushFolderData();
         }
 
-        string FolderRowToString(DataSet1.FoldersRow folderRow)
+        string FolderRowToString(DataSetHashDB.FoldersRow folderRow)
         {
             // No base64 encoding here, done before.
 

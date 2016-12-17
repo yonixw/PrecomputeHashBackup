@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PrecomputeBackupManager.DataSet1TableAdapters;
-using PrecomputeBackupManager.HashFileDatasetTableAdapters;
+using PrecomputeBackupManager.DataSetHashDBTableAdapters;
 
 namespace PrecomputeBackupManager
 {

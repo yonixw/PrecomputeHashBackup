@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrecomputedHashDirDiff.DataSet1TableAdapters;
+using PrecomputedHashDirDiff.DataSetHashDBTableAdapters;
 
 namespace PrecomputedHashDirDiff
 {
