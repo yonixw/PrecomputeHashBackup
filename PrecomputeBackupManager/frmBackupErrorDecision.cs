@@ -74,17 +74,20 @@ namespace PrecomputeBackupManager
             questionText += questionText
                 + "\n\n"
                 + "===================\n"
-                + "Please respond with text:\n"
-                + "\t* 1 or try to retry uploading\n"
-                + "\t* 2 or skip to skip the file (but saved in log)\n"
-                + "\t* add `save` to your response to save this action for all future errors"
+                //+ "Please respond with text:\n"
+                //+ "\t* 1 or try to retry uploading\n"
+                //+ "\t* 2 or skip to skip the file (but saved in log)\n"
+                //+ "\t* add `save` to your response to save this action for all future errors"
+                + "Reply with try or skip"
             ;
             return PushBulletAPI.Pushes.createPushNote(myFormPushNoteTitle, questionText);
         }
 
+
+        bool gotPushAnswer = false;
         private void backgroundWorkerPushBulletDecision_DoWork(object sender, DoWorkEventArgs e)
         {
-            bool gotPushAnswer = false;
+           
             string currentQuestion =
                     "Error uploading file:\n"
                     + _filename + "\n\n"
@@ -201,7 +204,9 @@ namespace PrecomputeBackupManager
 
         private void backgroundWorkerPushBulletDecision_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.Close();
+            // if worker closed because we got push response close the form, o.w. someone else will close it.
+            if (gotPushAnswer)
+                this.Close();
         }
 
         DateTime startTime = DateTime.Now;
@@ -216,10 +221,14 @@ namespace PrecomputeBackupManager
                 string finalResponse =
                     "Trying again to upload after 10 minutes passed with no response.";
 
+
+                // Try again (and stop worker):
+                decideAction(DialogResult.OK, cbSave.Checked);
+
+                // Send note
                 _parent.AddPushBulletNoteToQueue(myFormPushNoteTitle, finalResponse);
                 
-                // Try again:
-                decideAction(DialogResult.OK, cbSave.Checked);
+               // Close this form
                 this.Close();
             }
             else 
