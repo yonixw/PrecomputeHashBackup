@@ -84,14 +84,20 @@ namespace PrecomputeBackupManager
 
         private void backgroundWorkerPushBulletDecision_DoWork(object sender, DoWorkEventArgs e)
         {
+            bool gotPushAnswer = false;
             string currentQuestion =
                     "Error uploading file:\n"
                     + _filename + "\n\n"
                     + "Error message:\n"
                     + _ex.Message;
 
-            while (!e.Cancel)
+            while (!e.Cancel && !gotPushAnswer)
             {
+
+                // Sleep 1 minute
+                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(30).TotalMilliseconds);
+
+
                 if (questionPushNoteID == null) // Error or Calrification message could not sent.
                 {
                     questionPushNoteID = myCustomNote( currentQuestion);
@@ -169,19 +175,17 @@ namespace PrecomputeBackupManager
                             _parent.AddPushBulletNoteToQueue(myFormPushNoteTitle, finalResponse);
 
                             // Finish this dialog
-                            e.Cancel = true;
+                            gotPushAnswer = true;
 
                             if (tryFound)
                             {
                                 _parent.Log("User chose to try again. Save? " + saveFound);
                                 decideAction(DialogResult.OK, saveFound);
-                                return;
                             }
                             else if (skipFound)
                             {
                                 _parent.Log("User chose to skip file. Save? " + saveFound);
                                 decideAction(DialogResult.Cancel, saveFound);
-                                return;
                             }
                             else
                             {
@@ -190,10 +194,9 @@ namespace PrecomputeBackupManager
                         }
                     }
                 }
-
-                // Sleep 1 minute
-                System.Threading.Thread.Sleep((int)TimeSpan.FromSeconds(30).TotalMilliseconds);
             }
+
+            _parent.Log("Getting out of loop for push result");
         }
 
         private void backgroundWorkerPushBulletDecision_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
