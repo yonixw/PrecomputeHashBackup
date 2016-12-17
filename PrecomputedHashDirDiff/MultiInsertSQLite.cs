@@ -35,6 +35,7 @@ namespace PrecomputedHashDirDiff
 
         public void AddFileRow(DataSet1.FilesRow fileRow) {
             fileRow.FileName = strTo64(fileRow.FileName);
+            fileRow.FileAttributes = strTo64(fileRow.FileAttributes);
 
             localFiles.AddFilesRow(fileRow);
 
@@ -42,11 +43,12 @@ namespace PrecomputedHashDirDiff
                 FlushFileData();
         }
 
-        public void AddFileRow(string name, string hash, int folderid, int fileid, long size)
+        public void AddFileRow(string name, string hash, int folderid, int fileid, long size, string attributes)
         {
             name = strTo64(name);
+            attributes = strTo64(attributes);
 
-            localFiles.AddFilesRow(fileid,name,hash,folderid,size);
+            localFiles.AddFilesRow(fileid,name,hash,folderid,size,false, attributes);
 
             if (localFiles.Rows.Count > this._cutoff)
                 FlushFileData();
@@ -58,8 +60,10 @@ namespace PrecomputedHashDirDiff
             // No base64 encoding here, done before.
 
             return
-               string.Format("\n('{0}', '{1}', {2}, {3}, {4})",
-               fileRow.FileName, fileRow.FileHash, fileRow.FolderParentID, fileRow.FileId, fileRow.FileSize
+               string.Format("\n('{0}', '{1}', {2}, {3}, {4}, {5}, '{6}')",
+               fileRow.FileName, fileRow.FileHash, 
+               fileRow.FolderParentID, fileRow.FileId, fileRow.FileSize,
+               fileRow.Skipped ? '1' : '0' , fileRow.FileAttributes
                )
             ;
         }
@@ -80,7 +84,7 @@ namespace PrecomputedHashDirDiff
 
 
             string InsertCommand = @"INSERT INTO 'Files'
-                         ('FileName', 'FileHash', 'FolderParentID', 'FileId', 'FileSize') VALUES";
+                         ('FileName', 'FileHash', 'FolderParentID', 'FileId', 'FileSize', 'Skipped', 'FileAttributes') VALUES";
                             
             if (localFiles.Rows.Count == 0) {
                 return;

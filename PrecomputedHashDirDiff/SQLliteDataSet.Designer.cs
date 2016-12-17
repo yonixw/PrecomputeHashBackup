@@ -359,6 +359,10 @@ namespace PrecomputedHashDirDiff {
             
             private global::System.Data.DataColumn columnFileSize;
             
+            private global::System.Data.DataColumn columnSkipped;
+            
+            private global::System.Data.DataColumn columnFileAttributes;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public FilesDataTable() {
@@ -434,6 +438,22 @@ namespace PrecomputedHashDirDiff {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SkippedColumn {
+                get {
+                    return this.columnSkipped;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FileAttributesColumn {
+                get {
+                    return this.columnFileAttributes;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -469,14 +489,16 @@ namespace PrecomputedHashDirDiff {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public FilesRow AddFilesRow(int FileId, string FileName, string FileHash, int FolderParentID, long FileSize) {
+            public FilesRow AddFilesRow(int FileId, string FileName, string FileHash, int FolderParentID, long FileSize, bool Skipped, string FileAttributes) {
                 FilesRow rowFilesRow = ((FilesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         FileId,
                         FileName,
                         FileHash,
                         FolderParentID,
-                        FileSize};
+                        FileSize,
+                        Skipped,
+                        FileAttributes};
                 rowFilesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowFilesRow);
                 return rowFilesRow;
@@ -511,6 +533,8 @@ namespace PrecomputedHashDirDiff {
                 this.columnFileHash = base.Columns["FileHash"];
                 this.columnFolderParentID = base.Columns["FolderParentID"];
                 this.columnFileSize = base.Columns["FileSize"];
+                this.columnSkipped = base.Columns["Skipped"];
+                this.columnFileAttributes = base.Columns["FileAttributes"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -526,6 +550,10 @@ namespace PrecomputedHashDirDiff {
                 base.Columns.Add(this.columnFolderParentID);
                 this.columnFileSize = new global::System.Data.DataColumn("FileSize", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFileSize);
+                this.columnSkipped = new global::System.Data.DataColumn("Skipped", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSkipped);
+                this.columnFileAttributes = new global::System.Data.DataColumn("FileAttributes", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFileAttributes);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnFileId}, true));
                 this.columnFileId.AllowDBNull = false;
@@ -536,6 +564,9 @@ namespace PrecomputedHashDirDiff {
                 this.columnFileHash.MaxLength = 2147483647;
                 this.columnFolderParentID.AllowDBNull = false;
                 this.columnFileSize.AllowDBNull = false;
+                this.columnSkipped.AllowDBNull = false;
+                this.columnFileAttributes.AllowDBNull = false;
+                this.columnFileAttributes.MaxLength = 2147483647;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1301,6 +1332,28 @@ namespace PrecomputedHashDirDiff {
                     this[this.tableFiles.FileSizeColumn] = value;
                 }
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool Skipped {
+                get {
+                    return ((bool)(this[this.tableFiles.SkippedColumn]));
+                }
+                set {
+                    this[this.tableFiles.SkippedColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string FileAttributes {
+                get {
+                    return ((string)(this[this.tableFiles.FileAttributesColumn]));
+                }
+                set {
+                    this[this.tableFiles.FileAttributesColumn] = value;
+                }
+            }
         }
         
         /// <summary>
@@ -1631,6 +1684,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             tableMapping.ColumnMappings.Add("FileHash", "FileHash");
             tableMapping.ColumnMappings.Add("FolderParentID", "FolderParentID");
             tableMapping.ColumnMappings.Add("FileSize", "FileSize");
+            tableMapping.ColumnMappings.Add("Skipped", "Skipped");
+            tableMapping.ColumnMappings.Add("FileAttributes", "FileAttributes");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -1647,13 +1702,13 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection = new global::System.Data.SQLite.SQLiteCommand[5];
             this._commandCollection[0] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT        FileId, FileName, FileHash, FolderParentID, FileSize\r\nFROM         " +
-                "   Files";
+            this._commandCollection[0].CommandText = "SELECT        FileId, FileName, FileHash, FolderParentID, FileSize, Skipped, File" +
+                "Attributes\r\nFROM            Files";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        FileId, FileName, FileHash, FolderParentID, FileSize\r\nFROM         " +
-                "   Files\r\nWHERE        (FileId = @Param1)";
+            this._commandCollection[1].CommandText = "SELECT        FileAttributes, FileHash, FileId, FileName, FileSize, FolderParentI" +
+                "D, Skipped\r\nFROM            Files\r\nWHERE        (FileId = @Param1)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             global::System.Data.SQLite.SQLiteParameter param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@Param1";
@@ -1664,8 +1719,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[1].Parameters.Add(param);
             this._commandCollection[2] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT        FileHash, FileId, FileName, FileSize, FolderParentID\r\nFROM         " +
-                "   Files\r\nWHERE        (FolderParentID = @ParentId)";
+            this._commandCollection[2].CommandText = "SELECT FileAttributes, FileHash, FileId, FileName, FileSize, FolderParentID, Skip" +
+                "ped FROM Files WHERE (FolderParentID = @ParentId)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@ParentId";
@@ -1681,8 +1736,8 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             this._commandCollection[4] = new global::System.Data.SQLite.SQLiteCommand();
             this._commandCollection[4].Connection = this.Connection;
             this._commandCollection[4].CommandText = "INSERT INTO Files\r\n                         (FileName, FileHash, FolderParentID, " +
-                "FileId, FileSize)\r\nVALUES        (@FileName, @FileHash, @FolderParentID, @FileID" +
-                ", @Bytes)";
+                "FileId, FileSize, Skipped, FileAttributes)\r\nVALUES        (@FileName, @FileHash," +
+                " @FolderParentID, @FileID, @Bytes, 0, @FileAttributes)";
             this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
             param = new global::System.Data.SQLite.SQLiteParameter();
             param.ParameterName = "@FileName";
@@ -1716,6 +1771,12 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             param.DbType = global::System.Data.DbType.Int64;
             param.Size = 8;
             param.SourceColumn = "FileSize";
+            this._commandCollection[4].Parameters.Add(param);
+            param = new global::System.Data.SQLite.SQLiteParameter();
+            param.ParameterName = "@FileAttributes";
+            param.DbType = global::System.Data.DbType.String;
+            param.Size = 2147483647;
+            param.SourceColumn = "FileAttributes";
             this._commandCollection[4].Parameters.Add(param);
         }
         
@@ -1799,7 +1860,7 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
-        public virtual int NewFile(string FileName, string FileHash, int FolderParentID, int FileID, long Bytes) {
+        public virtual int NewFile(string FileName, string FileHash, int FolderParentID, int FileID, long Bytes, string FileAttributes) {
             global::System.Data.SQLite.SQLiteCommand command = this.CommandCollection[4];
             if ((FileName == null)) {
                 throw new global::System.ArgumentNullException("FileName");
@@ -1816,6 +1877,12 @@ namespace PrecomputedHashDirDiff.DataSet1TableAdapters {
             command.Parameters[2].Value = ((int)(FolderParentID));
             command.Parameters[3].Value = ((int)(FileID));
             command.Parameters[4].Value = ((long)(Bytes));
+            if ((FileAttributes == null)) {
+                throw new global::System.ArgumentNullException("FileAttributes");
+            }
+            else {
+                command.Parameters[5].Value = ((string)(FileAttributes));
+            }
             global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
             if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {

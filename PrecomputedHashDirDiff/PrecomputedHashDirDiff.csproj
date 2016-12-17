@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -55,6 +56,10 @@
     <Compile Include="MultiInsertSQLite.cs" />
     <Compile Include="MultithreadHash.cs" />
     <Compile Include="PrecomputeHash.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SQLliteDataSet.cs">
+      <DependentUpon>SQLliteDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="SQLliteDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

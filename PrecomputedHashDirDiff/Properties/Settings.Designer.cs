@@ -27,17 +27,6 @@ namespace PrecomputedHashDirDiff.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHa" +
-            "shDirDiff\\template.db3\"")]
-        public string templateConnectionString {
-            get {
-                return ((string)(this["templateConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("data source=\"C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHa" +
             "shDirDiff\\PrecomputedHashDirDiff\\bin\\Debug\\template.db3\"")]
         public string templateConnectionString1 {
             get {

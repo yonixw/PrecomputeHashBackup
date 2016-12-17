@@ -4,7 +4,7 @@
     <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
       <DataSource DefaultConnectionIndex="1" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
         <Connections>
-          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="templateConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="templateConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.PrecomputedHashDirDiff.Properties.Settings.GlobalReference.Default.templateConnectionString" Provider="System.Data.SQLite.EF6" />
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="templateConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="templateConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.PrecomputedHashDirDiff.Properties.Settings.GlobalReference.Default.templateConnectionString" Provider="System.Data.SQLite.EF6" />
           <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="templateConnectionString1" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="templateConnectionString1 (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.PrecomputedHashDirDiff.Properties.Settings.GlobalReference.Default.templateConnectionString1" Provider="System.Data.SQLite.EF6" />
         </Connections>
         <Tables>
@@ -13,7 +13,7 @@
               <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="main.Files" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        FileId, FileName, FileHash, FolderParentID, FileSize
+                    <CommandText>SELECT        FileId, FileName, FileHash, FolderParentID, FileSize, Skipped, FileAttributes
 FROM            Files</CommandText>
                     <Parameters />
                   </DbCommand>
@@ -26,12 +26,14 @@ FROM            Files</CommandText>
               <Mapping SourceColumn="FileHash" DataSetColumn="FileHash" />
               <Mapping SourceColumn="FolderParentID" DataSetColumn="FolderParentID" />
               <Mapping SourceColumn="FileSize" DataSetColumn="FileSize" />
+              <Mapping SourceColumn="Skipped" DataSetColumn="Skipped" />
+              <Mapping SourceColumn="FileAttributes" DataSetColumn="FileAttributes" />
             </Mappings>
             <Sources>
               <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="main.Files" DbObjectType="Table" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetFileByID" GetMethodModifier="Public" GetMethodName="GetFileByID" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetFileByID" UserSourceName="GetFileByID">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        FileId, FileName, FileHash, FolderParentID, FileSize
+                    <CommandText>SELECT        FileAttributes, FileHash, FileId, FileName, FileSize, FolderParentID, Skipped
 FROM            Files
 WHERE        (FileId = @Param1)</CommandText>
                     <Parameters>
@@ -43,16 +45,14 @@ WHERE        (FileId = @Param1)</CommandText>
               <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="main.Files" DbObjectType="Table" GenerateMethods="Get" GenerateShortCommands="true" GeneratorGetMethodName="GetFilesByFolderID" GetMethodModifier="Public" GetMethodName="GetFilesByFolderID" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetFilesByFolderID" UserSourceName="GetFilesByFolderID">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT        FileHash, FileId, FileName, FileSize, FolderParentID
-FROM            Files
-WHERE        (FolderParentID = @ParentId)</CommandText>
+                    <CommandText>SELECT FileAttributes, FileHash, FileId, FileName, FileSize, FolderParentID, Skipped FROM Files WHERE (FolderParentID = @ParentId)</CommandText>
                     <Parameters>
                       <Parameter AllowDbNull="false" AutogeneratedName="ParentId" ColumnName="FolderParentID" DataSourceName="main.Files" DataTypeServer="int(4)" DbType="Int32" Direction="Input" ParameterName="@ParentId" Precision="0" ProviderType="Int32" Scale="0" Size="4" SourceColumn="FolderParentID" SourceColumnNullMapping="false" SourceVersion="Current" />
                     </Parameters>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFilesCount" Modifier="Public" Name="GetFilesCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="GetFilesCount">
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFilesCount" Modifier="Public" Name="GetFilesCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="GetFilesCount">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT COUNT(*) FROM Files</CommandText>
@@ -60,18 +60,19 @@ WHERE        (FolderParentID = @ParentId)</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFile" Modifier="Public" Name="NewFile" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="NewFile">
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFile" Modifier="Public" Name="NewFile" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="NewFile">
                 <InsertCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>INSERT INTO Files
-                         (FileName, FileHash, FolderParentID, FileId, FileSize)
-VALUES        (@FileName, @FileHash, @FolderParentID, @FileID, @Bytes)</CommandText>
+                         (FileName, FileHash, FolderParentID, FileId, FileSize, Skipped, FileAttributes)
+VALUES        (@FileName, @FileHash, @FolderParentID, @FileID, @Bytes, 0, @FileAttributes)</CommandText>
                     <Parameters>
                       <Parameter AllowDbNull="false" AutogeneratedName="FileName" ColumnName="FileName" DataSourceName="main.Files" DataTypeServer="text" DbType="String" Direction="Input" ParameterName="@FileName" Precision="0" ProviderType="String" Scale="0" Size="2147483647" SourceColumn="FileName" SourceColumnNullMapping="false" SourceVersion="Current" />
                       <Parameter AllowDbNull="false" AutogeneratedName="FileHash" ColumnName="FileHash" DataSourceName="main.Files" DataTypeServer="text" DbType="String" Direction="Input" ParameterName="@FileHash" Precision="0" ProviderType="String" Scale="0" Size="2147483647" SourceColumn="FileHash" SourceColumnNullMapping="false" SourceVersion="Current" />
                       <Parameter AllowDbNull="false" AutogeneratedName="FolderParentID" ColumnName="FolderParentID" DataSourceName="main.Files" DataTypeServer="int(4)" DbType="Int32" Direction="Input" ParameterName="@FolderParentID" Precision="0" ProviderType="Int32" Scale="0" Size="4" SourceColumn="FolderParentID" SourceColumnNullMapping="false" SourceVersion="Current" />
                       <Parameter AllowDbNull="false" AutogeneratedName="FileID" ColumnName="FileId" DataSourceName="main.Files" DataTypeServer="int(4)" DbType="Int32" Direction="Input" ParameterName="@FileID" Precision="0" ProviderType="Int32" Scale="0" Size="4" SourceColumn="FileId" SourceColumnNullMapping="false" SourceVersion="Current" />
                       <Parameter AllowDbNull="false" AutogeneratedName="Bytes" ColumnName="FileSize" DataSourceName="main.Files" DataTypeServer="integer(8)" DbType="Int64" Direction="Input" ParameterName="@Bytes" Precision="0" ProviderType="Int64" Scale="0" Size="8" SourceColumn="FileSize" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="FileAttributes" ColumnName="FileAttributes" DataSourceName="main.Files" DataTypeServer="text" DbType="String" Direction="Input" ParameterName="@FileAttributes" Precision="0" ProviderType="String" Scale="0" Size="2147483647" SourceColumn="FileAttributes" SourceColumnNullMapping="false" SourceVersion="Current" />
                     </Parameters>
                   </DbCommand>
                 </InsertCommand>
@@ -154,7 +155,7 @@ FROM            Folders</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFoldersCount" Modifier="Public" Name="GetFoldersCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="GetFoldersCount">
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="GetFoldersCount" Modifier="Public" Name="GetFoldersCount" QueryType="Scalar" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="GetFoldersCount">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>SELECT COUNT(*) FROM Folders</CommandText>
@@ -162,7 +163,7 @@ FROM            Folders</CommandText>
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
-              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFolder" Modifier="Public" Name="NewFolder" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="NewFolder">
+              <DbSource ConnectionRef="templateConnectionString1 (Settings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="NewFolder" Modifier="Public" Name="NewFolder" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="NewFolder">
                 <InsertCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
                     <CommandText>INSERT INTO Folders
@@ -237,7 +238,7 @@ WHERE        ([Key] = @Key)</CommandText>
   <xs:element name="DataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet1" msprop:Generator_UserDSName="DataSet1">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Files" msprop:Generator_TableClassName="FilesDataTable" msprop:Generator_TableVarName="tableFiles" msprop:Generator_TablePropName="Files" msprop:Generator_RowDeletingName="FilesRowDeleting" msprop:Generator_RowChangingName="FilesRowChanging" msprop:Generator_RowEvHandlerName="FilesRowChangeEventHandler" msprop:Generator_RowDeletedName="FilesRowDeleted" msprop:Generator_UserTableName="Files" msprop:Generator_RowChangedName="FilesRowChanged" msprop:Generator_RowEvArgName="FilesRowChangeEvent" msprop:Generator_RowClassName="FilesRow">
+        <xs:element name="Files" msprop:Generator_TableClassName="FilesDataTable" msprop:Generator_TableVarName="tableFiles" msprop:Generator_RowChangedName="FilesRowChanged" msprop:Generator_TablePropName="Files" msprop:Generator_RowDeletingName="FilesRowDeleting" msprop:Generator_RowChangingName="FilesRowChanging" msprop:Generator_RowEvHandlerName="FilesRowChangeEventHandler" msprop:Generator_RowDeletedName="FilesRowDeleted" msprop:Generator_RowClassName="FilesRow" msprop:Generator_UserTableName="Files" msprop:Generator_RowEvArgName="FilesRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FileId" msprop:Generator_ColumnVarNameInTable="columnFileId" msprop:Generator_ColumnPropNameInRow="FileId" msprop:Generator_ColumnPropNameInTable="FileIdColumn" msprop:Generator_UserColumnName="FileId" type="xs:int" />
@@ -257,10 +258,18 @@ WHERE        ([Key] = @Key)</CommandText>
               </xs:element>
               <xs:element name="FolderParentID" msprop:Generator_ColumnVarNameInTable="columnFolderParentID" msprop:Generator_ColumnPropNameInRow="FolderParentID" msprop:Generator_ColumnPropNameInTable="FolderParentIDColumn" msprop:Generator_UserColumnName="FolderParentID" type="xs:int" />
               <xs:element name="FileSize" msprop:Generator_ColumnVarNameInTable="columnFileSize" msprop:Generator_ColumnPropNameInRow="FileSize" msprop:Generator_ColumnPropNameInTable="FileSizeColumn" msprop:Generator_UserColumnName="FileSize" type="xs:long" />
+              <xs:element name="Skipped" msprop:Generator_ColumnVarNameInTable="columnSkipped" msprop:Generator_ColumnPropNameInRow="Skipped" msprop:Generator_ColumnPropNameInTable="SkippedColumn" msprop:Generator_UserColumnName="Skipped" type="xs:boolean" />
+              <xs:element name="FileAttributes" msprop:Generator_ColumnVarNameInTable="columnFileAttributes" msprop:Generator_ColumnPropNameInRow="FileAttributes" msprop:Generator_ColumnPropNameInTable="FileAttributesColumn" msprop:Generator_UserColumnName="FileAttributes">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="2147483647" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Folders" msprop:Generator_TableClassName="FoldersDataTable" msprop:Generator_TableVarName="tableFolders" msprop:Generator_TablePropName="Folders" msprop:Generator_RowDeletingName="FoldersRowDeleting" msprop:Generator_RowChangingName="FoldersRowChanging" msprop:Generator_RowEvHandlerName="FoldersRowChangeEventHandler" msprop:Generator_RowDeletedName="FoldersRowDeleted" msprop:Generator_UserTableName="Folders" msprop:Generator_RowChangedName="FoldersRowChanged" msprop:Generator_RowEvArgName="FoldersRowChangeEvent" msprop:Generator_RowClassName="FoldersRow">
+        <xs:element name="Folders" msprop:Generator_TableClassName="FoldersDataTable" msprop:Generator_TableVarName="tableFolders" msprop:Generator_RowChangedName="FoldersRowChanged" msprop:Generator_TablePropName="Folders" msprop:Generator_RowDeletingName="FoldersRowDeleting" msprop:Generator_RowChangingName="FoldersRowChanging" msprop:Generator_RowEvHandlerName="FoldersRowChangeEventHandler" msprop:Generator_RowDeletedName="FoldersRowDeleted" msprop:Generator_RowClassName="FoldersRow" msprop:Generator_UserTableName="Folders" msprop:Generator_RowEvArgName="FoldersRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="FolderId" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnFolderId" msprop:Generator_ColumnPropNameInRow="FolderId" msprop:Generator_ColumnPropNameInTable="FolderIdColumn" msprop:Generator_UserColumnName="FolderId" type="xs:int" />
@@ -276,7 +285,7 @@ WHERE        ([Key] = @Key)</CommandText>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Metadata" msprop:Generator_TableClassName="MetadataDataTable" msprop:Generator_TableVarName="tableMetadata" msprop:Generator_RowChangedName="MetadataRowChanged" msprop:Generator_TablePropName="Metadata" msprop:Generator_RowDeletingName="MetadataRowDeleting" msprop:Generator_RowChangingName="MetadataRowChanging" msprop:Generator_RowEvHandlerName="MetadataRowChangeEventHandler" msprop:Generator_RowDeletedName="MetadataRowDeleted" msprop:Generator_RowClassName="MetadataRow" msprop:Generator_UserTableName="Metadata" msprop:Generator_RowEvArgName="MetadataRowChangeEvent">
+        <xs:element name="Metadata" msprop:Generator_TableClassName="MetadataDataTable" msprop:Generator_TableVarName="tableMetadata" msprop:Generator_TablePropName="Metadata" msprop:Generator_RowDeletingName="MetadataRowDeleting" msprop:Generator_RowChangingName="MetadataRowChanging" msprop:Generator_RowEvHandlerName="MetadataRowChangeEventHandler" msprop:Generator_RowDeletedName="MetadataRowDeleted" msprop:Generator_UserTableName="Metadata" msprop:Generator_RowChangedName="MetadataRowChanged" msprop:Generator_RowEvArgName="MetadataRowChangeEvent" msprop:Generator_RowClassName="MetadataRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Key" msprop:Generator_ColumnVarNameInTable="columnKey" msprop:Generator_ColumnPropNameInRow="Key" msprop:Generator_ColumnPropNameInTable="KeyColumn" msprop:Generator_UserColumnName="Key">

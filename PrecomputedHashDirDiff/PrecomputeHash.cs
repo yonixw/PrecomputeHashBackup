@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using PrecomputedHashDirDiff.DataSet1TableAdapters;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Web.Script.Serialization;
 
 namespace PrecomputedHashDirDiff
 {
@@ -101,11 +102,19 @@ namespace PrecomputedHashDirDiff
 
         }
 
+        public class JSONFileAttribute {
+            public class FileTimesInfo {
+                public DateTime creation;
+                public DateTime lastAccess;
+                public DateTime lastWrite;
+            }
+
+            public FileTimesInfo times;
+        }
+        static JavaScriptSerializer json = new JavaScriptSerializer();
+
+
         const int progresscols = 30;
-
-      
-
-
 
         public long HashFiles(DirectoryInfo di, int ParentFolderId, FilesTableAdapter aFiles, FoldersTableAdapter aFolders, BackgroundWorker bwCalcHash)
         {
@@ -155,8 +164,19 @@ namespace PrecomputedHashDirDiff
                     totalFilesSize += size;
                     myFolderSize += size;
 
+
+                    JSONFileAttribute attributes = new JSONFileAttribute();
+                    attributes.times = new JSONFileAttribute.FileTimesInfo()
+                    {
+                        creation = fi.CreationTime,
+                        lastAccess = fi.LastAccessTime,
+                        lastWrite = fi.LastWriteTime
+                    };
+
+
+
                     //aFiles.NewFile(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
-                    multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size);
+                    multisql.AddFileRow(fi.Name, finalHash, myFolderId, FileIdCounter++, size,json.Serialize(attributes));
                 }
 
 
