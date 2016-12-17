@@ -80,6 +80,7 @@ namespace PrecomputedHashDirDiff
         string Hash();
         GenericFolder Folder();
         long Size();
+        bool Skipped();
 
         string FullRelativeName();
     }
@@ -157,6 +158,11 @@ namespace PrecomputedHashDirDiff
         {
             return _file.Directory.FullName;
         }
+
+        public bool Skipped()
+        {
+            return false;
+        }
     }
 
     [DebuggerDisplay("{_file.FileName}")]
@@ -206,6 +212,11 @@ namespace PrecomputedHashDirDiff
         public string FullRelativeName()
         {
             return _DirectoryName + '\\' +  Name();
+        }
+
+        public bool Skipped()
+        {
+            return _file.Skipped;
         }
     }
 

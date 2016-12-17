@@ -227,9 +227,12 @@ namespace PrecomputedHashDirDiff
                 }
 
                 if (comp == 0 ) {
-                    // Same file, check checksum:
-                    if (backupFiles[backupIndx].Hash() !=  targetFiles[targetIndx].Hash() ) {
-                        Console.WriteLine("\t3. Changed file: [" + backupFiles[backupIndx].Name() + "]");
+                    // Same file, check checksum or if skippd last time:
+                    if (
+                    backupFiles[backupIndx].Hash() !=  targetFiles[targetIndx].Hash()  ||
+                    backupFiles[backupIndx].Skipped()
+                    ) {
+                        Console.WriteLine("\t3. Changed file: [" + backupFiles[backupIndx].Name() + "] (Skipped? " + backupFiles[backupIndx].Skipped()  +")");
 
                         // Stats ( Changed, delete old and add new )
                         ChangedFilesCount++;
