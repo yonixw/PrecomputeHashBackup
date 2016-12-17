@@ -547,18 +547,30 @@ namespace PrecomputeBackupManager
 
         #region Pushbullet queue
 
+        class NoteExInfo {
+            public string _title;
+            public string _body;
+            public Exception _stack; // For stack info
+        }
+
         DateTime lastSentPushUpdate = DateTime.Now.AddHours(-2);
 
         // list of {title,body}
         // read about this thread-safe Queue here: https://msdn.microsoft.com/en-us/library/dd267265.aspx
-        private ConcurrentQueue<string[]> _lowPriorityNotes = new ConcurrentQueue<string[]>();
+        private ConcurrentQueue<NoteExInfo> _lowPriorityNotes = new ConcurrentQueue<NoteExInfo>();
 
         public void AddPushBulletNoteToQueue(string title, string body)
         {
             if (frmMain.pbAuth == "")
                 return;
 
-            _lowPriorityNotes.Enqueue(new[] { title ?? "Backup BOT", body ?? "<No message body>" });
+            _lowPriorityNotes.Enqueue(
+                new NoteExInfo { 
+                    _title = title ?? "Backup BOT",
+                    _body = body ?? "<No message body>" ,
+                    _stack = new Exception("Push note origin stack")
+                    }
+                );
 
             // Debug write it:
             Console.WriteLine("Sending pushbullet. Body:" + body);
@@ -597,18 +609,29 @@ namespace PrecomputeBackupManager
             // Every interval (5 seconds) try and push to user some value from the list:
             if (_lowPriorityNotes.Count > 0)
             {
-                string[] noteInfo;
+                NoteExInfo noteInfo;
+                PushBulletAPI.PushNoteObject newNoteObject;
 
-                if (_lowPriorityNotes.TryDequeue(out noteInfo))
+                if (_lowPriorityNotes.TryPeek(out noteInfo))
                 {
-                    if (null != PushBulletAPI.Pushes.createPushNote(noteInfo[0], noteInfo[1]))
+                    if (null != (newNoteObject = PushBulletAPI.Pushes.createPushNote(noteInfo._title, noteInfo._body)))
                     {
-                        // Sucess on sending. Do nothing
+                        // Sucess on sending. Remove from list.
+                        if (!_lowPriorityNotes.TryDequeue(out noteInfo)) {
+                            Log(new Exception("Cant dequeue after sending a note with peeking!"));
+                        }
+
+                        // Anyway tell me where the note came from:
+                        Log("Push created with id: " + newNoteObject.iden 
+                            + "\nStack of creation:\n"
+                            + noteInfo._stack.StackTrace);
+                        
                     }
                     else
                     {
-                        // failed so add it back to queue
-                        _lowPriorityNotes.Enqueue(noteInfo);
+                        // failed so dont do antything cause we used peek.
+                        // but tell me:
+                        Log("Couldn't send push note. Queue length:" + _lowPriorityNotes.Count);
                     } 
                 }
             }

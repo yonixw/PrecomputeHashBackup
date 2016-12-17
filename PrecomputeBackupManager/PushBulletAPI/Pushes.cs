@@ -110,6 +110,8 @@ namespace PrecomputeBackupManager.PushBulletAPI
             }
         }
 
+        private static int orderCounter = 0;
+
         /// <summary>
         /// Try create push using config auth. null if fails.
         /// </summary>
@@ -152,7 +154,7 @@ namespace PrecomputeBackupManager.PushBulletAPI
             try
             {
                 CreatePushNoteJson pushJson = new CreatePushNoteJson();
-                pushJson.body = body;
+                pushJson.body = "[Note no. " + orderCounter++ + "]\n" + body;
                 pushJson.title = title;
                 pushJson.type = "note";
 
