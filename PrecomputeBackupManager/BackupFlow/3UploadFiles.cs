@@ -396,7 +396,7 @@ namespace PrecomputeBackupManager
                             Log("Skipping upload becuase max retries." );
                             AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
                                  "Skiping file \"" + currentFile + "\" after " 
-                                 + numRetryMaxCount.Value + " failed retries."); // TODO failed uploads is the correct term
+                                 + numRetryMaxCount.Value + " failed uploads."); 
                         }
                         else
                         {
