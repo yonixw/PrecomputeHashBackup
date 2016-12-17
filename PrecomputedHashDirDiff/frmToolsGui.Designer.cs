@@ -101,7 +101,7 @@
             this.txtBackup.Size = new System.Drawing.Size(567, 20);
             this.txtBackup.TabIndex = 5;
             this.txtBackup.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Tes" +
-    "t Cases v2\\original-backup.db3";
+    "t Cases Skip\\backup.db3";
             // 
             // label3
             // 
@@ -128,7 +128,7 @@
             this.txtTartget.Size = new System.Drawing.Size(567, 20);
             this.txtTartget.TabIndex = 7;
             this.txtTartget.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Tes" +
-    "t Cases v2\\.db3";
+    "t Cases Skip\\target.db3";
             // 
             // btnDiffDB
             // 
@@ -170,7 +170,7 @@
             this.txtDiffLog.Size = new System.Drawing.Size(567, 20);
             this.txtDiffLog.TabIndex = 11;
             this.txtDiffLog.Text = "C:\\Users\\YoniWas\\Documents\\Visual Studio 2015\\Projects\\PrecomputedHashDirDiff\\Tes" +
-    "t Cases v2\\1.log";
+    "t Cases Skip\\output.log";
             // 
             // frmToolsGui
             // 
