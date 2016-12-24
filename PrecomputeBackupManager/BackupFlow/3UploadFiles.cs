@@ -236,17 +236,6 @@ namespace PrecomputeBackupManager
                 Log("Didn't find the file to upload: " + txtUploadSkip.Text);
             }
 
-            // Dump skipped file:
-            // We do it now to pervernt duplicates and files that uploaded after fail (changed state)
-            lstSkippedFiles.Items.Clear();
-            foreach (string filenameKey in SkippedLogList.Keys)
-            {
-                string addition = "[" + filenameKey + "]: \n" + SkippedLogList[filenameKey];
-
-                lstSkippedFiles.Items.Insert(0, addition);
-                File.AppendAllText(skippedLogFile, "\n" + addition);
-            }
-
             // Move Forward to step 4
             if (currentCancelled) // From TryCancel()
             {
@@ -294,9 +283,17 @@ namespace PrecomputeBackupManager
             we will explode. so chosing "save my decision + try again" is not advised
         */
 
+        string fileSkipErrorformate(Exception ex) {
+            return
+                   "* " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                   CultureInfo.InvariantCulture) + "\n "
+                   + ex.Message + "\n " + ex.StackTrace + "\n";
+        }
+
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
             bool failed = true;
+            string errorFounds = "";
             int failedCount = 0;
 
             while (failed)
@@ -356,17 +353,17 @@ namespace PrecomputeBackupManager
                         AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
                                  "Successfully Uploaded file \"" + currentFile + "\" after "
                                  + numRetryMaxCount.Value + " failed retries.");
-                        LogSkipped(currentFile, null, false);
                     }
                 }
                 catch (Exception ex)
                 {
                     failedCount++;
+                    errorFounds += fileSkipErrorformate(ex); // Add error to our string
 
                     Log("Error with uploading file: " + currentFile);
                     Log(ex);
 
-                    bool skipBecauseCountMax 
+                    bool skipBecauseCountMax
                         = cbRetryMaxCount.Checked && (numRetryMaxCount.Value < failedCount);
 
                     if (!saveCopyAction && !skipBecauseCountMax)
@@ -379,12 +376,14 @@ namespace PrecomputeBackupManager
                         }));
                     }
 
-                    if (saveCopyAction) {
+                    if (saveCopyAction)
+                    {
                         // No need. `errorCopyAction` stay the same all the time.
                     }
 
 
-                    if (!skipBecauseCountMax && errorCopyAction == DialogResult.OK) {
+                    if (!skipBecauseCountMax && errorCopyAction == DialogResult.OK)
+                    {
                         // Try Again
                         Log("Trying again to upload. Rememer this? " + saveCopyAction);
                         failed = true; // lie to get out of this function
@@ -393,10 +392,10 @@ namespace PrecomputeBackupManager
                     {
                         if (skipBecauseCountMax)
                         {
-                            Log("Skipping upload becuase max retries." );
+                            Log("Skipping upload becuase max retries.");
                             AddPushBulletNoteToQueue(frmBackupErrorDecision.myFormPushNoteTitle,
-                                 "Skiping file \"" + currentFile + "\" after " 
-                                 + numRetryMaxCount.Value + " failed uploads."); 
+                                 "Skiping file \"" + currentFile + "\" after "
+                                 + numRetryMaxCount.Value + " failed uploads.");
                         }
                         else
                         {
@@ -404,14 +403,11 @@ namespace PrecomputeBackupManager
                         }
 
                         // Skip
-                        LogSkipped(currentFile, ex);
+                        LogSkipped("[" + currentFile + "]\n " + errorFounds);
                         failed = false; // To skip
                     }
-                } 
+                }
             }
-
-            // TODO Dump file skip info here
-
         }
 
       

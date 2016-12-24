@@ -81,7 +81,7 @@ namespace PrecomputeBackupManager
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [3]
 
         Queue<string> LogQue = new Queue<string>();
-        Dictionary<string, string> SkippedLogList = new Dictionary<string, string>();
+        Queue<string> SkippedLogQueue = new Queue<string>();
 
         string logFile = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -106,7 +106,17 @@ namespace PrecomputeBackupManager
                 File.AppendAllText(logFile, "\n" + addition);
             }
 
-            
+
+            // Dump skipped file:
+
+            while (SkippedLogQueue.Count > 0)
+            {
+                string addition = SkippedLogQueue.Dequeue();
+
+                lstSkippedFiles.Items.Insert(0, addition);
+                File.AppendAllText(skippedLogFile, "\n" + addition);
+            }
+
         }
 
         public void Log(string text)
@@ -121,32 +131,10 @@ namespace PrecomputeBackupManager
                                 CultureInfo.InvariantCulture) + "]\n " + ex.Message + "\n " + ex.StackTrace);
         }
 
-        
-        public void LogSkipped(string filename, Exception ex, bool skipped = true)
-        {
-            string lastError =  
-                "* " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
-                CultureInfo.InvariantCulture) + "\n "
-                + ex.Message + "\n " + ex.StackTrace + "\n";
 
-            if (SkippedLogList.ContainsKey(filename)) {
-                if (skipped) {
-                    // Update info
-                    SkippedLogList[filename] += lastError;
-                }
-                else
-                {
-                    // Remove entry. If oyu want to find the errors, look in the regualt log.
-                    SkippedLogList.Remove(filename);
-                }
-            }
-            else
-            {
-                // Only relvant if needed to add:
-                if (skipped) {
-                    SkippedLogList.Add(filename, lastError);
-                }
-            }
+        public void LogSkipped(string skippedFile)
+        {
+            SkippedLogQueue.Enqueue(skippedFile);
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)
@@ -356,10 +344,11 @@ namespace PrecomputeBackupManager
                 _st.allSettings.Add(row.Key, DBNull.Value.Equals(row.Value) ? "0" : row.Value);
             }
 
-            _st.WriteDataFromDictionary(tabBackupSettings); 
+            _st.WriteDataFromDictionary(tabBackupSettings);
 
             // Pushbullet need to be all across
-            if (txtPushBulletAuthCode.Text.Length > 0 ) {
+            if (txtPushBulletAuthCode.Text.Length > 0)
+            {
                 pbAuth = txtPushBulletAuthCode.Text;
             }
 
@@ -547,7 +536,8 @@ namespace PrecomputeBackupManager
 
         #region Pushbullet queue
 
-        class NoteExInfo {
+        class NoteExInfo
+        {
             public string _title;
             public string _body;
             public Exception _stack; // For stack info
@@ -565,11 +555,12 @@ namespace PrecomputeBackupManager
                 return;
 
             _lowPriorityNotes.Enqueue(
-                new NoteExInfo { 
+                new NoteExInfo
+                {
                     _title = title ?? "Backup BOT",
-                    _body = body ?? "<No message body>" ,
+                    _body = body ?? "<No message body>",
                     _stack = new Exception("Push note origin stack")
-                    }
+                }
                 );
 
             // Debug write it:
@@ -617,22 +608,23 @@ namespace PrecomputeBackupManager
                     if (null != (newNoteObject = PushBulletAPI.Pushes.createPushNote(noteInfo._title, noteInfo._body)))
                     {
                         // Sucess on sending. Remove from list.
-                        if (!_lowPriorityNotes.TryDequeue(out noteInfo)) {
+                        if (!_lowPriorityNotes.TryDequeue(out noteInfo))
+                        {
                             Log(new Exception("Cant dequeue after sending a note with peeking!"));
                         }
 
                         // Anyway tell me where the note came from:
-                        Log("Push created with id: " + newNoteObject.iden 
+                        Log("Push created with id: " + newNoteObject.iden
                             + "\nStack of creation:\n"
                             + noteInfo._stack.StackTrace);
-                        
+
                     }
                     else
                     {
                         // failed so dont do antything cause we used peek.
                         // but tell me:
                         Log("Couldn't send push note. Queue length:" + _lowPriorityNotes.Count);
-                    } 
+                    }
                 }
             }
         }
@@ -640,6 +632,6 @@ namespace PrecomputeBackupManager
 
         #endregion
 
-       
+
     }
 }

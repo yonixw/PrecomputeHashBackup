@@ -196,7 +196,9 @@ namespace PrecomputeBackupManager
             {
                 if (TryCancel()) return;
 
-                string currentHashDB = Path.Combine(saveHashPath.FullName, currentFolder.Key + ".db3");
+                string currentHashDB = Path.Combine(
+                    saveHashPath.FullName,
+                    saveHashPath.FullName.Split('\\').Last() + " (" + currentFolder.Key + ").db3");
 
                 // Copy template of hash db
                 templateDB3.CopyTo(currentHashDB, true);
