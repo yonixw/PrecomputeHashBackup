@@ -87,6 +87,9 @@
     <Compile Include="BackupFlow\2UnlockUpload.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="BackupFlow\3.5UploadSkippedFiles .cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="BackupFlow\3UploadFiles.cs">
       <SubType>Form</SubType>
     </Compile>

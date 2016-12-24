@@ -111,6 +111,7 @@
             this.logTimer = new System.Windows.Forms.Timer(this.components);
             this.tmrUploadProgress = new System.Windows.Forms.Timer(this.components);
             this.tmrBackupPushUpdates = new System.Windows.Forms.Timer(this.components);
+            this.backgroundUploadSkipped = new System.ComponentModel.BackgroundWorker();
             this.tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -954,6 +955,14 @@
             this.tmrBackupPushUpdates.Interval = 5000;
             this.tmrBackupPushUpdates.Tick += new System.EventHandler(this.tmrBackupPushUpdates_Tick);
             // 
+            // backgroundUploadSkipped
+            // 
+            this.backgroundUploadSkipped.WorkerReportsProgress = true;
+            this.backgroundUploadSkipped.WorkerSupportsCancellation = true;
+            this.backgroundUploadSkipped.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundUploadSkipped_DoWork);
+            this.backgroundUploadSkipped.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundUploadSkipped_ProgressChanged);
+            this.backgroundUploadSkipped.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundUploadSkipped_RunWorkerCompleted);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1072,6 +1081,7 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.ListBox lstSkippedFiles;
+        private System.ComponentModel.BackgroundWorker backgroundUploadSkipped;
     }
 }
 

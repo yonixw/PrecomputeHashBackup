@@ -236,7 +236,7 @@ namespace PrecomputeBackupManager
                 Log("Didn't find the file to upload: " + txtUploadSkip.Text);
             }
 
-            // Move Forward to step 4
+            // Move Forward to step 3.5
             if (currentCancelled) // From TryCancel()
             {
                 backupRunning = false;
@@ -260,7 +260,7 @@ namespace PrecomputeBackupManager
 
                 Log("Step 3/4: Finished uploading files.");
                 // TODO: On cancel send "cancel to the server" (using user modal form);
-                backworkLock.RunWorkerAsync();
+                backgroundUploadSkipped.RunWorkerAsync();
             }
         }
 
