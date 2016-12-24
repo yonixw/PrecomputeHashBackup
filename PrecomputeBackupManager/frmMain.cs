@@ -81,29 +81,44 @@ namespace PrecomputeBackupManager
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Log Tab [3]
 
         Queue<string> LogQue = new Queue<string>();
-        Queue<string> SkippedLogQueue = new Queue<string>();
+        Queue<string> SkippedLogQueue = new Queue<string>(); // With error description
 
-        string logFile = Path.Combine(
+
+        struct SkipInfo {
+            public string source;
+            public string target;
+        }
+        Queue<SkipInfo> SkippedListQueue = new Queue<SkipInfo>(); // Pure copy info
+
+        string logFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "log_" +
             DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
             + ".txt");
 
-        string skippedLogFile = Path.Combine(
+        string skippedLogFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "log_" +
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "skipped_" +
             DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
             + ".txt");
 
+        string skippedNamesFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "skipped.txt");
+
+        bool isLogtimerBusy = false;
         private void logTimer_Tick(object sender, EventArgs e)
         {
+            if (isLogtimerBusy) return;
+            isLogtimerBusy = true;
+
             // For multi thread logging.
             while (LogQue.Count > 0)
             {
                 string addition = LogQue.Dequeue();
 
                 lstLog.Items.Insert(0, addition);
-                File.AppendAllText(logFile, "\n" + addition);
+                File.AppendAllText(logFilePath, "\n" + addition);
             }
 
 
@@ -114,8 +129,20 @@ namespace PrecomputeBackupManager
                 string addition = SkippedLogQueue.Dequeue();
 
                 lstSkippedFiles.Items.Insert(0, addition);
-                File.AppendAllText(skippedLogFile, "\n" + addition);
+                File.AppendAllText(skippedLogFilePath, "\n" + addition);
             }
+
+            // Dump skipped file copy info:
+
+            while (SkippedListQueue.Count > 0)
+            {
+                SkipInfo addition = SkippedListQueue.Dequeue();
+
+                // 2 Rows: Source, Target
+                File.AppendAllText(skippedNamesFilePath, addition.source +  "\n" + addition.target + '\n');
+            }
+
+            isLogtimerBusy = false;
 
         }
 
@@ -132,9 +159,15 @@ namespace PrecomputeBackupManager
         }
 
 
-        public void LogSkipped(string skippedFile)
+        public void LogSkipped(string skippedFile, string targetCopy, string description)
         {
-            SkippedLogQueue.Enqueue(skippedFile);
+            SkippedLogQueue.Enqueue(
+                "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                                    CultureInfo.InvariantCulture) + "] "
+                + "[" + skippedFile + "]\n " + description
+            );
+
+            SkippedListQueue.Enqueue(new SkipInfo() { source = skippedFile, target = targetCopy });
         }
 
         private void lstLog_SelectedIndexChanged(object sender, EventArgs e)

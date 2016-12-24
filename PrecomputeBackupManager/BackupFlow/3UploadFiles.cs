@@ -269,7 +269,7 @@ namespace PrecomputeBackupManager
         // SO? 6044629
 
         // For progress check:
-        string currentFile = "";
+        string skippedFile,currentFile = "";
         long sentBytes = 0, sentBytesSinceLast = 0, totalSizeBytes = 1;
         bool foundSkipped = false;
 
@@ -403,7 +403,7 @@ namespace PrecomputeBackupManager
                         }
 
                         // Skip
-                        LogSkipped("[" + currentFile + "]\n " + errorFounds);
+                        LogSkipped(SourceFilePath, DestFilePath,  errorFounds);
                         failed = false; // To skip
                     }
                 }
