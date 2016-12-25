@@ -162,9 +162,9 @@ namespace PrecomputeBackupManager
         public void LogSkipped(string skippedFile, string targetCopy, string description)
         {
             SkippedLogQueue.Enqueue(
-                "[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
-                                    CultureInfo.InvariantCulture) + "] "
-                + "[" + skippedFile + "]\n " + description
+                "[ Logged: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss",
+                                    CultureInfo.InvariantCulture) + "]\n"
+                +  skippedFile + "\n" + description
             );
 
             SkippedListQueue.Enqueue(new SkipInfo() { source = skippedFile, target = targetCopy });
