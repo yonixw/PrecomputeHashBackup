@@ -98,7 +98,7 @@ namespace PrecomputeBackupManager
 
         string skippedLogFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "skipped_" +
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "skipped_info_" +
             DateTime.Now.ToString("dd_MM_yyyy", CultureInfo.InvariantCulture)
             + ".txt");
 
