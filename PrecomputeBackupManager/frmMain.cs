@@ -189,6 +189,7 @@ namespace PrecomputeBackupManager
         private void button1_Click(object sender, EventArgs e)
         {
             lstLog.Items.Clear();
+            lstSkippedFiles.Items.Clear();
         }
 
         private void btnLocalLogFolder_Click(object sender, EventArgs e)

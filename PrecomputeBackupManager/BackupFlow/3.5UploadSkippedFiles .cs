@@ -29,7 +29,7 @@ namespace PrecomputeBackupManager
             if (!File.Exists(skippedNamesFilePath)) return false;
 
             // Copy file
-            File.Copy(skippedNamesFilePath, skippedLogFilePathAfterCopy);
+            File.Copy(skippedNamesFilePath, skippedLogFilePathAfterCopy,true);
 
             return true;
         }

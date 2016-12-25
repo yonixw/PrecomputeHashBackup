@@ -177,6 +177,10 @@ namespace PrecomputeBackupManager
                 }
             }
             if (!needUpload) {
+                // Check if skipped files exists:
+                needUpload = File.Exists(skippedNamesFilePath);
+            }
+            if (!needUpload) {
                 currentCancelled = true;
                 Log("Backup aborted because no changes were found");
                 return;
