@@ -154,6 +154,10 @@ namespace PrecomputeBackupManager
             }
         }
 
+        string hashDBName(KeyValuePair<string, BackupDirectoryInfo> info) {
+            return info.Value.LocalPath.Split('\\').Last() + " (" + info.Key + ").db3";
+        }
+
         List<KeyValuePair<string, BackupDirectoryInfo>> _FoldersToBackup;
         private void backworkHashFiles_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -198,7 +202,7 @@ namespace PrecomputeBackupManager
 
                 string currentHashDB = Path.Combine(
                     saveHashPath.FullName,
-                    saveHashPath.FullName.Split('\\').Last() + " (" + currentFolder.Key + ").db3");
+                    hashDBName(currentFolder));
 
                 // Copy template of hash db
                 templateDB3.CopyTo(currentHashDB, true);
@@ -247,8 +251,8 @@ namespace PrecomputeBackupManager
             {
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
-                    string remoteDB3 = Path.Combine(recentBackup.FullName, currentFolder.Value.ServerName + ".db3");
-                    string localDB3 = Path.Combine(saveLastHashPath.FullName, currentFolder.Value.ServerName + ".db3");
+                    string remoteDB3 = Path.Combine(recentBackup.FullName, hashDBName(currentFolder));
+                    string localDB3 = Path.Combine(saveLastHashPath.FullName, hashDBName(currentFolder));
 
                     currentFolder.Value.HasRecent = File.Exists(remoteDB3);
 
@@ -276,8 +280,8 @@ namespace PrecomputeBackupManager
                 {
                     if (TryCancel()) return;
 
-                    string lastDB3 = Path.Combine(saveLastHashPath.FullName, currentFolder.Value.ServerName + ".db3");
-                    string freshDB3 = Path.Combine(saveHashPath.FullName, currentFolder.Value.ServerName + ".db3");
+                    string lastDB3 = Path.Combine(saveLastHashPath.FullName, hashDBName(currentFolder));
+                    string freshDB3 = Path.Combine(saveHashPath.FullName, hashDBName(currentFolder));
 
                     PrecomputedHashDirDiff.DiffDB diffObj = new PrecomputedHashDirDiff.DiffDB();
 
