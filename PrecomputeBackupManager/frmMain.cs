@@ -574,7 +574,7 @@ namespace PrecomputeBackupManager
         {
             public string _title;
             public string _body;
-            public Exception _stack; // For stack info
+            public string _stack; // For stack info
         }
 
         DateTime lastSentPushUpdate = DateTime.Now.AddHours(-2);
@@ -593,7 +593,7 @@ namespace PrecomputeBackupManager
                 {
                     _title = title ?? "Backup BOT",
                     _body = body ?? "<No message body>",
-                    _stack = new Exception("Push note origin stack")
+                    _stack = System.Environment.StackTrace // SO? 531697/1997873
                 }
                 );
 
@@ -650,7 +650,7 @@ namespace PrecomputeBackupManager
                         // Anyway tell me where the note came from:
                         Log("Push created with id: " + newNoteObject.iden
                             + "\nStack of creation:\n"
-                            + noteInfo._stack.StackTrace);
+                            + noteInfo._stack);
 
                     }
                     else
