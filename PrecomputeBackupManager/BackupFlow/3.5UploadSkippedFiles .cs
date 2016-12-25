@@ -28,10 +28,21 @@ namespace PrecomputeBackupManager
         private bool copySkippedFiles() {
             if (!File.Exists(skippedNamesFilePath)) return false;
 
-            // Copy file
-            File.Copy(skippedNamesFilePath, skippedLogFilePathAfterCopy,true);
+            try
+            {
+                // Move file (by copy + delete) so if all skipped works --> no more skip file.
+                File.Copy(skippedNamesFilePath, skippedLogFilePathAfterCopy, true);
+                File.Delete(skippedNamesFilePath);
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log("Problem when moving skip file to a temp one");
+                Log(ex);
+            }
+
+            return false;
         }
     
         private void backgroundUploadSkipped_DoWork(object sender, DoWorkEventArgs e)

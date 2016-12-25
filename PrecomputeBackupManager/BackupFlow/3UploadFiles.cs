@@ -269,7 +269,7 @@ namespace PrecomputeBackupManager
         // SO? 6044629
 
         // For progress check:
-        string skippedFile,currentFile = "";
+        string currentFile = "";
         long sentBytes = 0, sentBytesSinceLast = 0, totalSizeBytes = 1;
         bool foundSkipped = false;
 
@@ -321,6 +321,7 @@ namespace PrecomputeBackupManager
                     using (FileStream source = new FileStream(SourceFilePath, FileMode.Open, FileAccess.Read))
                     {
                         totalSizeBytes = source.Length;
+                        Directory.CreateDirectory(Path.GetDirectoryName(DestFilePath)); // Make sure path exists for file.
                         using (FileStream dest = new FileStream(DestFilePath, FileMode.OpenOrCreate, FileAccess.Write))
                         {
                             sentBytes = 0;
