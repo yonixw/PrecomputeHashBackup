@@ -31,6 +31,7 @@ namespace PrecomputeBackupManager
         {
             reloadBackupFolders();
             LoadAllSettings();
+            LoadLastUploadedFile();
         }
 
         public object safeDBNull(string column, DataRow dr, object fallback)
@@ -105,6 +106,10 @@ namespace PrecomputeBackupManager
         string skippedNamesFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "skipped.txt");
+
+        string lastUploadedFile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            @"Precompute Backup Manager" + Path.DirectorySeparatorChar + "lastUploadedFile.txt");
 
         bool isLogtimerBusy = false;
         private void logTimer_Tick(object sender, EventArgs e)
@@ -244,6 +249,19 @@ namespace PrecomputeBackupManager
         }
 
         #region >>>>>>>>>>>>>>>>>>>>>>>>> Backup Folder Tab [1]
+
+        public void LoadLastUploadedFile()
+        {
+            // Check if need to resume:
+            if (File.Exists(lastUploadedFile))
+            {
+                string file = File.ReadAllText(lastUploadedFile);
+                txtUploadSkip.Text = file;
+                cbSkipUpload.Checked = true;
+
+                // Will be deleted when step 3 finish successfully!
+            }
+        }
 
         public static void AutoSizeLSTVColumn(ListView lstv, int width)
         {

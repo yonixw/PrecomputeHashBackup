@@ -135,10 +135,12 @@ namespace PrecomputeBackupManager
 
         }
 
+        int writeLastFile = 0;
         private void backworkUploadFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             if (!cbStep3.Checked) return; // Skip step
             foundSkipped = !cbSkipUpload.Checked; // If not checked, no need to find.
+            writeLastFile = 0; // Write what file we are uploading every X amount of files.
 
             Log("Step 3/4: Starting to upload files");
             UpdateProgress(Status: "Uploading files:", progress: 0);
@@ -236,6 +238,9 @@ namespace PrecomputeBackupManager
                 Log("Didn't find the file to upload: " + txtUploadSkip.Text);
             }
 
+            // Reset Even if canceled
+            writeLastFile = 0;
+
             // Move Forward to step 3.5
             if (currentCancelled) // From TryCancel()
             {
@@ -245,6 +250,10 @@ namespace PrecomputeBackupManager
             }
             else
             {
+                // We succeded. So no resume:
+                if (File.Exists(lastUploadedFile))
+                    File.Delete(lastUploadedFile);
+
                 // Log each dir stats:
                 foreach (KeyValuePair<string, BackupDirectoryInfo> currentFolder in _FoldersToBackup)
                 {
@@ -292,6 +301,13 @@ namespace PrecomputeBackupManager
 
         public void CopyFileWithProgress(string SourceFilePath, string DestFilePath)
         {
+            // Every 16 files write what file are we uploading to file.
+            writeLastFile++;
+            if (writeLastFile % 16 == 0)
+            {
+                File.WriteAllText(lastUploadedFile, SourceFilePath);
+            }
+
             bool failed = true;
             string errorFounds = "";
             int failedCount = 0;
