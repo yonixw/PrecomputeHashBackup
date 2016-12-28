@@ -675,7 +675,10 @@ namespace PrecomputeBackupManager
                     {
                         // failed so dont do antything cause we used peek.
                         // but tell me:
-                        Log("Couldn't send push note. Queue length:" + _lowPriorityNotes.Count);
+
+                        // Spammy:
+                        //Log("Couldn't send push note. Queue length:" + _lowPriorityNotes.Count);
+                        Console.WriteLine("Couldn't send push note. Queue length:" + _lowPriorityNotes.Count);
                     }
                 }
             }
