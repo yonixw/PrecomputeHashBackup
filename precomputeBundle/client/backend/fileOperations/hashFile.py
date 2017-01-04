@@ -1,7 +1,8 @@
+import hashlib
 from precomputeBundle.client.log import *
 
 
-def hashfile(path , startbyte, length):
+def hashFileWithLength(path , startbyte, length):
     # type: (string, int, int) -> string
     """
     Read and hash a part of a file
@@ -18,9 +19,12 @@ def hashfile(path , startbyte, length):
     actualReadBytes = len(bytes)
     if (actualReadBytes != length) :
         logCustomError("Cant read file chunk. read " + str(actualReadBytes) + " from " + length,"hashfile_length")
+    else:
+
+        log("Read hex: " + bytes.encode("hex"))
 
 
-def hashfile(path, startbyte, endbyte):
+def hashFileWithEnd(path, startbyte, endbyte):
     # type: (string, int, int) -> string
     """
     Read and hash a part of a file
@@ -29,8 +33,10 @@ def hashfile(path, startbyte, endbyte):
     :param endbyte: index of last byte to read (inclusive)
     :return: hash of the part of the file as lower case string, empty if error
     """
-    return hashfile(path, startbyte, length=endbyte-startbyte+1);
+    calcLength = length=endbyte-startbyte+1
+    return hashFileWithLength(path, startbyte, calcLength)
 
 
 
-hashfile("C:\Users\YoniWas\AppData\Roaming\Precompute Backup Manager\________log_12_11_2016.txt",0,endbyte=5);
+hashFileWithEnd("C:\Users\YoniWas\AppData\Roaming\Precompute Backup Manager\________log_12_11_2016.txt",0,5)
+hashFileWithLength("C:\Users\YoniWas\AppData\Roaming\Precompute Backup Manager\________log_12_11_2016.txt",0,6)
