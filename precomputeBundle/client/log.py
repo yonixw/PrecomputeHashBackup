@@ -1,6 +1,6 @@
 import traceback, sys
 
-NO_TAG = "no tag"
+NO_TAG = "no-tag"
 
 def logError(tag=NO_TAG):
     exc_type, exc_value, exc_traceback = sys.exc_info()
